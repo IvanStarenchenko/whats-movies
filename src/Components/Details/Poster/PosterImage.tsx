@@ -14,7 +14,7 @@ export function PosterImage({
 	backdropPath,
 	movieId,
 	type,
-	isCinema
+	isCinema,
 }: PosterImageProps) {
 	const imageUrl =
 		typeof backdropPath === 'string' && backdropPath.startsWith('http')
@@ -24,16 +24,16 @@ export function PosterImage({
 	return (
 		<motion.div
 			layoutId={`poster-${movieId}`}
-			className="absolute inset-0"
+			className='absolute inset-0 overflow-hidden'
 		>
 			{!isCinema && (
 				<div
-					className="absolute -inset-1 opacity-60 pointer-events-none transition-opacity duration-700"
+					className='absolute -inset-1 opacity-60 pointer-events-none transition-opacity duration-700'
 					style={{
 						backgroundImage: `url(${imageUrl})`,
 						backgroundSize: 'cover',
 						backgroundPosition: 'center',
-						filter: 'blur(60px)'
+						filter: 'blur(60px)',
 					}}
 				/>
 			)}
@@ -50,11 +50,13 @@ export function PosterImage({
 					alt={'Background Poster'}
 					fill
 					priority
-					className={`object-cover ${type === 'book' ? 'blur-sm scale-110 brightness-[0.6]' : ''}`}
+					className={`object-cover ${
+						type === 'book' ? 'blur-sm scale-110 brightness-[0.6]' : ''
+					}`}
 				/>
 
-				<div className="absolute inset-0 bg-linear-to-t from-[#0f111a] via-[#0f111a]/60 to-transparent" />
-				<div className="absolute inset-0 bg-linear-to-r from-[#0f111a] via-transparent to-transparent" />
+				<div className='absolute inset-0 bg-linear-to-t from-[#0f111a] via-[#0f111a]/60 to-transparent' />
+				<div className='absolute inset-0 bg-linear-to-r from-[#0f111a] via-transparent to-transparent' />
 			</div>
 		</motion.div>
 	)

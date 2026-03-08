@@ -36,10 +36,10 @@ export function DetailsPoster({
 		data.type === 'movie'
 			? 'Movies'
 			: data.type === 'tv'
-				? 'TVShows'
-				: data.type === 'game'
-					? 'Games'
-					: 'Books'
+			? 'TVShows'
+			: data.type === 'game'
+			? 'Games'
+			: 'Books'
 
 	const isInCompareState = isInCompare(categoryKey, data.id)
 
@@ -62,7 +62,7 @@ export function DetailsPoster({
 			poster_path: imageUrl,
 			backdrop_path: data.backdropPath,
 
-			vote_average: data.rating || 0
+			vote_average: data.rating || 0,
 		} as UniversalItem
 
 		onToggle(categoryKey, itemToCompare)
@@ -70,7 +70,9 @@ export function DetailsPoster({
 
 	return (
 		<div
-			className={`relative w-full flex items-end transition-all duration-700 ease-in-out ${isCinema ? 'h-full' : 'h-175'}`}
+			className={`relative w-full flex items-end transition-all duration-700 ease-in-out ${
+				isCinema ? 'h-full' : 'h-175'
+			}`}
 		>
 			<PosterImage
 				backdropPath={data.backdropPath}
@@ -80,7 +82,9 @@ export function DetailsPoster({
 			/>
 
 			<div
-				className={`relative z-10 p-10 w-full max-w-4xl space-y-8 transition-all duration-500 ${isCinema ? 'opacity-0 translate-y-10' : 'opacity-100 translate-y-0'}`}
+				className={`relative z-10 p-5 sm:p-10 w-full max-w-4xl space-y-8 transition-all duration-500 ${
+					isCinema ? 'opacity-0 translate-y-10' : 'opacity-100 translate-y-0'
+				}`}
 			>
 				<PosterInfo {...data} />
 
