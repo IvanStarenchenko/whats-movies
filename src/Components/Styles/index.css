@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+:root {
+	--background: #151528;
+	--secondBackground: #131424;
+	--mainColor: #a1a1a1;
+	--activeColor: #4ecdc4;
+	--secondActiveColor: #8678ef;
+	--hoverColor: rgba(113, 138, 219, 0.405);
+	--brandGradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+	--brandGradientHover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+	--btnShadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+	--orange: #ff7e5f;
+}
+@layer components {
+	.card-hover-effect {
+		@apply transition-all duration-300 
+           hover:border-[--secondActiveColor]/50 
+           hover:-translate-y-1 
+           hover:shadow-[0_10px_30px_rgba(139,92,246,0.2)];
+	}
+
+	.card-image-hover {
+		@apply transition-transform duration-500 
+           group-hover:scale-105;
+	}
+
+	.card-overlay-hover {
+		@apply absolute inset-0 pointer-events-none 
+           border border-[--secondActiveColor] rounded-xl 
+           opacity-0 transition-opacity duration-300 
+           group-hover:opacity-20;
+	}
+}

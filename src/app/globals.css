@@ -1,0 +1,175 @@
+@import 'tailwindcss';
+
+:root {
+	--background: #151528;
+	--secondBackground: #131424;
+	--mainColor: #a1a1a1;
+	--activeColor: #4ecdc4;
+	--secondActiveColor: #8678ef;
+	--hoverColor: rgba(113, 138, 219, 0.405);
+	--brandGradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+	--brandGradientHover: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+	--btnShadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+	--yellow: #fbbf24;
+	--orange: #ff7e5f;
+	--green: #22c55e;
+	--blue: #3b82f6;
+	--red: #ef4444;
+}
+
+.react-select__control,
+.react-select__menu,
+.react-select__option {
+	background-color: var(--secondBackground) !important;
+}
+
+.react-select__option:hover {
+	background-color: var(--hoverColor) !important;
+	cursor: pointer;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+	-webkit-text-fill-color: var(--mainColor) !important;
+	letter-spacing: 2.5px;
+	-webkit-box-shadow: 0 0 0px 1000px var(--secondBackground) inset !important;
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
+}
+
+/* ДВИГАЕМ РЕКЛАМУ ТУТ */
+/* #as-root,
+.as-border,
+[id^='adsterra'],
+[class^='social-bar'] {
+	bottom: 0px !important;
+	z-index: 9999;
+} */
+
+html {
+	scroll-behavior: smooth;
+}
+body {
+	background: var(--background);
+	color: var(--mainColor);
+	font-family: var(--font-inter);
+	overflow-x: hidden;
+}
+h1,
+h2,
+h3 {
+	font-family: var(--font-poppins);
+}
+button {
+	cursor: pointer;
+	font-family: inherit;
+}
+input {
+	@apply outline-none focus:outline-none;
+}
+.btn-add-note {
+	background: var(--brandGradient);
+	box-shadow: var(--btnShadow);
+	border: none;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
+.btn-add-note:hover {
+	background: var(--brandGradientHover);
+}
+.item--hover {
+	@apply hover:bg-[var(--hoverColor)] hover:text-white transition-all;
+}
+.menuItem--active {
+	@apply text-white;
+	background: var(--brandGradientHover);
+}
+.filterItem--active {
+	@apply text-white;
+	background: var(--brandGradientHover);
+}
+.custom-scrollbar {
+	@apply [&::-webkit-scrollbar]:h-[5px] 
+  [&::-webkit-scrollbar]:w-[5px]
+  
+  [&::-webkit-scrollbar-track]:bg-white/5 
+  [&::-webkit-scrollbar-track]:rounded-full
+  
+  [&::-webkit-scrollbar-thumb]:bg-[var(--secondActiveColor)]/40 
+  [&::-webkit-scrollbar-thumb]:rounded-full
+  
+  hover:[&::-webkit-scrollbar-thumb]:bg-[var(--secondActiveColor)]/80
+  transition-colors cursor-grab;
+}
+.home-top-container {
+	position: relative;
+	max-width: 100%;
+	height: 300px;
+	display: flex;
+	align-items: center;
+	padding: 0 40px;
+	border-radius: 12px;
+	overflow: hidden;
+	background: radial-gradient(
+		circle at 20% 50%,
+		rgba(99, 102, 241, 0.15) 0%,
+		var(--background) 70%
+	);
+	background-color: var(--secondBackground);
+}
+
+.home-top-content {
+	max-width: 600px;
+	z-index: 2;
+}
+
+.featured-label {
+	display: block;
+	color: var(--orange);
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	margin-bottom: 8px;
+}
+
+.home-top-title {
+	color: #ffffff;
+	font-size: 48px;
+	font-weight: 800;
+	line-height: 1.1;
+	margin: 0 0 16px 0;
+}
+
+.gradient-text {
+	background: var(--brandGradient);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.home-top-description {
+	color: var(--mainColor);
+	font-size: 16px;
+	line-height: 1.5;
+	max-width: 450px;
+}
+
+.home-top-container::before {
+	content: '';
+	position: absolute;
+	top: -50px;
+	left: -50px;
+	width: 300px;
+	height: 300px;
+	background: var(--brandGradient);
+	filter: blur(100px);
+	opacity: 0.15;
+	pointer-events: none;
+}
