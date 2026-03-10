@@ -1,7 +1,10 @@
 import { MoviePlayer } from '@/Shared/Ui/MoviePlayer'
 import { VideoStub } from '@/Shared/Ui/VideoStub'
+import { IGameDetails } from '@/Store/Games/Games.type'
+import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { getYouTubeUrl } from '@/Utils/Utils'
 interface FilmProps {
+	movieData: TMDBMediaDetails | IGameDetails
 	activeMode: 'movie' | 'trailer'
 	id?: number
 	type?: string
@@ -20,6 +23,7 @@ interface FilmProps {
 		| undefined
 }
 export function Film({
+	movieData,
 	activeMode,
 	id,
 	type,
@@ -29,22 +33,25 @@ export function Film({
 	releasedYear,
 	mainTrailer,
 	isGame,
-	isCinema
+	isCinema,
 }: FilmProps) {
 	return (
-		<div className="relative w-full aspect-video z-10 sm:w-full md:w-full">
+		<div className='relative w-full aspect-video z-10 sm:w-full md:w-full'>
 			{activeMode === 'movie' ? (
 				<MoviePlayer
 					tmdbId={id}
 					type={type as 'movie' | 'tv'}
+					movieData={movieData}
 				/>
 			) : isGame ? (
 				gameTrailerId ? (
 					<iframe
-						src={`https://www.youtube.com/embed/${gameTrailerId}?autoplay=${isCinema ? 1 : 0}&modestbranding=1`}
+						src={`https://www.youtube.com/embed/${gameTrailerId}?autoplay=${
+							isCinema ? 1 : 0
+						}&modestbranding=1`}
 						title={`${name} trailer`}
-						className="absolute inset-0 w-full h-full"
-						allow="autoplay; encrypted-media"
+						className='absolute inset-0 w-full h-full'
+						allow='autoplay; encrypted-media'
 						allowFullScreen
 					/>
 				) : (
@@ -57,10 +64,12 @@ export function Film({
 				)
 			) : mainTrailer ? (
 				<iframe
-					src={`${getYouTubeUrl(mainTrailer.key)}${isCinema ? '?autoplay=1' : ''}`}
-					title="Video Player"
-					className="absolute inset-0 w-full h-full"
-					allow="autoplay; encrypted-media"
+					src={`${getYouTubeUrl(mainTrailer.key)}${
+						isCinema ? '?autoplay=1' : ''
+					}`}
+					title='Video Player'
+					className='absolute inset-0 w-full h-full'
+					allow='autoplay; encrypted-media'
 					allowFullScreen
 				/>
 			) : (

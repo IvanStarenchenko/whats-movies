@@ -1,5 +1,7 @@
 import { useVideo } from '@/Hooks/useVideo'
 import { LazyPuls } from '@/Shared/Ui/LazyPuls'
+import { IGameDetails } from '@/Store/Games/Games.type'
+import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { Maximize, Minimize } from 'lucide-react'
 import { Element } from 'react-scroll'
 import { BottomLink } from './BottomLink'
@@ -7,6 +9,7 @@ import { Film } from './Film'
 import { Label } from './Label'
 import { SwitchBtn } from './SwitchBtn'
 interface DetailsVideoProps {
+	movieData: TMDBMediaDetails | IGameDetails
 	id?: number
 	type?: string
 	runtime?: number | null
@@ -20,9 +23,10 @@ export function DetailsVideo({
 	id,
 	type,
 	backdrop_path,
+	movieData,
 	releasedYear,
 	isCinema,
-	name
+	name,
 }: DetailsVideoProps) {
 	const {
 		activeMode,
@@ -35,12 +39,12 @@ export function DetailsVideo({
 		providers,
 		imageUrl,
 		isGame,
-		isLoading
+		isLoading,
 	} = useVideo(id, type, backdrop_path, name)
 	if (isLoading) return <LazyPuls />
 	return (
 		<Element
-			name="trailer"
+			name='trailer'
 			className={`flex flex-col w-full max-w-full group transition-all duration-500 ${
 				isCinema ? 'gap-0' : 'gap-3 sm:gap-4 md:gap-6'
 			} px-2 sm:px-4 md:px-0`}
@@ -56,30 +60,22 @@ export function DetailsVideo({
 				{activeMode === 'movie' && (
 					<button
 						onClick={toggleFullscreen}
-						className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 z-50 p-2 sm:p-2.5 md:p-3 bg-black/60 hover:bg-(--secondActiveColor) backdrop-blur-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/10 text-white transition-all shadow-2xl opacity-0 group-hover:opacity-100"
+						className='absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 z-50 p-2 sm:p-2.5 md:p-3 bg-black/60 hover:bg-(--secondActiveColor) backdrop-blur-xl rounded-lg sm:rounded-xl md:rounded-2xl border border-white/10 text-white transition-all shadow-2xl opacity-0 group-hover:opacity-100'
 					>
 						{isFullscreen ? (
-							<Minimize
-								size={16}
-								className="sm:w-5 sm:h-5"
-							/>
+							<Minimize size={16} className='sm:w-5 sm:h-5' />
 						) : (
-							<Maximize
-								size={16}
-								className="sm:w-5 sm:h-5"
-							/>
+							<Maximize size={16} className='sm:w-5 sm:h-5' />
 						)}
 					</button>
 				)}
 
 				{!isGame && (
-					<SwitchBtn
-						activeMode={activeMode}
-						setActiveMode={setActiveMode}
-					/>
+					<SwitchBtn activeMode={activeMode} setActiveMode={setActiveMode} />
 				)}
 
 				<Film
+					movieData={movieData}
 					activeMode={activeMode}
 					id={id}
 					type={type}
@@ -93,10 +89,7 @@ export function DetailsVideo({
 				/>
 
 				{!isCinema && (
-					<Label
-						activeMode={activeMode}
-						mainTrailer={mainTrailer}
-					/>
+					<Label activeMode={activeMode} mainTrailer={mainTrailer} />
 				)}
 			</div>
 

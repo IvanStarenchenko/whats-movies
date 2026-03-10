@@ -3,14 +3,60 @@ import { StaticImageData } from 'next/image'
 export type MediaType = 'movie' | 'tv' | 'book' | 'game' | 'music'
 export type TMDBKnownForDepartment = 'Acting' | 'Directing' | 'Writing'
 
-export type TMDBListCategory = 'popular' | 'top_rated' | 'now_playing' | 'on_the_air' | 'top_revenue' | 'miniseries' | 'ended_shows' | 'documentary_tv' | 'short_movies' | 'classic_movies' | 'adult_include' | 'oscar_nominees'
+export type TMDBListCategory =
+	| 'popular'
+	| 'top_rated'
+	| 'now_playing'
+	| 'on_the_air'
+	| 'top_revenue'
+	| 'miniseries'
+	| 'ended_shows'
+	| 'documentary_tv'
+	| 'short_movies'
+	| 'classic_movies'
+	| 'adult_include'
+	| 'oscar_nominees'
 
-export type TMDBGenres = 'action' | 'adventure' | 'animation' | 'comedy' | 'crime' | 'documentary' | 'drama' | 'family' | 'fantasy' | 'history' | 'horror' | 'music' | 'mystery' | 'romance' | 'science_fiction' | 'thriller' | 'war' | 'western'
+export type TMDBGenres =
+	| 'action'
+	| 'adventure'
+	| 'animation'
+	| 'comedy'
+	| 'crime'
+	| 'documentary'
+	| 'drama'
+	| 'family'
+	| 'fantasy'
+	| 'history'
+	| 'horror'
+	| 'music'
+	| 'mystery'
+	| 'romance'
+	| 'science_fiction'
+	| 'thriller'
+	| 'war'
+	| 'western'
 
-export type discoveryOnlyCategory = 'top_revenue' | 'short_movies' | 'classic_movies' | 'adult_include' | 'miniseries' | 'ended_shows' | 'documentary_tv' | 'oscar_nominees'
+export type discoveryOnlyCategory =
+	| 'top_revenue'
+	| 'short_movies'
+	| 'classic_movies'
+	| 'adult_include'
+	| 'miniseries'
+	| 'ended_shows'
+	| 'documentary_tv'
+	| 'oscar_nominees'
 
-export const discoveryOnlyCategories = ['top_revenue', 'short_movies', 'classic_movies', 'adult_include', 'miniseries', 'ended_shows', 'documentary_tv', 'oscar_nominees'] as const
-
+export const discoveryOnlyCategories = [
+	'top_revenue',
+	'short_movies',
+	'classic_movies',
+	'adult_include',
+	'miniseries',
+	'ended_shows',
+	'documentary_tv',
+	'oscar_nominees',
+] as const
 
 export type TMDBSpecialCategories = 'with_runtime.lte' | 'with_runtime.gte'
 
@@ -153,16 +199,21 @@ export interface NextEpisodeToAir {
 	episode_number: number
 }
 
-
 export interface TMDBMovieSpecific {
 	runtime?: number | null
 	budget?: number
 	revenue?: number
 	belongs_to_collection?: IBelongsToCollection | null
 	imdb_id?: string | null
+	external_ids?: {
+		imdb_id?: string | null
+		tvdb_id?: number | null
+		facebook_id?: string | null
+		instagram_id?: string | null
+		twitter_id?: string | null
+	}
 	video?: boolean
 }
-
 
 export interface TMDBTVSpecific {
 	number_of_seasons?: number
@@ -174,8 +225,10 @@ export interface TMDBTVSpecific {
 	original_name?: string
 }
 
-
-export interface TMDBMediaDetails extends TMDBMediaItem, TMDBMovieSpecific, TMDBTVSpecific {
+export interface TMDBMediaDetails
+	extends TMDBMediaItem,
+		TMDBMovieSpecific,
+		TMDBTVSpecific {
 	tagline: string | null
 	status: string
 	genres: TMDBGenre[]
@@ -269,7 +322,6 @@ interface TMDBMediaLogosResponse {
 	vote_average: number
 	vote_count: number
 	width: number
-
 }
 interface TMDPPoster {
 	aspect_ratio: number

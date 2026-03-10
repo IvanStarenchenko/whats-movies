@@ -43,7 +43,7 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 			type: 'game',
 			id: gameData.id,
 			gameData,
-			description
+			description,
 		})
 
 	const { containerVariants, itemVariants, isCinema, toggleCinema, pageRef } =
@@ -52,9 +52,9 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 	return (
 		<motion.div
 			variants={containerVariants}
-			initial="hidden"
-			animate="visible"
-			className="bg-[#0f111a] min-h-screen pb-20 will-change-opacity"
+			initial='hidden'
+			animate='visible'
+			className='bg-[#0f111a] min-h-screen pb-20 will-change-opacity'
 		>
 			<div
 				ref={pageRef}
@@ -77,19 +77,13 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 					}`}
 				>
 					{isCinema && (
-						<div className="w-full max-w-5xl aspect-video scale-95 animate-in zoom-in-95 duration-700">
-							<Gallery
-								id={gameData.id}
-								type="game"
-							/>
+						<div className='w-full max-w-5xl aspect-video scale-95 animate-in zoom-in-95 duration-700'>
+							<Gallery id={gameData.id} type='game' />
 						</div>
 					)}
 				</div>
 
-				<CinemaMode
-					isCinema={isCinema}
-					toggleCinema={toggleCinema}
-				/>
+				<CinemaMode isCinema={isCinema} toggleCinema={toggleCinema} />
 			</div>
 
 			<motion.div
@@ -98,24 +92,28 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 					isCinema ? 'opacity-0 pointer-events-none' : 'opacity-100'
 				}`}
 			>
-				<div className="mx-auto px-6 md:px-12">
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
-						<div className="space-y-6">
-							<DynamicDetailsVideo
-								type="game"
-								id={gameData.id}
-								name={gameData.name}
-								releasedYear={gameData.released?.slice(0, 4)}
-								runtime={undefined}
-								backdrop_path={gameData.background_image}
-							/>
+				<div className='mx-auto px-6 md:px-12'>
+					<div className='grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12'>
+						<div className='space-y-6'>
+							{gameData && (
+								<DynamicDetailsVideo
+									movieData={gameData}
+									type='game'
+									id={gameData.id}
+									name={gameData.name}
+									releasedYear={gameData.released?.slice(0, 4)}
+									runtime={undefined}
+									backdrop_path={gameData.background_image}
+								/>
+							)}
+
 							{gameData.website && <Website website={gameData.website} />}
 						</div>
 
 						<DynamicDetailsDescription {...descriptionData} />
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-white/5">
+					<div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-white/5'>
 						{gameData.platforms && (
 							<DynamicPlatform platforms={gameData.platforms} />
 						)}
@@ -124,11 +122,11 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 						)}
 					</div>
 
-					<div className="mt-20">
+					<div className='mt-20'>
 						<DynamicDetailsRelative
 							id={gameData.id}
 							name={gameData.name || ''}
-							type="game"
+							type='game'
 						/>
 					</div>
 				</div>

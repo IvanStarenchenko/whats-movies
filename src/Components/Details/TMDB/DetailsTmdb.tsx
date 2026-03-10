@@ -39,7 +39,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 			type,
 			id: movieId as number | string,
 			status: status,
-			movieData
+			movieData,
 		})
 	const { containerVariants, itemVariants, isCinema, toggleCinema, pageRef } =
 		useFramer(movieId)
@@ -51,9 +51,9 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 	return (
 		<motion.div
 			variants={containerVariants}
-			initial="hidden"
-			animate="visible"
-			className="relative"
+			initial='hidden'
+			animate='visible'
+			className='relative'
 		>
 			<div
 				className={`bg-[#0f111a] transition-all duration-700 ease-in-out ${
@@ -76,18 +76,10 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 						isCinema ? 'opacity-100' : 'opacity-0 pointer-events-none'
 					}`}
 				>
-					{isCinema && (
-						<Gallery
-							type={type}
-							id={movieId}
-						/>
-					)}
+					{isCinema && <Gallery type={type} id={movieId} />}
 				</div>
 
-				<CinemaMode
-					isCinema={isCinema}
-					toggleCinema={toggleCinema}
-				/>
+				<CinemaMode isCinema={isCinema} toggleCinema={toggleCinema} />
 			</div>
 
 			<motion.div
@@ -107,22 +99,25 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 					}
         `}
 				>
-					<DynamicDetailsVideo
-						type={type}
-						id={movieId}
-						name={movieData?.title || movieData?.name}
-						releasedYear={
-							movieData?.release_date?.slice(0, 4) ||
-							movieData?.first_air_date?.slice(0, 4)
-						}
-						runtime={movieData?.runtime}
-						isCinema={isCinema}
-						backdrop_path={
-							typeof movieData?.backdrop_path === 'string'
-								? movieData.backdrop_path
-								: null
-						}
-					/>
+					{movieData && (
+						<DynamicDetailsVideo
+							movieData={movieData}
+							type={type}
+							id={movieId}
+							name={movieData.title || movieData.name}
+							releasedYear={
+								movieData.release_date?.slice(0, 4) ||
+								movieData.first_air_date?.slice(0, 4)
+							}
+							runtime={movieData.runtime}
+							isCinema={isCinema}
+							backdrop_path={
+								typeof movieData.backdrop_path === 'string'
+									? movieData.backdrop_path
+									: null
+							}
+						/>
+					)}
 
 					{!isCinema && (
 						<DynamicDetailsDescription
@@ -133,7 +128,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 				</div>
 
 				{!isCinema && (
-					<div className="my-6 sm:my-12 md:my-16 pb-12 space-y-12">
+					<div className='my-6 sm:my-12 md:my-16 pb-12 space-y-12'>
 						<Suspense fallback={<SkeletonCard />}>
 							<DynamicDetailsRelative
 								id={movieId}
@@ -144,10 +139,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 						</Suspense>
 
 						<Suspense fallback={<SkeletonCard />}>
-							<DynamicDetailsCast
-								id={movieId}
-								type={type}
-							/>
+							<DynamicDetailsCast id={movieId} type={type} />
 						</Suspense>
 					</div>
 				)}

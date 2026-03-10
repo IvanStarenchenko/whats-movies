@@ -11,7 +11,7 @@ import {
 	type TMDBPaginatedResponse,
 	type TMDBPersona,
 	type TMDBSpecialCategories,
-	type WatchProvidersResponse
+	type WatchProvidersResponse,
 } from './tMDB.type'
 
 const baseUrl = 'https://api.themoviedb.org/3'
@@ -30,11 +30,10 @@ export const tmdbApi = createApi({
 			)
 			headers.set('Content-Type', 'application/json')
 			return headers
-		}
+		},
 	}),
 	keepUnusedDataFor: 3600,
 	endpoints: builder => ({
-
 		searchMulti: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
 			{ query: string; page?: number }
@@ -45,27 +44,52 @@ export const tmdbApi = createApi({
 					query,
 					page,
 					include_adult: true,
-					language: 'en-US'
-				}
-			})
+					language: 'en-US',
+				},
+			}),
 		}),
 
-		getDetails: builder.query<TMDBMediaDetails, { type: MediaType; id: number }>({
-			query: ({ type, id }) => `/${type}/${id}`,
-			providesTags: (result, error, { type, id }) => [{ type: type === 'movie' ? 'movies' : 'tv', id }]
+		getDetails: builder.query<
+			TMDBMediaDetails,
+			{ type: MediaType; id: number }
+		>({
+			query: ({ type, id }) => ({
+				url: `/${type}/${id}`,
+				params: {
+					append_to_response: 'external_ids',
+				},
+			}),
+			providesTags: (result, error, { type, id }) => [
+				{ type: type === 'movie' ? 'movies' : 'tv', id },
+			],
 		}),
-		getBackdrops: builder.query<TMDBMediaBackdropsResponse, { id: number; type: MediaType }>({
+		getBackdrops: builder.query<
+			TMDBMediaBackdropsResponse,
+			{ id: number; type: MediaType }
+		>({
 			query: ({ id, type }) => `${type}/${id}/images`,
 
-			providesTags: (result, error, { id, type }) => result
-				? [
-					...result.backdrops.map((_, index) => ({
-						type: type === 'movie' ? 'movies' : 'tv',
-						id: `${type}-${id}-backdrop-${index}`
-					} as const)),
-					{ type: type === 'movie' ? 'movies' : 'tv', id: `${type}-${id}-backdrops` },
-				]
-				: [{ type: type === 'movie' ? 'movies' : 'tv', id: `${type}-${id}-backdrops` }]
+			providesTags: (result, error, { id, type }) =>
+				result
+					? [
+							...result.backdrops.map(
+								(_, index) =>
+									({
+										type: type === 'movie' ? 'movies' : 'tv',
+										id: `${type}-${id}-backdrop-${index}`,
+									} as const)
+							),
+							{
+								type: type === 'movie' ? 'movies' : 'tv',
+								id: `${type}-${id}-backdrops`,
+							},
+					  ]
+					: [
+							{
+								type: type === 'movie' ? 'movies' : 'tv',
+								id: `${type}-${id}-backdrops`,
+							},
+					  ],
 		}),
 		getList: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
@@ -78,8 +102,11 @@ export const tmdbApi = createApi({
 			}
 		>({
 			query: ({ type, category, page, genres, minRating }) => {
-				const hasActiveFilters = (genres && genres.length > 0) || (minRating && minRating > 0)
-				const isDiscoverCategory = discoveryOnlyCategories.includes(category as discoveryOnlyCategory)
+				const hasActiveFilters =
+					(genres && genres.length > 0) || (minRating && minRating > 0)
+				const isDiscoverCategory = discoveryOnlyCategories.includes(
+					category as discoveryOnlyCategory
+				)
 
 				if (category === 'oscar_winners' && !hasActiveFilters) {
 					return {
@@ -91,9 +118,10 @@ export const tmdbApi = createApi({
 					}
 				}
 
-				const url = (isDiscoverCategory || hasActiveFilters)
-					? `/discover/${type}`
-					: `/${type}/${category}`
+				const url =
+					isDiscoverCategory || hasActiveFilters
+						? `/discover/${type}`
+						: `/${type}/${category}`
 
 				const params: Record<string, string | number | boolean> = {
 					page,
@@ -147,59 +175,79 @@ export const tmdbApi = createApi({
 				return { url, params }
 			},
 
-
-
 			providesTags: (result, _, { type }) => {
 				const mediaType: 'movies' | 'tv' = type === 'movie' ? 'movies' : 'tv'
 				return result
 					? [
-						...result.results.map(({ id }) => ({ type: mediaType, id } as const)),
-						{ type: mediaType, id: 'LIST' },
-					]
+							...result.results.map(
+								({ id }) => ({ type: mediaType, id } as const)
+							),
+							{ type: mediaType, id: 'LIST' },
+					  ]
 					: [{ type: mediaType, id: 'LIST' }]
 			},
 		}),
 		getMovieCollection: builder.query<ITMDBCollectionResponse, number>({
-			query: (collectionId) => ({
+			query: collectionId => ({
 				url: `collection/${collectionId}`,
 				params: {
-					language: 'en-US'
-				}
-			})
+					language: 'en-US',
+				},
+			}),
 		}),
-		getMovieRecommendations: builder.query<TMDBPaginatedResponse<TMDBMediaItem>, { type: string; id: string | number }>({
+		getMovieRecommendations: builder.query<
+			TMDBPaginatedResponse<TMDBMediaItem>,
+			{ type: string; id: string | number }
+		>({
 			query: ({ type, id }) => ({
 				url: `/${type}/${id}/recommendations`,
-				params: { page: 1 }
-			})
+				params: { page: 1 },
+			}),
 		}),
 
-		getMediaCredits: builder.query<{ cast: TMDBPersona[], crew: TMDBPersona[] }, { type: string | undefined; id: number | string | undefined }>({
-			query: ({ type, id }) => `/${type}/${id}/credits`
+		getMediaCredits: builder.query<
+			{ cast: TMDBPersona[]; crew: TMDBPersona[] },
+			{ type: string | undefined; id: number | string | undefined }
+		>({
+			query: ({ type, id }) => `/${type}/${id}/credits`,
 		}),
 
-		getWatchProviders: builder.query<WatchProvidersResponse, { type: string; id: number }>({
+		getWatchProviders: builder.query<
+			WatchProvidersResponse,
+			{ type: string; id: number }
+		>({
 			query: ({ type, id }) => `${type}/${id}/watch/providers`,
 		}),
 
-		getMediaVideos: builder.query<{ results: { key: string; site: string; type: string }[] }, { type: string; id: number }>({
-			query: ({ type, id }) => `/${type}/${id}/videos`
+		getMediaVideos: builder.query<
+			{ results: { key: string; site: string; type: string }[] },
+			{ type: string; id: number }
+		>({
+			query: ({ type, id }) => `/${type}/${id}/videos`,
 		}),
 
-		getTotal: builder.query<TMDBPaginatedResponse<TMDBMediaItem>, { type: string; page: number; genreId?: string }>({
+		getTotal: builder.query<
+			TMDBPaginatedResponse<TMDBMediaItem>,
+			{ type: string; page: number; genreId?: string }
+		>({
 			query: ({ type, page, genreId }) => ({
 				url: `/discover/${type}`,
 				params: {
 					page,
 					with_genres: genreId,
 					language: 'en-US',
-					sort_by: 'popularity.desc'
-				}
+					sort_by: 'popularity.desc',
+				},
 			}),
-			providesTags: (result, error, { type }) => [{ type: type === 'movie' ? 'movies' : 'tv', id: 'LIST' }]
+			providesTags: (result, error, { type }) => [
+				{ type: type === 'movie' ? 'movies' : 'tv', id: 'LIST' },
+			],
 		}),
 
-		getRuntime: builder.query<TMDBPaginatedResponse<TMDBMediaItem>, { category: TMDBSpecialCategories | undefined; page?: number }>({
+		getRuntime: builder.query<
+			TMDBPaginatedResponse<TMDBMediaItem>,
+			{ category: TMDBSpecialCategories | undefined; page?: number }
+		>({
 			query: () => ({
 				url: '/discover/movie',
 				params: {
@@ -207,12 +255,18 @@ export const tmdbApi = createApi({
 					'with_runtime.gte': 90,
 					page: 1,
 				},
-			})
+			}),
 		}),
 		getPerson: builder.query<TMDBPersonFullDetails, { id: string }>({
-			query: ({ id }) => ({ url: `person/${id}`, params: { append_to_response: 'combined_credits' } })
+			query: ({ id }) => ({
+				url: `person/${id}`,
+				params: { append_to_response: 'combined_credits' },
+			}),
 		}),
-		searchPerson: builder.query<TMDBPaginatedResponse<TMDBPersona>, { query: string; page?: number }>({
+		searchPerson: builder.query<
+			TMDBPaginatedResponse<TMDBPersona>,
+			{ query: string; page?: number }
+		>({
 			query: ({ query, page = 1 }) => ({
 				url: '/search/person',
 				params: {
@@ -222,9 +276,11 @@ export const tmdbApi = createApi({
 					include_adult: true,
 				},
 			}),
-
 		}),
-		getPopularPersons: builder.query<TMDBPaginatedResponse<TMDBPersona>, { page?: number }>({
+		getPopularPersons: builder.query<
+			TMDBPaginatedResponse<TMDBPersona>,
+			{ page?: number }
+		>({
 			query: ({ page = 1 }) => ({
 				url: '/person/popular',
 				params: {
@@ -233,7 +289,7 @@ export const tmdbApi = createApi({
 				},
 			}),
 		}),
-	})
+	}),
 })
 
 export const {
@@ -250,5 +306,5 @@ export const {
 	useGetPopularPersonsQuery,
 	useSearchPersonQuery,
 	useGetBackdropsQuery,
-	useGetListQuery
+	useGetListQuery,
 } = tmdbApi
