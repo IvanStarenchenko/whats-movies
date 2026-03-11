@@ -1,7 +1,8 @@
 import { getItemTypeColor } from '@/Utils/getColorsByData'
+import clsx from 'clsx'
 import { Check, Plus, Share2, Zap } from 'lucide-react'
+import { useState } from 'react'
 import { DetailsPosterProps } from './DetailsPoster'
-
 interface PosterButtonsProps extends DetailsPosterProps {
 	handleCompareClick: (e: React.MouseEvent) => void
 	isInCompare: boolean
@@ -11,6 +12,15 @@ export function PosterButtons({
 	handleCompareClick,
 	...data
 }: PosterButtonsProps) {
+	const [isCopied, setIsCopied] = useState(false)
+	const [showTitle, setShowTitle] = useState(false)
+	const copyUrl = () => {
+		navigator.clipboard.writeText(window.location.href).then(() => {
+			setIsCopied(true)
+			setShowTitle(true)
+			setTimeout(() => setShowTitle(false), 1500)
+		})
+	}
 	return (
 		<div className='flex items-center gap-3'>
 			{(data.type === 'movie' || data.type === 'tv') && (
@@ -57,9 +67,37 @@ export function PosterButtons({
 
 			<button
 				aria-label='share'
-				className='bg-[#1a1d29]/80 backdrop-blur-md border border-gray-700 hover:bg-gray-800 transition-all text-white p-3 rounded-xl active:scale-95'
+				className={clsx(
+					'relative group bg-[#1a1d29]/80 backdrop-blur-md border border-gray-700 hover:bg-gray-800 transition-all text-white p-3 rounded-xl active:scale-95',
+					isCopied && 'bg-green-600'
+				)}
+				onClick={copyUrl}
 			>
-				<Share2 size={20} className='text-violet-400' />
+				{showTitle && (
+					<div
+						className={clsx(
+							'pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2',
+							'rounded-lg backdrop-blur px-3 py-1.5 text-xs font-medium ',
+							'shadow-lg border ',
+							'transition-all duration-200',
+							`${getItemTypeColor(data.type, true)}`,
+							showTitle
+								? 'opacity-100 translate-y-0'
+								: 'opacity-0 translate-y-1'
+						)}
+					>
+						Link copied
+						<div className='absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-zinc-900' />
+					</div>
+				)}
+
+				<Share2
+					size={20}
+					className={clsx(
+						'text-violet-400 transition-all duration-300',
+						isCopied && '-rotate-25 text-white'
+					)}
+				/>
 			</button>
 		</div>
 	)

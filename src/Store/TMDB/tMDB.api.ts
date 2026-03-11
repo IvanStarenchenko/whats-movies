@@ -289,6 +289,14 @@ export const tmdbApi = createApi({
 				},
 			}),
 		}),
+		getTrending: builder.query<
+			TMDBPaginatedResponse<TMDBMediaItem>,
+			{ page?: 1 }
+		>({
+			query: () => ({
+				url: `/trending/all/week`,
+			}),
+		}),
 	}),
 })
 
@@ -306,4 +314,5 @@ export const {
 	useSearchPersonQuery,
 	useGetBackdropsQuery,
 	useGetListQuery,
+	useGetTrendingQuery,
 } = tmdbApi

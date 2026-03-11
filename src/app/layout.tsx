@@ -1,6 +1,7 @@
 import Logo from '@/Assets/Images/logo.png'
 import { Header } from '@/Components/Layout/Header/Header'
 import { CompareBtn } from '@/Shared/Ui/Compare/CompareBtn'
+import { ContactForm } from '@/Shared/Ui/Feedback/Feedback'
 import { StoreProvider } from '@/Store/Provider'
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
@@ -61,7 +62,10 @@ export default function RootLayout({
 					<div className='relative pt-20'>
 						{' '}
 						{children}
-						<div className='absolute bottom-0 right-6'>
+						<div className='fixed bottom-8 right-3 z-20'>
+							<ContactForm />
+						</div>
+						<div className='absolute bottom-0 right-6 '>
 							<CompareBtn />
 						</div>
 					</div>
