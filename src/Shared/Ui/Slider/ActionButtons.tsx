@@ -25,25 +25,26 @@ export function ActionButtons({
 	onToggle,
 	categoryKey,
 	item,
-	type
+	type,
 }: ActionButtonsProps) {
 	return (
-		<div className="absolute top-12 right-3 z-30 flex flex-col gap-2">
+		<div className='absolute top-12 right-3 z-30 flex flex-col gap-2'>
 			<button
+				aria-label='add to wishlist'
 				onClick={e => toggleSliderWishlistHandler(e, item)}
 				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${
 					isAdded
-						? `${getItemTypeColor(type)} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
+						? `${getItemTypeColor(
+								type
+						  )} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
 						: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110'
 				}`}
 			>
-				<Heart
-					size={18}
-					fill={isAdded ? 'currentColor' : 'none'}
-				/>
+				<Heart size={18} fill={isAdded ? 'currentColor' : 'none'} />
 			</button>
 
 			<button
+				aria-label='compare'
 				onClick={e => {
 					e.preventDefault()
 					e.stopPropagation()
@@ -51,15 +52,14 @@ export function ActionButtons({
 				}}
 				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${
 					isComparing
-						? `${getItemTypeColor(type)} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
+						? `${getItemTypeColor(
+								type
+						  )} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
 						: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110 hover:text-indigo-300'
 				}`}
-				title="Add to compare"
+				title='Add to compare'
 			>
-				<Zap
-					size={18}
-					fill={isComparing ? 'currentColor' : 'none'}
-				/>
+				<Zap size={18} fill={isComparing ? 'currentColor' : 'none'} />
 			</button>
 		</div>
 	)

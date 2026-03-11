@@ -21,11 +21,9 @@ export function ActorCard({ person }: { person: TMDBPersona }) {
 						alt={person.name}
 						className='w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000 ease-out'
 					/>
-					{/* Адаптивный градиент: снизу вверх на мобилке, слева направо на десктопе */}
 					<div className='absolute inset-0 bg-gradient-to-t from-[#111113] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#111113] opacity-90' />
 				</div>
 
-				{/* Контентная часть */}
 				<div className='flex-1 p-5 md:p-8 flex flex-col justify-center relative'>
 					<div className='mb-4 md:mb-8'>
 						<Link href={`/actor/${simplifyName(person.name)}/${person.id}`}>

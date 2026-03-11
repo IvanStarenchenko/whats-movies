@@ -4,7 +4,6 @@ import catalogCard from '@/Assets/Images/placeholders/catalogCard.jpg'
 import { StaticImageData } from 'next/image'
 export const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p'
 export const TMDB_IMAGE_ORIGINAL_URL = 'https://image.tmdb.org/t/p/original'
-export const YOUTUBE_TRAILER_URL = `https://www.youtube.com/embed/`
 export const TMDB_CAST_IMAGE_URL = `https://image.tmdb.org/t/p/`
 
 export const TMDB_CAST_IMAGE_PLACEHOLDER_URL = `${castCard.src}`
@@ -17,7 +16,7 @@ export const getTmdbImageSlideUrl = (
 	return `${TMDB_IMAGE_BASE_URL}/${size}${path}`
 }
 export const getTmdbImageOriginalUrl = (
-	path: string | null | StaticImageData | undefined,
+	path: string | null | StaticImageData | undefined
 ) => {
 	if (!path) return '/images/placeholder-poster.png'
 	return `${TMDB_IMAGE_ORIGINAL_URL}/${path}`
@@ -28,7 +27,9 @@ export const getYouTubeUrl = (
 	releasedYear?: number | string | null | undefined
 ) => {
 	if (!key) {
-		const query = encodeURIComponent(`${title || ''} ${releasedYear || ''} trailer`)
+		const query = encodeURIComponent(
+			`${title || ''} ${releasedYear || ''} trailer`
+		)
 		return `https://www.youtube.com/results?search_query=${query}`
 	}
 
@@ -40,7 +41,10 @@ export const getTmdbCastImageUrl = (
 	size: 'h632' | 'w185' = 'h632'
 ) => {
 	if (!path) return TMDB_CAST_IMAGE_PLACEHOLDER_URL
-	const baseUrl = size === 'h632' ? `${TMDB_CAST_IMAGE_URL}h632` : `${TMDB_CAST_IMAGE_URL}w185`
+	const baseUrl =
+		size === 'h632'
+			? `${TMDB_CAST_IMAGE_URL}h632`
+			: `${TMDB_CAST_IMAGE_URL}w185`
 	return `${baseUrl}/${path}`
 }
 
@@ -53,7 +57,9 @@ export const getBookCoverUrl = (
 	}
 	return `https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg`
 }
-export const getHighResGameImage = (url: string | null | undefined | StaticImageData) => {
+export const getHighResGameImage = (
+	url: string | null | undefined | StaticImageData
+) => {
 	if (!url || typeof url !== 'string') return url
 	if (url.includes('media/games/') || url.includes('media/screenshots/')) {
 		return url.replace('/media/', '/media/resize/640/-/')
@@ -61,7 +67,9 @@ export const getHighResGameImage = (url: string | null | undefined | StaticImage
 	return url
 }
 
-export const getFullscreenGalleryImageUrl = (path: string | null | undefined) => {
+export const getFullscreenGalleryImageUrl = (
+	path: string | null | undefined
+) => {
 	if (!path) return '/images/placeholder-backdrop.png'
 	return `${TMDB_CAST_IMAGE_URL}w780${path}`
 }

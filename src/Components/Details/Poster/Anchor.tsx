@@ -23,6 +23,7 @@ export function Anchor({ type }: { type: MediaType }) {
 		<nav className='flex items-center gap-x-3 mt-8'>
 			{movieAnchors.map(anchor => (
 				<Link
+					href='#'
 					key={anchor.href}
 					to={anchor.href}
 					spy={true}

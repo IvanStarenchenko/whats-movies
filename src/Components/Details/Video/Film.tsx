@@ -1,8 +1,16 @@
-import { MoviePlayer } from '@/Shared/Ui/MoviePlayer'
 import { VideoStub } from '@/Shared/Ui/VideoStub'
 import { IGameDetails } from '@/Store/Games/Games.type'
 import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { getYouTubeUrl } from '@/Utils/Utils'
+import dynamic from 'next/dynamic'
+
+const DynamicMoviePlayer = dynamic(
+	() => import('@/Shared/Ui/MoviePlayer').then(mod => mod.MoviePlayer),
+	{
+		ssr: false,
+		loading: () => <div className='h-[450px] bg-gray-900 animate-pulse' />,
+	}
+)
 interface FilmProps {
 	movieData: TMDBMediaDetails | IGameDetails
 	activeMode: 'movie' | 'trailer'
@@ -38,7 +46,7 @@ export function Film({
 	return (
 		<div className='relative w-full aspect-video z-10 sm:w-full md:w-full'>
 			{activeMode === 'movie' ? (
-				<MoviePlayer
+				<DynamicMoviePlayer
 					tmdbId={id}
 					type={type as 'movie' | 'tv'}
 					movieData={movieData}

@@ -30,8 +30,6 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 
 		if (!tmdbId) return null
 
-		const vibixType = type === 'tv' ? 'series' : 'movie'
-
 		return (
 			<div
 				ref={ref}

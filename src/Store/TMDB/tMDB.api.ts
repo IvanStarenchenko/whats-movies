@@ -299,7 +299,6 @@ export const {
 	useGetMediaVideosQuery,
 	useGetMovieRecommendationsQuery,
 	useGetMovieCollectionQuery,
-	useGetTotalQuery,
 	useGetMediaCreditsQuery,
 	useGetWatchProvidersQuery,
 	useGetPersonQuery,

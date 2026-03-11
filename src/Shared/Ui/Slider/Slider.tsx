@@ -91,12 +91,14 @@ export function Slider({
 						breakpoints={{
 							640: { slidesPerView: 2 },
 							1024: { slidesPerView: 3 },
-							1280: { slidesPerView: 5 },
+							1280: { slidesPerView: 4 },
 						}}
+						observeParents={true}
+						observer={true}
 						onSwiper={s => (swiperRef.current = s)}
-						className='w-full h-125 items-stretch'
+						className='w-full h-125 p-1! items-stretch'
 					>
-						{items.map(item => {
+						{items.map((item, index) => {
 							const currentId =
 								type === 'book'
 									? (item as OpenLibraryWorks).key.split('/').pop()
@@ -122,7 +124,7 @@ export function Slider({
 											type={type}
 										/>
 
-										<SliderTop item={item} type={type} />
+										<SliderTop item={item} index={index} type={type} />
 										<SliderBottom item={item} type={type} />
 									</div>
 								</SwiperSlide>

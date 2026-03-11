@@ -5,8 +5,9 @@ import Image from 'next/image'
 interface SliderTopProps {
 	item: TMDBMediaItem | OpenLibraryWorks
 	type: MediaType
+	index: number
 }
-export function SliderTop({ item, type }: SliderTopProps) {
+export function SliderTop({ item, type, index }: SliderTopProps) {
 	const { isBook, imageUrl, displayTitle, releaseYear, rating } = useSlider(
 		item,
 		type
@@ -17,7 +18,9 @@ export function SliderTop({ item, type }: SliderTopProps) {
 				src={imageUrl}
 				alt={displayTitle || 'Cover Image'}
 				fill
-				unoptimized
+				priority={index === 0}
+				loading={index === 0 ? 'eager' : 'lazy'}
+				fetchPriority={index === 0 ? 'high' : 'low'}
 				draggable={false}
 				className='w-full h-full object-cover transition-transform duration-500 ease-out card-image-hover'
 			/>

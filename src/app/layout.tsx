@@ -42,7 +42,17 @@ export default function RootLayout({
 			<head>
 				<Script
 					src='https://graphicslab.io/sdk/v2/rendex-sdk.min.js'
-					strategy='afterInteractive'
+					strategy='lazyOnload'
+				/>
+				<link
+					rel='preconnect'
+					href='https://graphicslab.io'
+					crossOrigin='anonymous'
+				/>
+				<link
+					rel='preconnect'
+					href='https://image.tmdb.org'
+					crossOrigin='anonymous'
 				/>
 			</head>
 			<body className={`${inter.variable} ${poppins.variable} antialiased`}>
