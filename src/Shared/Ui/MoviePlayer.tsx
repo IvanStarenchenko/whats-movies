@@ -19,28 +19,22 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 			}
 		}, [tmdbId, type])
 
-		if (!movieData) return null
+		if (!movieData || !tmdbId) return null
 
-		const finalImdbId =
-			'movieData' in movieData && 'external_ids' in movieData
-				? movieData.external_ids?.imdb_id
-				: 'imdb_id' in movieData
-				? movieData.imdb_id
-				: undefined
-
-		if (!tmdbId) return null
-
+		const imdbId =
+			(movieData as TMDBMediaDetails).external_ids?.imdb_id ||
+			(movieData as TMDBMediaDetails).imdb_id
 		return (
 			<div
 				ref={ref}
-				className='my-4 w-full bg-black rounded-xl overflow-hidden'
+				className='my-4 w-full bg-black rounded-xl overflow-hidden shadow-2xl border border-white/5'
 			>
 				<ins
 					key={`${tmdbId}-${type}`}
 					className='vibix-player'
 					data-publisher-id='677242216'
-					data-type={finalImdbId ? 'imdb' : type === 'tv' ? 'series' : 'movie'}
-					data-id={finalImdbId || tmdbId}
+					data-type={type === 'tv' ? 'series' : imdbId ? 'imdb' : 'movie'}
+					data-id={imdbId || tmdbId}
 					data-design='4'
 					data-nopreload='true'
 					data-width='100%'
