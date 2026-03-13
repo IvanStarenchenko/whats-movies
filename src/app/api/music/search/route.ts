@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
+import dns from 'node:dns'
 import yts from 'yt-search'
+
+dns.setDefaultResultOrder('ipv4first')
 
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url)
@@ -14,7 +17,11 @@ export async function GET(request: Request) {
 			return NextResponse.json(list.videos || [])
 		}
 
-		const r = await yts(q)
+		const r = await yts({
+			query: q,
+			hl: 'ru',
+			gl: 'RU',
+		})
 
 		if (type === 'playlist') {
 			return NextResponse.json(r.playlists)
@@ -23,6 +30,13 @@ export async function GET(request: Request) {
 		return NextResponse.json(r.videos)
 	} catch (e) {
 		console.error('yt-search error:', e)
-		return NextResponse.json({ error: 'Search failed' }, { status: 500 })
+		return NextResponse.json(
+			{
+				error: 'Search failed',
+				message: e instanceof Error ? e.message : 'Unknown error',
+				stack: e instanceof Error ? e.stack : undefined,
+			},
+			{ status: 500 }
+		)
 	}
 }

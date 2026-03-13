@@ -18,25 +18,30 @@ export async function POST(req: Request) {
 	try {
 		const { title, type, overview } = await req.json()
 
-		const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-			method: "POST",
-			headers: {
-				"Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				model: "llama-3.3-70b-versatile",
-				messages: [
-					{ role: "system", content: SYSTEM_PROMPT },
-					{
-						role: "user",
-						content: `Проект: "${title}". Категория: ${type}. Контекст: ${overview || 'нет описания'}`
-					}
-				],
-				temperature: 0.6, // Немного снизим для стабильности
-				max_tokens: 200,
-			}),
-		})
+		const response = await fetch(
+			'https://api.groq.com/openai/v1/chat/completions',
+			{
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${process.env.NEXT_PUBLIC_GROQ_API_KEY}`,
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					model: 'llama-3.3-70b-versatile',
+					messages: [
+						{ role: 'system', content: SYSTEM_PROMPT },
+						{
+							role: 'user',
+							content: `Проект: "${title}". Категория: ${type}. Контекст: ${
+								overview || 'нет описания'
+							}`,
+						},
+					],
+					temperature: 0.6, // Немного снизим для стабильности
+					max_tokens: 200,
+				}),
+			}
+		)
 
 		const data = await response.json()
 		return NextResponse.json(data)

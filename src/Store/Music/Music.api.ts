@@ -4,10 +4,9 @@ export const MusicApi = createApi({
 	reducerPath: 'musicApi',
 	baseQuery: fetchBaseQuery({ baseUrl: '/api/music' }),
 	endpoints: builder => ({
-		// 1. Поиск ID видео (трейлер) или плейлиста (OST)
 		getYoutubeId: builder.query<
-			YouTubePlaylistItems, // Возвращаемый тип
-			{ title: string; type: 'video' | 'playlist' } // Аргументы
+			YouTubePlaylistItems,
+			{ title: string; type: 'video' | 'playlist' }
 		>({
 			query: ({ title, type }) => ({
 				url: 'search',
