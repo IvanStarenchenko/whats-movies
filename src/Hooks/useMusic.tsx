@@ -1,6 +1,6 @@
 import {
 	useGetPlayListQuery,
-	useGetYoutubeIdQuery
+	useGetYoutubeIdQuery,
 } from '@/Store/Music/Music.api'
 import { useCallback, useMemo, useState } from 'react'
 
@@ -13,7 +13,7 @@ interface UseMusicProps {
 export function useMusic({
 	initialName,
 	type = 'playlist',
-	value
+	value,
 }: UseMusicProps = {}) {
 	const [inputValue, setInputValue] = useState(initialName || value || '')
 	const [searchTerm, setSearchTerm] = useState(initialName || value || '')
@@ -30,7 +30,7 @@ export function useMusic({
 	const playlistId = musicData?.items[0]?.id?.playlistId
 
 	const { data: songs, isFetching: isFetchingSongs } = useGetPlayListQuery(
-		{ id: playlistId!, pageToken },
+		{ id: playlistId! },
 		{ skip: !playlistId || type === 'video' }
 	)
 
@@ -66,6 +66,6 @@ export function useMusic({
 		handleSearch,
 		handleReset,
 		mainThemeId,
-		setPageToken
+		setPageToken,
 	}
 }

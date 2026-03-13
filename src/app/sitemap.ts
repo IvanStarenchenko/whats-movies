@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-
+// export const dynamic = 'force-static'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const movies = [
 		{ id: 1, updatedAt: new Date() },
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	return [
 		{
-			url: 'https://твой-сайт.com',
+			url: 'https://media-hub.top',
 			lastModified: new Date(),
 			changeFrequency: 'always',
 			priority: 1,

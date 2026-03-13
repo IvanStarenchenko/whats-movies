@@ -1,67 +1,73 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { YouTubePlaylistId, YouTubePlaylistItems } from './Music.type'
-
-const baseUrl = 'https://www.googleapis.com/youtube/v3/'
-const YOUTUBE_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY
-
+import { YouTubePlaylistItems, YTSResult } from './Music.type'
 export const MusicApi = createApi({
 	reducerPath: 'musicApi',
-	tagTypes: ['music'],
-	baseQuery: fetchBaseQuery({
-		baseUrl,
-		fetchFn: (input: RequestInfo | URL, init?: RequestInit) =>
-			fetch(input, { ...init, next: { revalidate: 3600 } }),
-	}),
-
+	baseQuery: fetchBaseQuery({ baseUrl: '/api/music' }),
 	endpoints: builder => ({
-		getYoutubeId: builder.query<YouTubePlaylistId, { title: string, type: 'video' | 'playlist' }>({
-			query: ({ title, type = 'playlist' }) => ({
+		// 1. Поиск ID видео (трейлер) или плейлиста (OST)
+		getYoutubeId: builder.query<
+			YouTubePlaylistItems, // Возвращаемый тип
+			{ title: string; type: 'video' | 'playlist' } // Аргументы
+		>({
+			query: ({ title, type }) => ({
 				url: 'search',
 				params: {
-					q: `${title} ${type === 'video' ? 'trailer' : 'official soundtrack playlist'}`,
-					key: YOUTUBE_KEY,
+					q: `${title} ${
+						type === 'video' ? 'trailer' : 'official soundtrack playlist'
+					}`,
 					type: type,
-					part: 'snippet',
-					maxResults: 1
-				}
-			}),
-			keepUnusedDataFor: 3600,
-		}),
-
-		getPlayList: builder.query<YouTubePlaylistItems, { id: string, pageToken?: string }>({
-			query: ({ id, pageToken }) => ({
-				url: 'playlistItems',
-				params: {
-					playlistId: id,
-					key: YOUTUBE_KEY,
-					part: 'snippet',
-					maxResults: 25,
-					pageToken: pageToken
 				},
 			}),
-			providesTags: (result) => (result ? [{ type: 'music', id: 'LIST' }] : []),
-			keepUnusedDataFor: 3600,
+			transformResponse: (
+				response: YTSResult[],
+				meta,
+				arg
+			): YouTubePlaylistItems => {
+				const item = response?.[0]
+				if (!item) return { items: [] }
 
-			serializeQueryArgs: ({ queryArgs }) => {
-				return queryArgs.id
-			},
-			merge: (currentCache, newItems, { arg }) => {
-				if (!arg.pageToken) {
-					return newItems
-				}
 				return {
-					...newItems,
-					items: [...(currentCache?.items || []), ...newItems.items]
+					items: [
+						{
+							id:
+								arg.type === 'video'
+									? { videoId: item.videoId || item.id }
+									: { playlistId: item.listId || item.id },
+							snippet: {
+								title: item.title,
+								resourceId: { videoId: item.videoId || item.id || '' },
+								thumbnails: {
+									high: { url: item.thumbnail || item.image || '' },
+								},
+							},
+						},
+					],
 				}
 			},
-			forceRefetch({ currentArg, previousArg }) {
-				return currentArg?.pageToken !== previousArg?.pageToken || currentArg?.id !== previousArg?.id
-			}
-		})
-	})
+		}),
+
+		getPlayList: builder.query<YouTubePlaylistItems, { id: string }>({
+			query: ({ id }) => ({
+				url: 'search',
+				params: { q: id, type: 'playlist' },
+			}),
+			transformResponse: (response: YTSResult[]): YouTubePlaylistItems => {
+				const videos = Array.isArray(response) ? response : []
+
+				return {
+					items: videos.map(v => ({
+						snippet: {
+							title: v.title,
+							resourceId: { videoId: v.videoId || v.id || '' },
+							thumbnails: {
+								high: { url: v.thumbnail || v.image || '' },
+							},
+						},
+					})),
+				}
+			},
+		}),
+	}),
 })
 
-export const {
-	useGetYoutubeIdQuery,
-	useGetPlayListQuery
-} = MusicApi
+export const { useGetYoutubeIdQuery, useGetPlayListQuery } = MusicApi

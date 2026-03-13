@@ -4,10 +4,12 @@ import type { NextConfig } from 'next'
 const bundleAnalyzer = withBundleAnalyzer({
 	enabled: process.env.ANALYZE === 'true',
 })
-
+/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
+	output: 'standalone',
+	// trailingSlash: true,
+
 	images: {
-		unoptimized: true, // Отключаем оптимизацию изображений для разработки (!!!УБРАТЬ В ПРОДАКШЕНЕ!!!)
 		remotePatterns: [
 			{
 				protocol: 'https',

@@ -1,7 +1,6 @@
 'use client'
-import PlaceholderCover from '@/Assets/Images/Book/placeholder-book-cover.jpg'
 import { YouTubePlaylistItems } from '@/Store/Music/Music.type'
-import { Play, X } from 'lucide-react'
+import { Music, Play, X } from 'lucide-react'
 import Image from 'next/image'
 
 interface SongCardProps {
@@ -15,10 +14,9 @@ export function SongCard({
 	song,
 	index,
 	activeVideoId,
-	setActiveVideoId
+	setActiveVideoId,
 }: SongCardProps) {
 	const isPlaying = activeVideoId === song.snippet.resourceId.videoId
-
 	return (
 		<div
 			onClick={() => setActiveVideoId(song.snippet.resourceId.videoId)}
@@ -29,46 +27,54 @@ export function SongCard({
 			}`}
 		>
 			<span
-				className={`w-8 font-mono text-sm ${isPlaying ? 'text-(--activeColor)' : 'text-gray-500'}`}
+				className={`w-8 font-mono text-sm ${
+					isPlaying ? 'text-(--activeColor)' : 'text-gray-500'
+				}`}
 			>
 				{index + 1}
 			</span>
 
-			<div className="relative w-14 h-14 shrink-0 shadow-lg">
-				<Image
-					src={song.snippet?.thumbnails?.default?.url || PlaceholderCover}
-					fill
-					alt="img"
-					className="rounded-lg object-cover"
-				/>
+			<div className='relative w-14 h-14 shrink-0 shadow-lg  flex items-center justify-center'>
+				{song.snippet?.thumbnails?.default?.url ? (
+					<Image
+						src={song.snippet?.thumbnails?.default?.url || ''}
+						fill
+						alt='img'
+						className='rounded-lg object-cover'
+					/>
+				) : (
+					<Music className='text-xl text-(--activeColor)' />
+				)}
 			</div>
 
-			<div className="flex-1">
+			<div className='flex-1'>
 				<h4
-					className={`font-semibold line-clamp-1 ${isPlaying ? 'text-(--activeColor)' : ''}`}
+					className={`font-semibold line-clamp-1 ${
+						isPlaying ? 'text-(--activeColor)' : ''
+					}`}
 				>
 					{song.snippet.title}
 				</h4>
-				<p className="text-xs text-gray-500 uppercase mt-1 tracking-wider font-medium">
+				<p className='text-xs text-gray-500 uppercase mt-1 tracking-wider font-medium'>
 					YouTube Music
 				</p>
 			</div>
 
-			<div className="flex items-center justify-center w-12">
+			<div className='flex items-center justify-center w-12'>
 				{isPlaying ? (
 					<button
 						onClick={e => {
 							e.stopPropagation()
 							setActiveVideoId(null)
 						}}
-						className="bg-white/10 p-3 rounded-full hover:bg-(--red)/20 hover:text-(--red) transition-all text-white"
-						title="Stop playing"
+						className='bg-white/10 p-3 rounded-full hover:bg-(--red)/20 hover:text-(--red) transition-all text-white'
+						title='Stop playing'
 					>
 						<X size={24} />
 					</button>
 				) : (
-					<div className="p-3 rounded-full bg-white/5 group-hover:bg-(--activeColor) transition-all text-white group-hover:text-black">
-						<Play className="text-xl" />
+					<div className='p-3 rounded-full bg-white/5 group-hover:bg-(--activeColor) transition-all text-white group-hover:text-black'>
+						<Play className='text-xl' />
 					</div>
 				)}
 			</div>
