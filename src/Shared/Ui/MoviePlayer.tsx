@@ -35,7 +35,7 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 					data-publisher-id='677242216'
 					data-type={type === 'tv' ? 'series' : imdbId ? 'imdb' : 'movie'}
 					data-id={imdbId || tmdbId}
-					data-design='4'
+					data-design='2'
 					data-nopreload='true'
 					data-width='100%'
 					data-height='450px'
