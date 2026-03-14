@@ -8,7 +8,7 @@ const DynamicMoviePlayer = dynamic(
 	() => import('@/Shared/Ui/MoviePlayer').then(mod => mod.MoviePlayer),
 	{
 		ssr: false,
-		loading: () => <div className='h-[450px] bg-gray-900 animate-pulse' />,
+		loading: () => <div className='w-full h-full bg-gray-900 animate-pulse' />,
 	}
 )
 interface FilmProps {
@@ -44,7 +44,7 @@ export function Film({
 	isCinema,
 }: FilmProps) {
 	return (
-		<div className='relative w-full aspect-video z-10 sm:w-full md:w-full'>
+		<div className='relative w-full overflow-hidden aspect-video z-10 sm:w-full md:w-full'>
 			{activeMode === 'movie' ? (
 				<DynamicMoviePlayer
 					tmdbId={id}

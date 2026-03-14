@@ -1,7 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 export function Label({
 	activeMode,
-	mainTrailer
+	mainTrailer,
 }: {
 	activeMode: 'movie' | 'trailer'
 	mainTrailer?: { key: string; site: string; type: string }
@@ -12,17 +12,17 @@ export function Label({
 				activeMode === 'movie' ? 'opacity-0 z-0' : 'opacity-100 z-20'
 			}`}
 		>
-			<div className="flex items-center gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-xl px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl border border-white/10 shadow-xl">
+			<div className='flex items-center gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-xl px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl border border-white/10 shadow-xl'>
 				<ExternalLink
 					size={14}
-					className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-(--secondActiveColor) animate-pulse"
+					className='w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-(--secondActiveColor) animate-pulse'
 				/>
-				<span className="text-[8px] sm:text-[10px] text-white font-bold uppercase tracking-[1.5px] sm:tracking-[2px] whitespace-nowrap">
+				<span className='text-[8px] sm:text-[10px] text-white font-bold uppercase tracking-[1.5px] sm:tracking-[2px] whitespace-nowrap'>
 					{activeMode === 'movie'
 						? 'Full Movie'
 						: mainTrailer
-							? 'Official Trailer'
-							: 'Preview'}
+						? 'Official Trailer'
+						: 'Preview'}
 				</span>
 			</div>
 		</div>

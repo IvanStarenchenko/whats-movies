@@ -27,18 +27,29 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 		return (
 			<div
 				ref={ref}
-				className='my-4 w-full bg-black rounded-xl overflow-hidden shadow-2xl border border-white/5'
+				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
 			>
+				<style jsx global>{`
+					.vibix-player,
+					.vibix-player iframe {
+						width: 100% !important;
+						height: 100% !important;
+						position: absolute !important;
+						top: 0;
+						left: 0;
+						object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
+					}
+				`}</style>
 				<ins
 					key={`${tmdbId}-${type}`}
 					className='vibix-player'
 					data-publisher-id='677242216'
-					data-type={type === 'tv' ? 'series' : imdbId ? 'imdb' : 'movie'}
+					data-type='imdb'
 					data-id={imdbId || tmdbId}
 					data-design='2'
 					data-nopreload='true'
 					data-width='100%'
-					data-height='450px'
+					data-height='100%' // Обязательно 100%
 				></ins>
 			</div>
 		)

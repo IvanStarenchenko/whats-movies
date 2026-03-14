@@ -2,38 +2,35 @@ import { Play, YoutubeIcon } from 'lucide-react'
 
 export function SwitchBtn({
 	activeMode,
-	setActiveMode
+	setActiveMode,
 }: {
 	activeMode: 'movie' | 'trailer'
 	setActiveMode: (mode: 'movie' | 'trailer') => void
 }) {
 	return (
-		<div className="absolute top-4 sm:top-8 left-2 right-2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-40 flex gap-1 p-1 bg-black/40 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-2xl transition-all duration-300 group-hover:top-8">
+		<div className='absolute top-1 left-[51%] -translate-x-1/2 z-40 flex p-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10 shadow-2xl transition-all'>
 			<button
 				onClick={() => setActiveMode('trailer')}
-				className={`flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 min-w-0 ${
+				className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
 					activeMode === 'trailer'
-						? 'bg-(--secondActiveColor) text-white shadow-lg'
-						: 'text-white/60 hover:text-white hover:bg-white/5'
+						? 'bg-white text-black'
+						: 'text-white/70 hover:text-white'
 				}`}
 			>
-				<YoutubeIcon size={16} />
-				<span className="truncate">Trailer</span>
+				<YoutubeIcon size={14} />
+				<span className='hidden sm:inline'>Trailer</span>
 			</button>
 
 			<button
 				onClick={() => setActiveMode('movie')}
-				className={`flex flex-1 sm:flex-none items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 min-w-0 ${
+				className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
 					activeMode === 'movie'
-						? 'bg-(--secondActiveColor) text-white shadow-lg'
-						: 'text-white/60 hover:text-white hover:bg-white/5'
+						? 'bg-white text-black'
+						: 'text-white/70 hover:text-white'
 				}`}
 			>
-				<Play
-					size={16}
-					fill="currentColor"
-				/>
-				<span className="truncate">Full Movie</span>
+				<Play size={14} fill='currentColor' />
+				<span className='hidden sm:inline'>Full Movie</span>
 			</button>
 		</div>
 	)
