@@ -4,8 +4,7 @@ import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { MetadataRoute } from 'next'
 
 const BASE_URL = process.env.BASE_URL || 'https://media-hub.top'
-// Используем ключи из ENV (убедись, что они прописаны в Docker/Build.sh)
-const TMDB_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY
+const TMDB_KEY = process.env.NEXT_PUBLIC_TMDB_TOKEN
 const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API
 
 // --- Вспомогательные функции запросов ---

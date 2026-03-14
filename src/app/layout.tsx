@@ -1,4 +1,3 @@
-import Logo from '@/Assets/Images/logo.png'
 import { Header } from '@/Components/Layout/Header/Header'
 import { CompareBtn } from '@/Shared/Ui/Compare/CompareBtn'
 import { ContactForm } from '@/Shared/Ui/Feedback/Feedback'
@@ -21,15 +20,38 @@ export const poppins = Poppins({
 export const metadata: Metadata = {
 	title: {
 		template: '%s | MediaHub',
-		default: 'MediaHub — Media Comparison Engine',
+		default: 'MediaHub — Смотреть фильмы, сериалы и игры онлайн в HD',
 	},
 	description:
-		'A universal catalog for searching and comparing media content. Find the best movies, games, and books in one place.',
-	keywords: ['movies', 'games', 'books', 'comparison', 'catalog'],
+		'Универсальный каталог для поиска и сравнения медиа-контента. Смотрите фильмы, сериалы и находите лучшие игры в одном месте.',
+	keywords: [
+		'смотреть фильмы',
+		'сериалы онлайн',
+		'база игр',
+		'imdb поиск',
+		'mediahub',
+	],
+
+	icons: {
+		icon: [{ url: '/favicon.ico' }, { url: '/icon.png', type: 'image/png' }],
+		apple: [{ url: '/apple-icon.png' }],
+	},
+
 	openGraph: {
-		title: 'MediaHub — Your guide to the world of entertainment',
-		description: 'Compare content and choose the best.',
-		images: [Logo.src],
+		title: 'MediaHub — Твой гид в мире развлечений',
+		description: 'Сравнивай контент и выбирай лучшее. Все новинки кино и игр.',
+		url: 'https://media-hub.top',
+		siteName: 'MediaHub',
+		images: [
+			{
+				url: '/public/opengraph-image.png',
+				width: 1200,
+				height: 630,
+				alt: 'MediaHub Logo',
+			},
+		],
+		locale: 'ru_RU',
+		type: 'website',
 	},
 }
 
