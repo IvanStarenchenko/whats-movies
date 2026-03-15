@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 		siteName: 'MediaHub',
 		images: [
 			{
-				url: '/public/opengraph-image.png',
+				url: '/opengraph-image.png',
 				width: 1200,
 				height: 630,
 				alt: 'MediaHub Logo',

@@ -1,3 +1,4 @@
+'use client'
 import {
 	booksOptions,
 	FilterRatingData,
@@ -7,7 +8,7 @@ import {
 	orderingGamesOptions,
 	specialMovieOptions,
 	TvGenresData,
-	tvOptions
+	tvOptions,
 } from '@/Data/Filter.data'
 import { BooksListCategory } from '@/Store/Books/Openlibrary.type'
 import { TGamesGenre } from '@/Store/Games/Games.type'
@@ -15,9 +16,9 @@ import { useGetListQuery } from '@/Store/TMDB/tMDB.api'
 import {
 	MediaType,
 	TMDBListCategory,
-	TMDBSpecialCategories
+	TMDBSpecialCategories,
 } from '@/Store/TMDB/tMDB.type'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 export interface Option {
 	TmdbValue?: TMDBListCategory | TMDBSpecialCategories
@@ -31,7 +32,8 @@ export function useFilter(type: MediaType) {
 	const [page, setPage] = useState(1)
 	const searchParams = useSearchParams()
 	const urlCategory = searchParams.get('category')
-
+	const pathname = usePathname()
+	const router = useRouter()
 	const [savedFilters, setSavedFilters] = useState<{
 		genres: number[]
 		rating: number
@@ -61,7 +63,7 @@ export function useFilter(type: MediaType) {
 		category: selectedOption.TmdbValue || 'popular',
 		page,
 		genres: savedFilters.genres,
-		minRating: savedFilters.rating
+		minRating: savedFilters.rating,
 	})
 
 	const totalPages = data?.total_pages || 1
@@ -70,6 +72,14 @@ export function useFilter(type: MediaType) {
 		setSavedFilters({ genres: [], rating: 0 })
 		setSelectedOption(type === 'movie' ? movieOptions[0] : tvOptions[0])
 		setPage(1)
+
+		const params = new URLSearchParams(searchParams.toString())
+
+		params.delete('genres')
+		params.delete('rating')
+		params.delete('page')
+
+		router.replace(`${pathname}?${params.toString()}`)
 	}
 	return {
 		movieOptions,
@@ -92,6 +102,6 @@ export function useFilter(type: MediaType) {
 		page,
 		setPage,
 		data,
-		isFetching
+		isFetching,
 	}
 }

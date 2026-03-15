@@ -14,8 +14,8 @@ const DynamicCatalogFilter = dynamic(
 	() => import('../Filter/CategoryFilter').then(mod => mod.CatalogFilter),
 	{
 		loading: () => (
-			<div className="h-10 w-full bg-white/5 animate-pulse rounded-xl" />
-		)
+			<div className='h-10 w-full bg-white/5 animate-pulse rounded-xl' />
+		),
 	}
 )
 
@@ -23,8 +23,8 @@ const DynamicGenreFilter = dynamic(
 	() => import('../Filter/GenreFilter').then(mod => mod.GenreFilter),
 	{
 		loading: () => (
-			<div className="h-10 w-full bg-white/5 animate-pulse rounded-xl" />
-		)
+			<div className='h-10 w-full bg-white/5 animate-pulse rounded-xl' />
+		),
 	}
 )
 
@@ -42,15 +42,15 @@ export function Movies({ type }: { type: MediaType }) {
 		setSavedFilters,
 		resetFilter,
 		totalPages,
-		data
+		data,
 	} = useFilter(type)
 
 	return (
-		<div className="space-y-10">
-			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-				<h2 className="text-2xl flex items-center gap-4 font-bold text-white uppercase tracking-wider">
-					<div className="flex flex-col">
-						<span className="text-sm text-(--activeColor)">
+		<div className='space-y-10'>
+			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
+				<h2 className='text-2xl flex items-center gap-4 font-bold text-white uppercase tracking-wider'>
+					<div className='flex flex-col'>
+						<span className='text-sm text-(--activeColor)'>
 							{selectedGenreNames && `${selectedGenreNames} `}
 						</span>
 						{selectedOption.label} Movies
@@ -58,8 +58,8 @@ export function Movies({ type }: { type: MediaType }) {
 					<RandomBtn movies={data?.results || []} />
 				</h2>
 
-				<div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-					<div className="relative group">
+				<div className='flex flex-col md:flex-row gap-4 w-full md:w-auto'>
+					<div className='relative group'>
 						<FunnelPlus
 							onClick={() => setIsActive(!isActive)}
 							className={`mt-3 cursor-pointer hover:scale-110 transition-all duration-300
@@ -79,7 +79,7 @@ export function Movies({ type }: { type: MediaType }) {
 						)}
 					</div>
 
-					<div className="w-full md:w-64">
+					<div className='w-full md:w-64'>
 						<DynamicCatalogFilter
 							setPage={setPage}
 							filterType={type}
@@ -103,37 +103,36 @@ export function Movies({ type }: { type: MediaType }) {
 				/>
 			)}
 
-			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+			<div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6'>
 				{isFetching
 					? Array.from({ length: 20 }).map((_, index) => (
 							<LazyPuls key={index} />
-						))
-					: data?.results.map((item, index) => (
-							<Fragment key={index}>
-								<CatalogCard
-									item={item}
-									type={type}
-								/>
-								{index === 4 && <NativeAdCard />}
-							</Fragment>
-						))}
+					  ))
+					: data?.results
+							.filter(item => item.poster_path && item.backdrop_path)
+							.map((item, index) => (
+								<Fragment key={index}>
+									<CatalogCard item={item} type={type} />
+									{index === 4 && <NativeAdCard />}
+								</Fragment>
+							))}
 			</div>
 
-			<div className="flex justify-center items-center gap-6 pt-10">
+			<div className='flex justify-center items-center gap-6 pt-10'>
 				<button
 					onClick={() => {
 						setPage(p => Math.max(1, p - 1))
 						window.scrollTo({ top: 0, behavior: 'smooth' })
 					}}
 					disabled={page === 1 || isFetching}
-					className="px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white"
+					className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 				>
 					Previous
 				</button>
 
-				<span className="text-[--secondActiveColor] font-bold">
+				<span className='text-[--secondActiveColor] font-bold'>
 					Page {page}{' '}
-					<span className="text-gray-500 font-normal">of {totalPages}</span>
+					<span className='text-gray-500 font-normal'>of {totalPages}</span>
 				</span>
 
 				<button
@@ -142,7 +141,7 @@ export function Movies({ type }: { type: MediaType }) {
 						window.scrollTo({ top: 0, behavior: 'smooth' })
 					}}
 					disabled={page === totalPages || isFetching}
-					className="px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white"
+					className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 				>
 					Next
 				</button>
