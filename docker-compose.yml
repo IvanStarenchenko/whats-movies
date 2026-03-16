@@ -1,0 +1,41 @@
+services:
+  web:
+    # Образ собирается на ПК через build.sh с запечёнными NEXT_PUBLIC_ ключами
+    # и деплоится на сервер через Docker Hub. Здесь только pull и run.
+    image: tymurmustafaiev/whats-movies:latest
+    container_name: nextjs-media-hub
+    restart: always
+
+    environment:
+      # Только runtime-переменные: то, что сервер читает в момент работы.
+      # NEXT_PUBLIC_ здесь НЕ нужны — они уже запечены в JS-бандл при сборке.
+      PORT: 3000
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      BASE_URL: ${BASE_URL}
+
+    expose:
+      - "3000"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  caddy_data:
+  caddy_config:
