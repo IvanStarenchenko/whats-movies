@@ -44,7 +44,7 @@ export function Film({
 	isCinema,
 }: FilmProps) {
 	return (
-		<div className='relative w-full overflow-hidden aspect-video z-10 sm:w-full md:w-full'>
+		<div className='relative w-full overflow-hidden aspect-video z-10 '>
 			{activeMode === 'movie' ? (
 				<DynamicMoviePlayer
 					tmdbId={id}

@@ -84,7 +84,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 
 			<motion.div
 				variants={itemVariants}
-				className={`mx-auto px-4 sm:px-6 md:px-8 lg:px-12 transition-all duration-500 ${
+				className={`mx-auto px-0 sm:px-12 transition-all duration-500 ${
 					isCinema
 						? 'fixed inset-0 z-[101] p-0 m-0 w-screen h-screen bg-black'
 						: 'relative z-10 opacity-100'

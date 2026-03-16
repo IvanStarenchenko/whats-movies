@@ -28,5 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          # ВАЖНО: замени 'tymurmustafaiev' на свой реальный DOCKER_USERNAME
           tags: tymurmustafaiev/whats-movies:latest
