@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: 'MediaHub — Твой гид в мире развлечений',
 		description: 'Сравнивай контент и выбирай лучшее. Все новинки кино и игр.',
-		url: 'https://media-hub.top',
+		url: 'https://media-hub.icu',
 		siteName: 'MediaHub',
 		images: [
 			{

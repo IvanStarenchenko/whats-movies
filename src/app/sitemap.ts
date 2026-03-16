@@ -3,7 +3,7 @@ import { IGameDetails } from '@/Store/Games/Games.type'
 import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { MetadataRoute } from 'next'
 
-const BASE_URL = process.env.BASE_URL || 'https://media-hub.top'
+const BASE_URL = process.env.BASE_URL || 'https://media-hub.icu'
 const TMDB_KEY = process.env.NEXT_PUBLIC_TMDB_TOKEN
 const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API
 
