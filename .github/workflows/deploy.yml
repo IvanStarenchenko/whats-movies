@@ -1,0 +1,32 @@
+name: Build and Push to Docker Hub
+
+# Запускать скрипт только при пуше в ветку master (или main, проверь как у тебя)
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Бесплатный сервер от GitHub с 7 ГБ ОЗУ
+
+    steps:
+      # 1. Скачиваем твой код на сервер GitHub
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Авторизуемся в Docker Hub используя секреты
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      # 3. Собираем образ и отправляем его
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # ВАЖНО: замени 'tymurmustafaiev' на свой реальный DOCKER_USERNAME
+          tags: tymurmustafaiev/whats-movies:latest
