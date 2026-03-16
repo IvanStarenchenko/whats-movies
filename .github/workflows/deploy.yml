@@ -29,3 +29,8 @@ jobs:
           context: .
           push: true
           tags: tymurmustafaiev/whats-movies:latest
+          build-args: |
+            NEXT_PUBLIC_TMDB_TOKEN=${{ secrets.TMDB_API_KEY }}
+            NEXT_PUBLIC_RAWG_API=${{ secrets.TMDB_API_KEY }}
+            NEXT_PUBLIC_YOUTUBE_API_KEY=${{ secrets.TMDB_API_KEY }}
+            BASE_URL=${{ secrets.TMDB_API_KEY }}
