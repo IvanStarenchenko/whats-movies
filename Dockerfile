@@ -34,6 +34,7 @@ RUN npm install cheerio
 ARG NEXT_PUBLIC_TMDB_TOKEN
 ARG NEXT_PUBLIC_RAWG_API
 ARG NEXT_PUBLIC_YOUTUBE_API_KEY
+ARG NEXT_PUBLIC_GROQ_API_KEY
 ARG BASE_URL
 
 # Прокидываем их в ENV, чтобы Next.js вшил их в клиентский бандл
