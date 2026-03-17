@@ -18,6 +18,7 @@ export const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
+	metadataBase: new URL('https://media-hub.icu'),
 	title: {
 		template: '%s | MediaHub',
 		default: 'MediaHub — Смотреть фильмы, сериалы и игры онлайн в HD',
