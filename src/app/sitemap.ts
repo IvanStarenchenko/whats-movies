@@ -12,12 +12,19 @@ const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API
 async function getTMDB(type: 'movie' | 'tv') {
 	try {
 		const res = await fetch(
-			`https://api.themoviedb.org/3/${type}/popular?api_key=${TMDB_KEY}&language=ru-RU&page=1`,
-			{ next: { revalidate: 86400 } } // Кэшируем на сутки
+			`https://api.themoviedb.org/3/${type}/popular?language=ru-RU&page=1`, // Убрали api_key из URL
+			{
+				headers: {
+					accept: 'application/json',
+					Authorization: `Bearer ${TMDB_KEY}`, // Передаем длинный токен здесь
+				},
+				next: { revalidate: 86400 },
+			}
 		)
 		const data = await res.json()
 		return data.results || []
-	} catch {
+	} catch (error) {
+		console.error('TMDB Fetch Error:', error)
 		return []
 	}
 }
