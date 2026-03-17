@@ -4,23 +4,29 @@ import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { MetadataRoute } from 'next'
 
 const BASE_URL = process.env.BASE_URL || 'https://media-hub.icu'
-export const TMDB_KEY = process.env.NEXT_PUBLIC_TMDB_TOKEN
+//export const TMDB_KEY = process.env.NEXT_PUBLIC_TMDB_TOKEN
 const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API
-
-// --- Вспомогательные функции запросов ---
 
 async function getTMDB(type: 'movie' | 'tv') {
 	try {
+		const token = process.env.NEXT_PUBLIC_TMDB_TOKEN
+
 		const res = await fetch(
-			`https://api.themoviedb.org/3/${type}/popular?language=ru-RU&page=1`, // Убрали api_key из URL
+			`https://api.themoviedb.org/3/${type}/popular?language=ru-RU&page=1`,
 			{
 				headers: {
-					accept: 'application/json',
-					Authorization: `Bearer ${TMDB_KEY}`, // Передаем длинный токен здесь
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
 				},
-				next: { revalidate: 86400 },
+				next: { revalidate: 86400 }, // Кэш на сутки
 			}
 		)
+
+		if (!res.ok) {
+			console.error(`TMDB API Error: ${res.status} ${res.statusText}`)
+			return []
+		}
+
 		const data = await res.json()
 		return data.results || []
 	} catch (error) {
@@ -44,7 +50,6 @@ async function getGames() {
 
 async function getBooks() {
 	try {
-		// OpenLibrary не требует ключа, берем популярные детективы или классику
 		const res = await fetch(
 			`https://openlibrary.org/subjects/love.json?limit=40`,
 			{ next: { revalidate: 86400 } }
@@ -55,8 +60,6 @@ async function getBooks() {
 		return []
 	}
 }
-
-// --- Основная функция Sitemap ---
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const [movies, tvShows, games, books] = await Promise.all([
@@ -86,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	const gameEntries: MetadataRoute.Sitemap = games.map(
 		(item: IGameDetails) => ({
-			url: `${BASE_URL}/details/game/${item.id}`, // Убедись, что у тебя роут /game/ или /games/
+			url: `${BASE_URL}/details/game/${item.id}`,
 			lastModified: new Date(),
 			changeFrequency: 'weekly',
 			priority: 0.7,
