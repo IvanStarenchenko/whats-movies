@@ -10,9 +10,9 @@ async function getMediaData(type: string, id: string) {
 	let url = ''
 
 	if (type === 'movie' || type === 'tv') {
-		url = `https://api.themoviedb.org/3/${type}/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=ru-RU`
+		url = `https://api.themoviedb.org/3/${type}/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_TOKEN}&language=ru-RU`
 	} else if (type === 'game') {
-		url = `https://api.rawg.io/api/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}`
+		url = `https://api.rawg.io/api/games/${id}?key=${process.env.NEXT_PUBLIC_RAWG_API}`
 	}
 
 	const res = await fetch(url)
