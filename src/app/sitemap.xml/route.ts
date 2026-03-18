@@ -57,10 +57,10 @@ export async function GET() {
 
 	const urls = [
 		`${BASE_URL}`,
-		`${BASE_URL}/movies`,
-		`${BASE_URL}/tv-shows`,
-		`${BASE_URL}/games`,
-		`${BASE_URL}/books`,
+		`${BASE_URL}/details/movies`,
+		`${BASE_URL}/details/tv-shows`,
+		`${BASE_URL}/details/games`,
+		`${BASE_URL}/details/books`,
 	]
 
 	const dynamicUrls = [
