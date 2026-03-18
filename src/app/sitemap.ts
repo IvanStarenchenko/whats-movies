@@ -18,7 +18,7 @@ async function getTMDB(type: 'movie' | 'tv') {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${token}`,
 				},
-				next: { revalidate: 0 }, // Кэш на сутки
+				next: { revalidate: 86400 }, // Кэш на сутки
 			}
 		)
 

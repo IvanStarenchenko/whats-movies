@@ -39,11 +39,24 @@ async function getMediaData(type: MediaType, id: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { name, id } = await params
 	const actualType = name as MediaType
-
 	const data = await getMediaData(actualType, id)
+
 	if (!data) return { title: 'MediaHub' }
 
 	const title = data.title || data.name || 'MediaHub'
+	const year = data.release_date ? ` (${data.release_date.split('-')[0]})` : ''
+
+	let seoTitle = `${title}${year} | MediaHub`
+	let description = `Информация о ${title} на MediaHub.`
+
+	if (actualType === 'movie' || actualType === 'tv') {
+		seoTitle = `Смотреть ${title}${year} онлайн в хорошем качестве — MediaHub`
+		description = `Смотреть ${
+			actualType === 'movie' ? 'фильм' : 'сериал'
+		} ${title} онлайн. Трейлеры, описание и детали на MediaHub.`
+	} else if (actualType === 'game') {
+		seoTitle = `Игра ${title}: обзор, системные требования и детали — MediaHub`
+	}
 
 	let posterUrl = 'https://media-hub.icu/opengraph-image.png'
 
@@ -56,14 +69,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	}
 
 	return {
-		title: `${title} | MediaHub`,
+		title: seoTitle,
+		description: description,
 		openGraph: {
-			title: title,
+			title: seoTitle,
+			description: description,
 			images: [{ url: posterUrl }],
+			type: 'video.movie',
 		},
 	}
 }
 
-export default function page() {
-	return <Details />
+export default async function page({ params }: Props) {
+	const { name, id } = await params
+	const actualType = name as MediaType
+	const data = await getMediaData(actualType, id)
+
+	const jsonLd =
+		data && (actualType === 'movie' || actualType === 'tv')
+			? {
+					'@context': 'https://schema.org',
+					'@type': actualType === 'movie' ? 'Movie' : 'TVSeries',
+					name: data.title || data.name,
+					description: data.overview,
+					image: data.poster_path
+						? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+						: '',
+					datePublished: data.release_date || data.first_air_date,
+					aggregateRating: {
+						'@type': 'AggregateRating',
+						ratingValue: data.vote_average,
+						bestRating: '10',
+						ratingCount: data.vote_count,
+					},
+			  }
+			: null
+
+	return (
+		<>
+			{jsonLd && (
+				<script
+					type='application/ld+json'
+					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+				/>
+			)}
+			<Details />
+		</>
+	)
 }
