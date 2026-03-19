@@ -94,12 +94,6 @@ export default function RootLayout({
 					</div>
 				</StoreProvider>
 				<div id='portal-root'></div>
-				<Script
-					id='adsterra-social-bar'
-					strategy='afterInteractive'
-					className='m-5'
-					src='https://pl28734127.effectivegatecpm.com/ab/71/4d/ab714dc25ea17a55f341d613262efb5e.js'
-				/>
 			</body>
 		</html>
 	)

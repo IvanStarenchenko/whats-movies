@@ -1,7 +1,6 @@
 'use client'
 import { Option, useFilter } from '@/Hooks/useFilter'
 import { LazyPuls } from '@/Shared/Ui/LazyPuls'
-import { NativeAdCard } from '@/Shared/Ui/NativeAdCard.tsx/NativeAdCard.tsx'
 import { useGetBooksByGenreQuery } from '@/Store/Books/Openlibrary.api'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { onlyCoveredBooks } from '@/Utils/onlyCoveredBooks'
@@ -72,7 +71,7 @@ export function Books({ type }: { type: MediaType }) {
 							<Fragment key={item.key}>
 								<CatalogCard item={item} type={type} />
 
-								{index === 4 && <NativeAdCard />}
+								{/* {index === 4 && <NativeAdCard />} */}
 							</Fragment>
 					  ))}
 			</div>

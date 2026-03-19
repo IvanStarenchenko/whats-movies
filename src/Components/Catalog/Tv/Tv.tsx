@@ -2,7 +2,6 @@
 import { useFilter } from '@/Hooks/useFilter'
 import { FilterTip } from '@/Shared/Ui/FilterTip'
 import { LazyPuls } from '@/Shared/Ui/LazyPuls'
-import { NativeAdCard } from '@/Shared/Ui/NativeAdCard.tsx/NativeAdCard.tsx'
 import { RandomBtn } from '@/Shared/Ui/RandomBtn'
 import { FunnelPlus } from 'lucide-react'
 import dynamic from 'next/dynamic'
@@ -109,7 +108,7 @@ export function Tv({ type }: { type: 'tv' }) {
 								<Fragment key={item.id || index}>
 									<CatalogCard item={item} type={type} />
 
-									{index === 4 && <NativeAdCard />}
+									{/* {index === 4 && <NativeAdCard />} */}
 								</Fragment>
 							))}
 			</div>
