@@ -3,7 +3,7 @@ import type { OpenLibraryBookDetails } from '@/Store/Books/Openlibrary.type'
 import type { IGameDetails } from '@/Store/Games/Games.type'
 import type { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 
-const BASE_URL = process.env.BASE_URL || 'https://media-hub.icu'
+const BASE_URL = process.env.BASE_URL || 'https://media-hub.top'
 const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API
 export const dynamic = 'force-dynamic'
 // ПОКА 'force-dynamic' УБРАТЬ revalidate
@@ -28,7 +28,7 @@ async function getTMDB(type: 'movie' | 'tv') {
 
 async function getGames() {
 	const res = await fetch(
-		`https://api.rawg.io/api/games?key=${RAWG_KEY}&page_size=40`,
+		`https://api.rawg.io/api/games?key=${RAWG_KEY}&page_size=40`
 		//{ next: { revalidate: 86400 } }
 	)
 
@@ -39,7 +39,7 @@ async function getGames() {
 
 async function getBooks() {
 	const res = await fetch(
-		`https://openlibrary.org/subjects/love.json?limit=40`,
+		`https://openlibrary.org/subjects/love.json?limit=40`
 		//{ next: { revalidate: 86400 } }
 	)
 
@@ -75,9 +75,7 @@ export async function GET() {
 			g?.id ? `${BASE_URL}/details/game/${g.id}` : null
 		),
 		...books.map((b: OpenLibraryBookDetails) =>
-			b?.key
-				? `${BASE_URL}/details/book/${b.key.replace('/works/', '')}`
-				: null
+			b?.key ? `${BASE_URL}/details/book/${b.key.replace('/works/', '')}` : null
 		),
 	]
 
@@ -93,14 +91,14 @@ export async function GET() {
 	const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allUrls
-			.map(
-				(url) => `
+	.map(
+		url => `
   <url>
     <loc>${escapeXml(url)}</loc>
    
   </url>`
-			)
-			.join('')}
+	)
+	.join('')}
 </urlset>`
 
 	return new Response(xml, {
