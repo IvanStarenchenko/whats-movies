@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		seoTitle = `Игра ${title}: обзор, системные требования и детали — MediaHub`
 	}
 
-	let posterUrl = 'https://media-hub.top/opengraph-image.png'
+	let posterUrl = 'https://media-hub.lol/opengraph-image.png'
 
 	if ((actualType === 'movie' || actualType === 'tv') && data.poster_path) {
 		posterUrl = `https://image.tmdb.org/t/p/w600_and_h900_bestv2${data.poster_path}`

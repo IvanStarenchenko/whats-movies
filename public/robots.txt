@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://media-hub.top/sitemap.xml
+Sitemap: https://media-hub.lol/sitemap.xml

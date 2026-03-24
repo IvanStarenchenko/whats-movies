@@ -18,7 +18,7 @@ export const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-	metadataBase: new URL('https://media-hub.top'),
+	metadataBase: new URL('https://media-hub.lol'),
 	title: {
 		template: '%s | MediaHub',
 		default: 'MediaHub — Смотреть фильмы, сериалы и игры онлайн в HD',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: 'MediaHub — Твой гид в мире развлечений',
 		description: 'Сравнивай контент и выбирай лучшее. Все новинки кино и игр.',
-		url: 'https://media-hub.top',
+		url: 'https://media-hub.lol',
 		siteName: 'MediaHub',
 		images: [
 			{

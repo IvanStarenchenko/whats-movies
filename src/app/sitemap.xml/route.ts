@@ -3,7 +3,7 @@ import type { OpenLibraryBookDetails } from '@/Store/Books/Openlibrary.type'
 import type { IGameDetails } from '@/Store/Games/Games.type'
 import type { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 
-const BASE_URL = process.env.BASE_URL || 'https://media-hub.top'
+const BASE_URL = process.env.BASE_URL || 'https://media-hub.lol'
 const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API
 export const dynamic = 'force-dynamic'
 // ПОКА 'force-dynamic' УБРАТЬ revalidate
