@@ -95,7 +95,6 @@ ${allUrls
 		url => `
   <url>
     <loc>${escapeXml(url)}</loc>
-   
   </url>`
 	)
 	.join('')}

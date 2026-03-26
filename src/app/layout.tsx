@@ -78,6 +78,7 @@ export default function RootLayout({
 					href='https://image.tmdb.org'
 					crossOrigin='anonymous'
 				/>
+				<link rel='canonical' href='https://media-hub.lol/' />
 			</head>
 			<body className={`${inter.variable} ${poppins.variable} antialiased`}>
 				<StoreProvider>
