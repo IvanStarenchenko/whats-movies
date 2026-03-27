@@ -23,7 +23,7 @@ export function HomeTop() {
 	}
 
 	return (
-		<div className='home-top-slider-wrapper relative h-[60vh] w-full overflow-hidden rounded-3xl shadow-2xl bg-black'>
+		<div className='home-top-slider-wrapper relative h-[70vh] md:h-[60vh] w-full overflow-hidden rounded-3xl shadow-2xl bg-black'>
 			<Swiper
 				modules={[Autoplay, Pagination, EffectFade]}
 				effect='fade'
@@ -47,53 +47,58 @@ export function HomeTop() {
 					).split('-')[0]
 
 					return (
-						<SwiperSlide key={item.id} className='relative h-full w-full'>
-							<div className='absolute inset-0'>
+						<SwiperSlide key={item.id} className='relative overflow-hidden'>
+							{/* Фоновое изображение с градиентами */}
+							<div className='absolute inset-0 select-none'>
 								<Image
 									src={backdrop}
 									alt={title || 'Trending Item'}
 									fill
 									priority={index === 0}
 									loading={index === 0 ? 'eager' : 'lazy'}
-									fetchPriority={index === 0 ? 'high' : 'low'}
-									className='object-cover object-center'
+									className='object-cover object-center scale-105'
 								/>
-								<div className='absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent' />
-								<div className='absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent' />
+								<div className='absolute inset-0 bg-gradient-to-r from-black/95 via-black/50 to-transparent z-[1]' />
+								<div className='absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-[2]' />
 							</div>
 
-							<div className='absolute inset-0 flex flex-col justify-center px-6 md:px-20 max-w-4xl z-10'>
-								<div className='flex items-center gap-4 mb-6 animate-in slide-in-from-left-8 duration-500'>
+							{/* Контентный блок */}
+							<div className='absolute inset-0 flex flex-col justify-end md:justify-center px-6 pb-24 md:pb-0 md:px-20 max-w-5xl z-10'>
+								<div className='flex items-center flex-wrap gap-3 mb-4 animate-in slide-in-from-left-8 duration-500'>
 									<span
 										className={`px-3 py-1 ${getItemTypeColor(
 											item.media_type
-										)} text-[10px] font-black uppercase tracking-[0.2em] rounded`}
+										)} text-[10px] font-black uppercase tracking-[0.2em] rounded shrink-0`}
 									>
 										TRENDING WEEKLY
 									</span>
+
 									{releaseDate && (
-										<span className='text-white/90 text-sm font-medium border-l border-white/20 pl-4'>
+										<span className='text-white/80 text-sm font-medium border-l border-white/20 pl-3'>
 											{releaseDate}
 										</span>
 									)}
+
 									<div className='flex items-center gap-1.5 text-amber-400'>
 										<Star size={16} fill='currentColor' />
 										<span className='text-sm font-bold'>{rating}</span>
 									</div>
 								</div>
 
-								<h1 className='text-4xl md:text-7xl font-black text-white mb-6 leading-[1.1] drop-shadow-2xl animate-in slide-in-from-left-10 duration-700'>
+								{/* Заголовок с ограничением в 2 строки */}
+								<h1 className='text-3xl md:text-7xl font-black text-white mb-4 leading-[1.1] drop-shadow-2xl animate-in slide-in-from-left-10 duration-700 line-clamp-2 uppercase'>
 									{title}
 								</h1>
 
-								<p className='text-zinc-300 text-lg md:text-xl mb-10 line-clamp-3 max-w-2xl font-light leading-relaxed animate-in slide-in-from-left-12 duration-1000'>
+								{/* Описание с адаптивным ограничением строк */}
+								<p className='text-zinc-300 text-sm md:text-lg mb-8 line-clamp-2 md:line-clamp-3 max-w-2xl font-light leading-relaxed animate-in slide-in-from-left-12 duration-1000'>
 									{item.overview}
 								</p>
 
 								<div className='flex items-center gap-5 animate-in slide-in-from-bottom-8 duration-700'>
 									<Link
 										href={`details/${item.media_type}/${item.id}`}
-										className='flex items-center gap-3 px-2 py-3 md:p-4  bg-white text-black font-bold rounded-2xl hover:bg-amber-400 transition-all active:scale-95 shadow-lg shadow-white/5'
+										className='flex items-center gap-3 px-8 py-3.5 bg-white text-black font-bold rounded-2xl hover:bg-amber-400 hover:scale-105 transition-all active:scale-95 shadow-xl shadow-black/20'
 									>
 										<Play size={20} fill='black' />
 										Смотреть
@@ -112,9 +117,10 @@ export function HomeTop() {
 					width: auto !important;
 					display: flex;
 					gap: 12px;
+					z-index: 30 !important;
 				}
 				.home-top-slider-wrapper .swiper-pagination-bullet-active {
-					background: #f59e0b !important; /* amber-500 */
+					background: #f59e0b !important;
 					width: 48px !important;
 				}
 				@media (max-width: 768px) {
@@ -122,6 +128,13 @@ export function HomeTop() {
 						left: 50% !important;
 						transform: translateX(-50%);
 						bottom: 20px !important;
+						gap: 8px;
+					}
+					.home-top-slider-wrapper .swiper-pagination-bullet {
+						width: 20px !important;
+					}
+					.home-top-slider-wrapper .swiper-pagination-bullet-active {
+						width: 35px !important;
 					}
 				}
 			`}</style>
