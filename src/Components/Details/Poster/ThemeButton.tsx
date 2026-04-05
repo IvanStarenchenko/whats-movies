@@ -1,4 +1,4 @@
-import { ListMusic, Music, Pause, Play } from 'lucide-react'
+import { Music, Pause, Play } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface ThemeButtonProps {
@@ -52,7 +52,7 @@ export function ThemeButton({
 					</>
 				)}
 			</button>
-			<button
+			{/* <button
 				onClick={getPlaylist}
 				className='group flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/50 hover:text-(--activeColor) hover:border-(--activeColor)/50 hover:bg-(--activeColor)/5 transition-all duration-300'
 			>
@@ -63,7 +63,7 @@ export function ThemeButton({
 				<span className='text-[10px] font-black uppercase tracking-widest hidden md:inline'>
 					View Playlist
 				</span>
-			</button>
+			</button> */}
 			<style jsx>{`
 				@keyframes music-bar {
 					0%,
