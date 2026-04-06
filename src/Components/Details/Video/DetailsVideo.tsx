@@ -44,7 +44,7 @@ export function DetailsVideo({
 	return (
 		<Element
 			name='trailer'
-			className={`flex flex-col w-full max-w-full group transition-all duration-500 ${
+			className={`relative flex flex-col mt-5 w-full max-w-full group transition-all duration-500 ${
 				isCinema ? 'gap-0' : 'gap-3 sm:gap-4 md:gap-6'
 			} px-2 sm:px-4 md:px-0`}
 		>
@@ -69,10 +69,6 @@ export function DetailsVideo({
 					</button>
 				)} */}
 
-				{!isGame && (
-					<SwitchBtn activeMode={activeMode} setActiveMode={setActiveMode} />
-				)}
-
 				<Film
 					movieData={movieData}
 					activeMode={activeMode}
@@ -91,7 +87,9 @@ export function DetailsVideo({
 					<Label activeMode={activeMode} mainTrailer={mainTrailer} />
 				)}
 			</div>
-
+			{!isGame && (
+				<SwitchBtn activeMode={activeMode} setActiveMode={setActiveMode} />
+			)}
 			{!isCinema && (providers?.flatrate || providers?.buy) && (
 				<BottomLink href={providers?.link} />
 			)}

@@ -87,7 +87,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 				className={`mx-auto px-0 sm:px-12 transition-all duration-500 ${
 					isCinema
 						? 'fixed inset-0 z-[101] p-0 m-0 w-screen h-screen bg-black'
-						: 'relative z-10 opacity-100'
+						: 'relative px-3  z-10 opacity-100'
 				}`}
 			>
 				<div
@@ -95,7 +95,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
           ${
 						isCinema
 							? 'w-full h-full'
-							: 'grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 my-6 sm:my-12'
+							: ' grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 my-6 sm:my-12'
 					}
         `}
 				>
@@ -128,7 +128,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 				</div>
 
 				{!isCinema && (
-					<div className='my-6 sm:my-12 md:my-16 pb-12 space-y-12'>
+					<div className=' my-6 sm:my-12 md:my-16 pb-12 space-y-12'>
 						<Suspense fallback={<SkeletonCard />}>
 							<DynamicDetailsRelative
 								id={movieId}
