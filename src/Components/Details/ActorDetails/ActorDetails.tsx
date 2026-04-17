@@ -34,7 +34,7 @@ export function ActorDetails() {
 						</div>
 					</aside>
 
-					<main className="space-y-10 md:space-y-12 min-w-0">
+					<div className="space-y-10 md:space-y-12 min-w-0">
 						<ActorBiography data={data} />
 						<ActorCredits
 							data={data}
@@ -45,7 +45,7 @@ export function ActorDetails() {
 							slicedTVCount={slicedTVCount}
 							slicedMovieCount={slicedMovieCount}
 						/>
-					</main>
+					</div>
 				</div>
 			</div>
 		</div>

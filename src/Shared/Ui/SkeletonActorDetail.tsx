@@ -27,7 +27,7 @@ export function ActorDetailsSkeleton() {
 					</div>
 				</aside>
 
-				<main className="space-y-12">
+				<div className="space-y-12">
 					<section className="space-y-4">
 						<div className="h-12 w-2/3 bg-white/10 rounded-xl" />
 						<div className="h-6 w-1/3 bg-white/5 rounded-lg" />
@@ -62,7 +62,7 @@ export function ActorDetailsSkeleton() {
 							))}
 						</div>
 					</section>
-				</main>
+				</div>
 			</div>
 		</div>
 	)

@@ -12,9 +12,9 @@ export function Home() {
 				<AsideMenu />
 			</div>
 
-			<main className="bg-[--var(--secondBackground)] min-w-0">
+			<div className="bg-[--var(--secondBackground)] min-w-0">
 				<HomeBlock />
-			</main>
+			</div>
 		</div>
 	)
 }
