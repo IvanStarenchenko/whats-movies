@@ -2,13 +2,15 @@ import { Map } from 'lucide-react'
 import Link from 'next/link'
 interface NetworksProps {
 	networks: { name: string }[]
-	title: string
+	title: string | undefined
 }
 export function Networks({ networks, title }: NetworksProps) {
-	const slugPath = title
-		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/^-+|-+$/g, '')
+	const slugPath =
+		title &&
+		title
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/^-+|-+$/g, '')
 	return (
 		<div className='flex justify-between space-y-1 '>
 			<div>
