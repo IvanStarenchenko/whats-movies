@@ -7,9 +7,9 @@ export function useFramer(movieId: number | string) {
 			opacity: 1,
 			transition: {
 				delayChildren: 0.1,
-				staggerChildren: 0.05
-			}
-		}
+				staggerChildren: 0.05,
+			},
+		},
 	}
 
 	const itemVariants = {
@@ -19,9 +19,9 @@ export function useFramer(movieId: number | string) {
 			y: 0,
 			transition: {
 				duration: 0.4,
-				ease: easeInOut
-			}
-		}
+				ease: easeInOut,
+			},
+		},
 	}
 	const [isCinema, setIsCinema] = useState(false)
 	const pageRef = useRef<HTMLDivElement>(null)

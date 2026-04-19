@@ -18,7 +18,7 @@ export function SwitchBtn({
 				}`}
 			>
 				<YoutubeIcon size={14} />
-				<span className='hidden sm:inline'>Trailer</span>
+				<span className=''>Trailer</span>
 			</button>
 
 			<button
@@ -30,7 +30,7 @@ export function SwitchBtn({
 				}`}
 			>
 				<Play size={14} fill='currentColor' />
-				<span className='hidden sm:inline'>Full Movie</span>
+				<span className=''>Movie</span>
 			</button>
 		</div>
 	)

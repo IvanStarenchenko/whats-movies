@@ -1,6 +1,6 @@
 import {
 	useGetMediaVideosQuery,
-	useGetWatchProvidersQuery
+	useGetWatchProvidersQuery,
 } from '@/Store/TMDB/tMDB.api'
 import { getTmdbImageOriginalUrl } from '@/Utils/Utils'
 import { useEffect, useRef, useState } from 'react'
@@ -11,7 +11,7 @@ export function useVideo(
 	backdrop_path?: string | null,
 	name?: string | null
 ) {
-	const [activeMode, setActiveMode] = useState<'trailer' | 'movie'>('trailer')
+	const [activeMode, setActiveMode] = useState<'trailer' | 'movie'>('movie')
 	const [isFullscreen, setIsFullscreen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
 
@@ -26,7 +26,7 @@ export function useVideo(
 
 	const { data, isLoading } = useGetMediaVideosQuery({
 		type: type || 'movie',
-		id: id || 0
+		id: id || 0,
 	})
 
 	const toggleFullscreen = () => {
@@ -45,12 +45,12 @@ export function useVideo(
 
 	const { mainThemeId: gameTrailerId } = useMusic({
 		initialName: isGame ? `${name} official gameplay trailer` : '',
-		type: 'video'
+		type: 'video',
 	})
 
 	const { data: watchProvidersData } = useGetWatchProvidersQuery({
 		type: type || 'movie',
-		id: id || 0
+		id: id || 0,
 	})
 
 	const providers =
@@ -73,6 +73,6 @@ export function useVideo(
 		gameTrailerId,
 		isGame,
 		providers,
-		imageUrl
+		imageUrl,
 	}
 }

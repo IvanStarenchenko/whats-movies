@@ -30,8 +30,6 @@ export function DetailsVideo({
 	const {
 		activeMode,
 		setActiveMode,
-		isFullscreen,
-		toggleFullscreen,
 		containerRef,
 		mainTrailer,
 		gameTrailerId,
@@ -46,7 +44,7 @@ export function DetailsVideo({
 			name='trailer'
 			className={`relative flex flex-col mt-5 w-full max-w-full group transition-all duration-500 ${
 				isCinema ? 'gap-0' : 'gap-3 sm:gap-4 md:gap-6'
-			} px-2 sm:px-4 md:px-0`}
+			}  `}
 		>
 			<div
 				ref={containerRef}

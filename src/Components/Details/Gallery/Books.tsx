@@ -51,7 +51,6 @@ export function Books({
 				))}
 			</div>
 
-			{/* Полноэкранный просмотр */}
 			{currentIndex !== null && bookCovers[currentIndex] && (
 				<div
 					className='fixed inset-0 z-[999] flex items-center justify-center bg-black/95 backdrop-blur-md select-none'

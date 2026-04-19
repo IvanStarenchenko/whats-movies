@@ -69,7 +69,6 @@ export function ActorCard({ person }: { person: TMDBPersona }) {
 					</div>
 				</div>
 
-				{/* Кнопка-стрелка: Скрываем на совсем маленьких экранах для чистоты */}
 				<Link
 					className='hidden md:block absolute top-8 right-8 translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500'
 					href={`actor/${simplifyName(person.name)}/${person.id}`}
