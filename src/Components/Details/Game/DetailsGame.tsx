@@ -110,7 +110,7 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 							{gameData.website && <Website website={gameData.website} />}
 						</div>
 
-						<DynamicDetailsDescription {...descriptionData} />
+						<DynamicDetailsDescription gameData={gameData} />
 					</div>
 
 					<div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-white/5'>

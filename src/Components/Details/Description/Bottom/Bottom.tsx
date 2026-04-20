@@ -1,33 +1,36 @@
-import { DetailsDescriptionProps } from '../DetailsDescription'
+import { OpenLibraryBookDetails } from '@/Store/Books/Openlibrary.type'
+import { IGameDetails } from '@/Store/Games/Games.type'
+import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { BooksAuthors } from './BooksAuthors'
 import { Genres } from './Genres'
 import { Metacritic } from './Metacritic'
 import { OriginalIdenty } from './OriginalIdenty'
-export function Bottom({
-	description
-}: {
-	description: DetailsDescriptionProps
-}) {
+
+interface BottomProps {
+	movieData: TMDBMediaDetails | undefined
+	gameData: IGameDetails | undefined
+	bookData: OpenLibraryBookDetails | undefined
+	title: string | undefined
+}
+export function Bottom({ movieData, gameData, bookData, title }: BottomProps) {
 	return (
-		<div className="bg-[#1a1d29]/60 backdrop-blur-xl rounded-3xl w-full p-8 border border-white/5">
-			<div className="flex items-center justify-between mb-8 border-b border-white/5 pb-5">
-				<h3 className="text-xl font-bold tracking-tight text-white/90">
+		<div className='bg-[#1a1d29]/60 backdrop-blur-xl rounded-3xl w-full p-8 border border-white/5'>
+			<div className='flex items-center justify-between mb-8 border-b border-white/5 pb-5'>
+				<h3 className='text-xl font-bold tracking-tight text-white/90'>
 					Technical Details
 				</h3>
-				{description.metacritic !== undefined && (
-					<Metacritic metacritic={description.metacritic} />
+				{gameData?.metacritic !== undefined && (
+					<Metacritic metacritic={gameData.metacritic} />
 				)}
 			</div>
-			<div className="flex flex-col gap-y-4">
-				<Genres genres={description.genres} />
+			<div className='flex flex-col gap-y-4'>
+				<Genres genres={gameData?.genres?.map(genre => genre.name)} />
 				<OriginalIdenty
-					original_name={description.original_name}
-					original_language={description.original_language}
-					title={description.title}
+					original_name={movieData?.original_name}
+					original_language={movieData?.original_language}
+					title={title}
 				/>
-				{description.booksData?.authors && (
-					<BooksAuthors description={description} />
-				)}
+				{bookData?.authors && <BooksAuthors bookData={bookData} />}
 			</div>
 		</div>
 	)

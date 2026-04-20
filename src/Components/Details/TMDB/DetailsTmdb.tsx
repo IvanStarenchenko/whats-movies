@@ -44,10 +44,6 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 	const { containerVariants, itemVariants, isCinema, toggleCinema, pageRef } =
 		useFramer(movieId)
 
-	const handleChoseStatus = (status: string) => {
-		setStatus(status as statusType)
-	}
-
 	return (
 		<motion.div
 			variants={containerVariants}
@@ -119,12 +115,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 						/>
 					)}
 
-					{!isCinema && (
-						<DynamicDetailsDescription
-							{...descriptionData}
-							handleChoseStatus={handleChoseStatus}
-						/>
-					)}
+					{!isCinema && <DynamicDetailsDescription movieData={movieData} />}
 				</div>
 
 				{!isCinema && (

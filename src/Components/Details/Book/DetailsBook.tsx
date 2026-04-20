@@ -41,7 +41,7 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 			type: 'book',
 			id: bookId,
 			bookData,
-			description
+			description,
 		})
 
 	const { containerVariants, itemVariants, isCinema, toggleCinema, pageRef } =
@@ -53,9 +53,9 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 		<motion.div
 			ref={pageRef}
 			variants={containerVariants}
-			initial="hidden"
-			animate="visible"
-			className="bg-[#0f111a] min-h-screen pb-20 will-change-opacity"
+			initial='hidden'
+			animate='visible'
+			className='bg-[#0f111a] min-h-screen pb-20 will-change-opacity'
 		>
 			<div
 				className={`bg-[#0f111a] transition-all duration-700 ease-in-out ${
@@ -77,19 +77,13 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 					}`}
 				>
 					{isCinema && (
-						<div className="w-full max-w-5xl aspect-video scale-95 animate-in zoom-in-95 duration-700">
-							<Gallery
-								key={bookId}
-								type="book"
-							/>
+						<div className='w-full max-w-5xl aspect-video scale-95 animate-in zoom-in-95 duration-700'>
+							<Gallery key={bookId} type='book' />
 						</div>
 					)}
 				</div>
 
-				<CinemaMode
-					isCinema={isCinema}
-					toggleCinema={toggleCinema}
-				/>
+				<CinemaMode isCinema={isCinema} toggleCinema={toggleCinema} />
 			</div>
 
 			<motion.div
@@ -98,34 +92,28 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 					isCinema ? 'opacity-0 pointer-events-none' : 'opacity-100'
 				}`}
 			>
-				<div className="mx-auto px-6 md:px-12">
-					<div className="grid grid-cols-1 lg:grid-cols-2 mt-12 gap-16">
-						<div
-							id="overview"
-							className="space-y-6"
-						>
+				<div className='mx-auto px-6 md:px-12'>
+					<div className='grid grid-cols-1 lg:grid-cols-2 mt-12 gap-16'>
+						<div id='overview' className='space-y-6'>
 							<DynamicDetailsBookImage
 								bookData={bookData}
 								mainExcerpt={mainExcerpt}
 								backdropPath={posterData.backdropPath}
 							/>
 							{bookData.links && (
-								<div className="flex justify-end">
+								<div className='flex justify-end'>
 									<External links={bookData.links} />
 								</div>
 							)}
 						</div>
 
-						<div className="flex flex-col">
-							<DynamicDetailsDescription {...descriptionData} />
+						<div className='flex flex-col'>
+							<DynamicDetailsDescription bookData={bookData} />
 						</div>
 					</div>
 
-					<div className="mt-12 pt-12 border-t border-white/5 space-y-20">
-						<div
-							id="details"
-							className="grid grid-cols-1 md:grid-cols-2 gap-8"
-						>
+					<div className='mt-12 pt-12 border-t border-white/5 space-y-20'>
+						<div id='details' className='grid grid-cols-1 md:grid-cols-2 gap-8'>
 							{bookData.subject_people && (
 								<DynamicKeyCharacters
 									subject_people={bookData.subject_people}
@@ -133,11 +121,11 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 							)}
 						</div>
 
-						<div id="related">
+						<div id='related'>
 							<DynamicDetailsRelative
 								id={bookData.key}
 								name={bookData.title || ''}
-								type="book"
+								type='book'
 							/>
 						</div>
 					</div>
