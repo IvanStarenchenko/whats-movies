@@ -1,7 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /_next/static/css/
+Allow: /_next/static/chunks/*.css
+Allow: /_next/static/media/
+
 Disallow: /*_rsc=*
-Disallow: /_next/static/chunks/
+Disallow: /_next/static/chunks/*.js
 Disallow: /search
 
 Sitemap: https://media-hub.lol/sitemap.xml

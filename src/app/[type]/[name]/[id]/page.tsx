@@ -116,6 +116,10 @@ export default async function page({ params }: Props) {
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 				/>
 			)}
+			<article style={{ display: 'none' }}>
+				<h1>{data.title || data.name}</h1>
+				<p>{data.overview || data.description}</p>
+			</article>
 			<Details />
 		</>
 	)
