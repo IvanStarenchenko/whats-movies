@@ -37,7 +37,7 @@ async function getMediaData(type: MediaType, id: string) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const { name, id } = await params
+	const { type, name, id } = await params
 	const actualType = name as MediaType
 	const data = await getMediaData(actualType, id)
 
@@ -71,6 +71,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	return {
 		title: seoTitle,
 		description: description,
+		alternates: {
+			canonical: `/${type}/${actualType}/${id}`,
+		},
 		openGraph: {
 			title: seoTitle,
 			description: description,

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /*_rsc=*
+Disallow: /_next/static/chunks/
+Disallow: /search
 
 Sitemap: https://media-hub.lol/sitemap.xml
