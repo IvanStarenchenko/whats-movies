@@ -24,7 +24,7 @@ export function MediaRoad({ title }: MediaRoadProps) {
 				
 '
 			>
-				<Link href={`https://road.media-hub.lol/${slugPath}`}>
+				<Link href={`https://road.media-hub.lol/roadmaps/${slugPath}`}>
 					<Map />
 
 					<p
