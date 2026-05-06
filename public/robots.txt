@@ -2,5 +2,6 @@ User-agent: *
 Allow: /_next/static/
 Disallow: /_next/
 Disallow: /api/
+Disallow: /*_rsc=*
 
 Sitemap: https://media-hub.lol/sitemap-v2.xml
