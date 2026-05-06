@@ -15,26 +15,26 @@ export function ActorDetails() {
 		slicedTVCount,
 		slicedMovieCount,
 		isLoading,
-		error
+		error,
 	} = useActorDetails()
 
 	if (isLoading) return <ActorDetailsSkeleton />
 	if (error || !data)
 		return (
-			<div className="text-white p-6 md:p-10">Error loading actor details.</div>
+			<div className='text-white p-6 md:p-10'>Error loading actor details.</div>
 		)
 
 	return (
-		<div className="min-h-screen text-white">
-			<div className="w-full max-w-415 mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
-				<div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[350px_1fr] gap-8 lg:gap-12">
-					<aside className="lg:sticky lg:top-20 lg:self-start h-auto lg:h-[calc(90vh-5rem)]">
-						<div className="space-y-8">
+		<div className='min-h-screen text-white'>
+			<div className='w-full max-w-415 mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10'>
+				<div className='grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[350px_1fr] gap-8 lg:gap-12'>
+					<aside className='lg:sticky lg:top-20 lg:self-start h-auto lg:h-[calc(90vh-5rem)]'>
+						<div className='space-y-8'>
 							<ActorAside data={data} />
 						</div>
 					</aside>
 
-					<div className="space-y-10 md:space-y-12 min-w-0">
+					<div className='space-y-10 md:space-y-12 min-w-0'>
 						<ActorBiography data={data} />
 						<ActorCredits
 							data={data}

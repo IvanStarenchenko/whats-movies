@@ -7,25 +7,13 @@ import { IGameDetails } from '@/Store/Games/Games.type'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { CinemaMode } from '../../../Shared/Ui/CinemaMode/CinemaMode'
+import { DetailsDescription } from '../Description/DetailsDescription'
 import { Gallery } from '../Gallery/Gallery'
+import { Platform } from './Platform'
+import { Publisher } from './Publisher'
 import { Website } from './Website'
-
-const DynamicDetailsDescription = dynamic(() =>
-	import('@/Components/Details/Description/DetailsDescription').then(
-		mod => mod.DetailsDescription
-	)
-)
-
 const DynamicDetailsVideo = dynamic(() =>
 	import('../Video/DetailsVideo').then(mod => mod.DetailsVideo)
-)
-
-const DynamicPlatform = dynamic(() =>
-	import('./Platform').then(mod => mod.Platform)
-)
-
-const DynamicPublisher = dynamic(() =>
-	import('./Publisher').then(mod => mod.Publisher)
 )
 
 const DynamicDetailsRelative = dynamic(() =>
@@ -38,13 +26,12 @@ interface DetailsGameProps {
 }
 
 export function DetailsGame({ gameData, description }: DetailsGameProps) {
-	const { checkIsAdded, toggleDetailWishlist, posterData, descriptionData } =
-		useData({
-			type: 'game',
-			id: gameData.id,
-			gameData,
-			description,
-		})
+	const { checkIsAdded, toggleDetailWishlist, posterData } = useData({
+		type: 'game',
+		id: gameData.id,
+		gameData,
+		description,
+	})
 
 	const { containerVariants, itemVariants, isCinema, toggleCinema, pageRef } =
 		useFramer(gameData.id)
@@ -52,7 +39,6 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 	return (
 		<motion.div
 			variants={containerVariants}
-			initial='hidden'
 			animate='visible'
 			className='bg-[#0f111a] min-h-screen pb-20 will-change-opacity'
 		>
@@ -110,15 +96,13 @@ export function DetailsGame({ gameData, description }: DetailsGameProps) {
 							{gameData.website && <Website website={gameData.website} />}
 						</div>
 
-						<DynamicDetailsDescription gameData={gameData} />
+						<DetailsDescription gameData={gameData} />
 					</div>
 
 					<div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pt-12 border-t border-white/5'>
-						{gameData.platforms && (
-							<DynamicPlatform platforms={gameData.platforms} />
-						)}
+						{gameData.platforms && <Platform platforms={gameData.platforms} />}
 						{gameData.publishers && (
-							<DynamicPublisher publishers={gameData.publishers} />
+							<Publisher publishers={gameData.publishers} />
 						)}
 					</div>
 

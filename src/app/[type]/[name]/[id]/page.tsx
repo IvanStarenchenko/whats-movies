@@ -2,6 +2,7 @@
 import { Details } from '@/Components/Pages/Details/Details'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { Metadata } from 'next'
+export const revalidate = 3600
 
 type Props = {
 	params: Promise<{ type: string; name: string; id: string }>

@@ -1,20 +1,10 @@
 'use client'
+import { DetailsBook } from '@/Components/Details/Book/DetailsBook'
+import { DetailsGame } from '@/Components/Details/Game/DetailsGame'
+import { DetailsTmdb } from '@/Components/Details/TMDB/DetailsTmdb'
 import { useGetDetails } from '@/Hooks/useGetDetails'
 import { Skeleton } from '@/Shared/Ui/Skeleton'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
-
-import dynamic from 'next/dynamic'
-
-const DetailsGame = dynamic(() =>
-	import('../../Details/Game/DetailsGame').then(mod => mod.DetailsGame)
-)
-
-const DetailsBook = dynamic(() =>
-	import('../../Details/Book/DetailsBook').then(mod => mod.DetailsBook)
-)
-const DetailsTmdb = dynamic(() =>
-	import('@/Components/Details/TMDB/DetailsTmdb').then(mod => mod.DetailsTmdb)
-)
 
 export function Details() {
 	const {
@@ -25,11 +15,11 @@ export function Details() {
 		isLoading,
 		error,
 		movieId,
-		isBookFetching
+		isBookFetching,
 	} = useGetDetails()
 
 	if (error)
-		return <div className="p-20 text-center text-(--red)">Ошибка загрузки</div>
+		return <div className='p-20 text-center text-(--red)'>Ошибка загрузки</div>
 	if (isLoading || isBookFetching) return <Skeleton />
 
 	if (type === 'book' && bookData) {
@@ -38,12 +28,7 @@ export function Details() {
 				? bookData.description
 				: 'Description'
 
-		return (
-			<DetailsBook
-				bookData={bookData}
-				description={description}
-			/>
-		)
+		return <DetailsBook bookData={bookData} description={description} />
 	}
 	if ((type === 'movie' || type === 'tv') && movieData) {
 		return (
@@ -59,12 +44,7 @@ export function Details() {
 			typeof gameData.description === 'string'
 				? gameData.description
 				: 'Description'
-		return (
-			<DetailsGame
-				description={description}
-				gameData={gameData}
-			/>
-		)
+		return <DetailsGame description={description} gameData={gameData} />
 	}
 	return null
 }

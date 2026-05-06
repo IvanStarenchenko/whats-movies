@@ -1,5 +1,4 @@
 'use client'
-
 import { useFramer } from '@/Hooks/useFramer'
 import { SkeletonCard } from '@/Shared/Ui/SkeletonRelated'
 import { motion } from 'framer-motion'
@@ -8,17 +7,13 @@ import { Suspense, useState } from 'react'
 import { statusType, useData } from '../../../Hooks/useData'
 import { CinemaMode } from '../../../Shared/Ui/CinemaMode/CinemaMode'
 import { MediaType, TMDBMediaDetails } from '../../../Store/TMDB/tMDB.type'
+import { DetailsDescription } from '../Description/DetailsDescription'
 import { Gallery } from '../Gallery/Gallery'
 import { DetailsPoster } from '../Poster/DetailsPoster'
-
 const DynamicDetailsVideo = dynamic(() =>
 	import('../Video/DetailsVideo').then(mod => mod.DetailsVideo)
 )
-const DynamicDetailsDescription = dynamic(() =>
-	import('../Description/DetailsDescription').then(
-		mod => mod.DetailsDescription
-	)
-)
+
 const DynamicDetailsCast = dynamic(() =>
 	import('../CreditPeople/Cast').then(mod => mod.Cast)
 )
@@ -47,7 +42,6 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 	return (
 		<motion.div
 			variants={containerVariants}
-			initial='hidden'
 			animate='visible'
 			className='relative'
 		>
@@ -115,7 +109,7 @@ export function DetailsTmdb({ type, movieId, movieData }: DetailsTmdbProps) {
 						/>
 					)}
 
-					{!isCinema && <DynamicDetailsDescription movieData={movieData} />}
+					{!isCinema && <DetailsDescription movieData={movieData} />}
 				</div>
 
 				{!isCinema && (

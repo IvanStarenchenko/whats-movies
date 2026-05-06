@@ -7,18 +7,10 @@ import { CinemaMode } from '@/Shared/Ui/CinemaMode/CinemaMode'
 import { OpenLibraryBookDetails } from '@/Store/Books/Openlibrary.type'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import { DetailsDescription } from '../Description/DetailsDescription'
 import { Gallery } from '../Gallery/Gallery'
 import { External } from './External'
-
-const DynamicDetailsDescription = dynamic(() =>
-	import('@/Components/Details/Description/DetailsDescription').then(
-		mod => mod.DetailsDescription
-	)
-)
-
-const DynamicKeyCharacters = dynamic(() =>
-	import('./KeyCharacters').then(mod => mod.KeyCharacters)
-)
+import { KeyCharacters } from './KeyCharacters'
 
 const DynamicDetailsBookImage = dynamic(() =>
 	import('./DetailsBookImage').then(mod => mod.DetailsBookImage)
@@ -36,13 +28,12 @@ interface DetailsBookProps {
 export function DetailsBook({ bookData, description }: DetailsBookProps) {
 	const bookId = bookData.key.split('/').pop() || ''
 
-	const { checkIsAdded, toggleDetailWishlist, posterData, descriptionData } =
-		useData({
-			type: 'book',
-			id: bookId,
-			bookData,
-			description,
-		})
+	const { checkIsAdded, toggleDetailWishlist, posterData } = useData({
+		type: 'book',
+		id: bookId,
+		bookData,
+		description,
+	})
 
 	const { containerVariants, itemVariants, isCinema, toggleCinema, pageRef } =
 		useFramer(bookId)
@@ -53,7 +44,6 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 		<motion.div
 			ref={pageRef}
 			variants={containerVariants}
-			initial='hidden'
 			animate='visible'
 			className='bg-[#0f111a] min-h-screen pb-20 will-change-opacity'
 		>
@@ -108,16 +98,14 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 						</div>
 
 						<div className='flex flex-col'>
-							<DynamicDetailsDescription bookData={bookData} />
+							<DetailsDescription bookData={bookData} />
 						</div>
 					</div>
 
 					<div className='mt-12 pt-12 border-t border-white/5 space-y-20'>
 						<div id='details' className='grid grid-cols-1 md:grid-cols-2 gap-8'>
 							{bookData.subject_people && (
-								<DynamicKeyCharacters
-									subject_people={bookData.subject_people}
-								/>
+								<KeyCharacters subject_people={bookData.subject_people} />
 							)}
 						</div>
 
