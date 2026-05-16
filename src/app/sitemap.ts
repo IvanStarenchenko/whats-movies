@@ -1,126 +1,120 @@
 import type { MetadataRoute } from 'next'
 
-export const dynamic = 'force-dynamic' // Гарантирует, что sitemap всегда актуальный
+// Вместо force-dynamic кэшируем sitemap на 24 часа. 
+// Сервер отдаст его мгновенно, и Googlebot не отвалится по таймауту.
+export const revalidate = 86400 
+
+const BASE_URL = 'https://media-hub.lol'
+
+// Типизация для ответов API (чтобы уйти от any)
+interface TMDBResult { id: number }
+interface RAWGResult { slug: string }
+interface OpenLibraryResult { key: string }
+
+// Вспомогательный fetch с таймаутом, чтобы роут не зависал вечно
+async function fetchWithTimeout(url: string, options?: RequestInit, timeout = 3000) {
+  const controller = new AbortController()
+  const id = setTimeout(() => controller.abort(), timeout)
+  try {
+    const response = await fetch(url, { ...options, signal: controller.signal })
+    clearTimeout(id)
+    return response
+  } catch (error) {
+    clearTimeout(id)
+    throw error
+  }
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.BASE_URL || 'https://media-hub.lol'
+  // Фиксированная дата для сайтмапа (избегаем new Date() everywhere при каждом роуте)
+  const currentDate = new Date()
 
-  // 1. Статические страницы категорий
+  // 1. Статические страницы
   const staticRoutes: MetadataRoute.Sitemap = [
-    '',
-    '/movies',
-    '/tv-shows',
-    '/games',
-    '/books',
+    '', '/movies', '/tv-shows', '/games', '/books'
   ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
+    url: `${BASE_URL}${route}`,
+    lastModified: currentDate,
     changeFrequency: 'daily',
     priority: 1.0,
   }))
 
-  const dynamicRoutes: MetadataRoute.Sitemap = []
+  // Массив для хранения всех динамических путей
+  let dynamicRoutes: MetadataRoute.Sitemap = []
 
-  try {
-    // ==========================================
-    // 2. ФИЛЬМЫ (TMDB) -> /details/movie/[id]
-    // ==========================================
-    for (let page = 1; page <= 5; page++) {
-      const movieRes = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?language=ru-RU&page=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
-          },
-        }
-      )
-      if (movieRes.ok) {
-        const data = await movieRes.json()
-        data.results?.forEach((movie: any) => {
-          dynamicRoutes.push({
-            url: `${baseUrl}/details/movie/${movie.id}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.7,
-          })
-        })
-      }
-    }
-
-    // ==========================================
-    // 3. СЕРИАЛЫ (TMDB) -> /details/tv/[id]
-    // ==========================================
-    for (let page = 1; page <= 5; page++) {
-      const tvRes = await fetch(
-        `https://api.themoviedb.org/3/tv/popular?language=ru-RU&page=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
-          },
-        }
-      )
-      if (tvRes.ok) {
-        const data = await tvRes.json()
-        data.results?.forEach((tv: any) => {
-          dynamicRoutes.push({
-            url: `${baseUrl}/details/tv/${tv.id}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.7,
-          })
-        })
-      }
-    }
-
-    // ==========================================
-    // 4. ИГРЫ (RAWG) -> /details/game/[slug]
-    // ==========================================
-    for (let page = 1; page <= 3; page++) {
-      const gamesRes = await fetch(
-        `https://api.rawg.io/api/games?key=${process.env.NEXT_PUBLIC_RAWG_API}&page=${page}&page_size=40`
-      )
-      if (gamesRes.ok) {
-        const data = await gamesRes.json()
-        data.results?.forEach((game: any) => {
-          dynamicRoutes.push({
-            url: `${baseUrl}/details/game/${game.slug}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.7,
-          })
-        })
-      }
-    }
-
-    // ==========================================
-    // 5. КНИГИ (OpenLibrary) -> /details/book/[id]
-    // ==========================================
-    const genres = ['love', 'sci-fi', 'fantasy']
-    for (const genre of genres) {
-      const booksRes = await fetch(
-        `https://openlibrary.org/subjects/${genre}.json?limit=50`
-      )
-      if (booksRes.ok) {
-        const data = await booksRes.json()
-        data.works?.forEach((work: any) => {
-          const bookId = work.key.replace('/works/', '')
-          dynamicRoutes.push({
-            url: `${baseUrl}/details/book/${bookId}`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.6,
-          })
-        })
-      }
-    }
-  } catch (error) {
-    console.error('Ошибка генерации динамических URL для sitemap:', error)
-  }
-
-  const allRoutes = [...staticRoutes, ...dynamicRoutes]
-  const uniqueRoutes = Array.from(new Set(allRoutes.map((r) => r.url))).map(
-    (url) => allRoutes.find((r) => r.url === url)!
+  // Готовим пулы запросов для параллельного сканирования (Parallel Fetch)
+  const tmdbMoviePromises = Array.from({ length: 5 }, (_, i) => 
+    fetchWithTimeout(`https://api.themoviedb.org/3/movie/popular?language=ru-RU&page=${i + 1}`, {
+      headers: { Authorization: `Bearer ${process.env.TMDB_TOKEN}` } // Безопасный серверный конфиг
+    }).then(res => res.ok ? res.json() : null).catch(() => null)
   )
 
-  return uniqueRoutes
+  const tmdbTvPromises = Array.from({ length: 5 }, (_, i) => 
+    fetchWithTimeout(`https://api.themoviedb.org/3/tv/popular?language=ru-RU&page=${i + 1}`, {
+      headers: { Authorization: `Bearer ${process.env.TMDB_TOKEN}` }
+    }).then(res => res.ok ? res.json() : null).catch(() => null)
+  )
+
+  const rawgPromises = Array.from({ length: 3 }, (_, i) => 
+    fetchWithTimeout(`https://api.rawg.io/api/games?key=${process.env.RAWG_API_KEY}&page=${i + 1}&page_size=40`)
+      .then(res => res.ok ? res.json() : null).catch(() => null)
+  )
+
+  const genres = ['love', 'sci-fi', 'fantasy']
+  const openLibraryPromises = genres.map(genre => 
+    fetchWithTimeout(`https://openlibrary.org/subjects/${genre}.json?limit=50`)
+      .then(res => res.ok ? res.json() : null).catch(() => null)
+  )
+
+  try {
+    // Выполняем ВСЕ запросы параллельно. Время выполнения будет равно времени самого долгого запроса (~2-3 сек максимум)
+    const [moviesPages, tvPages, rawgPages, libraryPages] = await Promise.all([
+      Promise.all(tmdbMoviePromises),
+      Promise.all(tmdbTvPromises),
+      Promise.all(rawgPromises),
+      Promise.all(openLibraryPromises)
+    ])
+
+    // Парсим Фильмы
+    moviesPages.forEach(page => {
+      page?.results?.forEach((movie: TMDBResult) => {
+        dynamicRoutes.push({ url: `${BASE_URL}/details/movie/${movie.id}`, lastModified: currentDate, changeFrequency: 'weekly', priority: 0.7 })
+      })
+    })
+
+    // Парсим Сериалы
+    tvPages.forEach(page => {
+      page?.results?.forEach((tv: TMDBResult) => {
+        dynamicRoutes.push({ url: `${BASE_URL}/details/tv/${tv.id}`, lastModified: currentDate, changeFrequency: 'weekly', priority: 0.7 })
+      })
+    })
+
+    // Парсим Игры
+    rawgPages.forEach(page => {
+      page?.results?.forEach((game: RAWGResult) => {
+        dynamicRoutes.push({ url: `${BASE_URL}/details/game/${game.slug}`, lastModified: currentDate, changeFrequency: 'weekly', priority: 0.7 })
+      })
+    })
+
+    // Парсим Книги
+    libraryPages.forEach(page => {
+      page?.works?.forEach((work: OpenLibraryResult) => {
+        const bookId = work.key.replace('/works/', '')
+        dynamicRoutes.push({ url: `${BASE_URL}/details/book/${bookId}`, lastModified: currentDate, changeFrequency: 'weekly', priority: 0.6 })
+      })
+    })
+
+  } catch (error) {
+    console.error('Sitemap generation failed:', error)
+  }
+
+  // Настоящий дедупликатор через Map (как просили в аудите)
+  const allRoutes = [...staticRoutes, ...dynamicRoutes]
+  const uniqueRoutesMap = new Map<string, MetadataRoute.Sitemap[number]>()
+  
+  allRoutes.forEach(route => {
+    uniqueRoutesMap.set(route.url, route)
+  })
+
+  return Array.from(uniqueRoutesMap.values())
 }
