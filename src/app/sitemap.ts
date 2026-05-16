@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic' // Гарантирует, что sitemap
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.BASE_URL || 'https://media-hub.lol'
 
-  // 1. Статические страницы сайта
+  // 1. Статические страницы категорий
   const staticRoutes: MetadataRoute.Sitemap = [
     '',
     '/movies',
@@ -23,14 +23,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // ==========================================
-    // 2. ЗАГРУЗКА ФИЛЬМОВ (TMDB) — Сбор первых 5 страниц для объема
+    // 2. ФИЛЬМЫ (TMDB) -> /details/movie/[id]
     // ==========================================
     for (let page = 1; page <= 5; page++) {
       const movieRes = await fetch(
         `https://api.themoviedb.org/3/movie/popular?language=ru-RU&page=${page}`,
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`, // Используем новый чистый токен сервера
+            Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
           },
         }
       )
@@ -38,27 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         const data = await movieRes.json()
         data.results?.forEach((movie: any) => {
           dynamicRoutes.push({
-            url: `${baseUrl}/movie/${movie.id}`,
-            lastModified: new Date(), // Гугл любит, когда есть дата изменения
-            changeFrequency: 'weekly',
-            priority: 0.7,
-          })
-        })
-      }
-    }
-
-    // ==========================================
-    // 3. ЗАГРУЗКА ИГР (RAWG)
-    // ==========================================
-    for (let page = 1; page <= 3; page++) {
-      const gamesRes = await fetch(
-        `https://api.rawg.io/api/games?key=${process.env.NEXT_PUBLIC_RAWG_API_KEY}&page=${page}&page_size=40`
-      )
-      if (gamesRes.ok) {
-        const data = await gamesRes.json()
-        data.results?.forEach((game: any) => {
-          dynamicRoutes.push({
-            url: `${baseUrl}/game/${game.slug}`,
+            url: `${baseUrl}/details/movie/${movie.id}`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.7,
@@ -68,8 +48,52 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // ==========================================
-    // 4. ЗАГРУЗКА КНИГ (OpenLibrary)
-    // Добавь сюда несколько популярных жанров вместо одного love
+    // 3. СЕРИАЛЫ (TMDB) -> /details/tv/[id]
+    // ==========================================
+    for (let page = 1; page <= 5; page++) {
+      const tvRes = await fetch(
+        `https://api.themoviedb.org/3/tv/popular?language=ru-RU&page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_TOKEN}`,
+          },
+        }
+      )
+      if (tvRes.ok) {
+        const data = await tvRes.json()
+        data.results?.forEach((tv: any) => {
+          dynamicRoutes.push({
+            url: `${baseUrl}/details/tv/${tv.id}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.7,
+          })
+        })
+      }
+    }
+
+    // ==========================================
+    // 4. ИГРЫ (RAWG) -> /details/game/[slug]
+    // ==========================================
+    for (let page = 1; page <= 3; page++) {
+      const gamesRes = await fetch(
+        `https://api.rawg.io/api/games?key=${process.env.NEXT_PUBLIC_RAWG_API}&page=${page}&page_size=40`
+      )
+      if (gamesRes.ok) {
+        const data = await gamesRes.json()
+        data.results?.forEach((game: any) => {
+          dynamicRoutes.push({
+            url: `${baseUrl}/details/game/${game.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.7,
+          })
+        })
+      }
+    }
+
+    // ==========================================
+    // 5. КНИГИ (OpenLibrary) -> /details/book/[id]
     // ==========================================
     const genres = ['love', 'sci-fi', 'fantasy']
     for (const genre of genres) {
@@ -79,10 +103,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (booksRes.ok) {
         const data = await booksRes.json()
         data.works?.forEach((work: any) => {
-          // Выдергиваем ID книги (например, /works/OL123W -> OL123W)
           const bookId = work.key.replace('/works/', '')
           dynamicRoutes.push({
-            url: `${baseUrl}/book/${bookId}`,
+            url: `${baseUrl}/details/book/${bookId}`,
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.6,
@@ -94,7 +117,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Ошибка генерации динамических URL для sitemap:', error)
   }
 
-  // 5. Дедупликация (Защита от дублей, если API вернули одинаковые ссылки)
   const allRoutes = [...staticRoutes, ...dynamicRoutes]
   const uniqueRoutes = Array.from(new Set(allRoutes.map((r) => r.url))).map(
     (url) => allRoutes.find((r) => r.url === url)!
