@@ -54,12 +54,12 @@ input:-webkit-autofill:focus {
 
 html {
 	scroll-behavior: smooth;
+	overflow-x: hidden;
 }
 body {
 	background: var(--background);
 	color: var(--mainColor);
 	font-family: var(--font-inter);
-	overflow-x: hidden;
 }
 h1,
 h2,

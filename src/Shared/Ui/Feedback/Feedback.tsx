@@ -5,7 +5,7 @@ import { CheckCircle2, MessageSquare, Send, X } from 'lucide-react'
 import { useState } from 'react'
 
 export function ContactForm() {
-	const [state, handleSubmit] = useForm('xzdjrjdz')
+	const [state, handleSubmit] = useForm('xzdjrjdz') // не помню чё это за каракули. Не убираю пока 
 	const [isOpen, setIsOpen] = useState(false)
 
 	const closeMenu = () => setIsOpen(false)

@@ -1,3 +1,4 @@
+import { SearchBy } from '@/Components/SearchByDescription/SearchBy'
 import { Logo } from './Logo'
 import { Search } from './Search'
 import { WishList } from './WishList'
@@ -8,8 +9,9 @@ export function Header() {
 				<Logo />
 			</div>
 
-			<div className='flex-1 flex justify-center px-4 max-w-lg'>
+			<div className='flex-1 flex items-center gap-x-2 justify-center px-4 max-w-lg'>
 				<Search />
+				<SearchBy />
 			</div>
 
 			<div className='flex-shrink-0'>
