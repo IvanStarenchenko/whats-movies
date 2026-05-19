@@ -2,6 +2,7 @@
 import { Details } from '@/Components/Pages/Details/Details'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { Metadata } from 'next'
+
 export const revalidate = 3600
 
 type Props = {
@@ -117,7 +118,7 @@ export default async function page({ params }: Props) {
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
 				/>
 			)}
-			<article style={{ display: 'none' }}>
+			<article className="sr-only">
 				<h1>{data?.title || data?.name || ''}</h1>
 				<p>{data?.overview || data?.description || ''}</p>
 			</article>
