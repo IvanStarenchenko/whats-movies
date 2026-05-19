@@ -1,10 +1,15 @@
+
+const { loadEnvConfig } = require('@next/env')
+loadEnvConfig(process.cwd())
+
 const fs = require('fs')
 const path = require('path')
 
+
 const BASE_URL = 'https://media-hub.lol'
 // Берем чистые серверные переменные без NEXT_PUBLIC_
-const TMDB_TOKEN = process.env.TMDB_TOKEN
-const RAWG_API_KEY = process.env.RAWG_API_KEY
+const TMDB_TOKEN = process.env.NEXT_PUBLIC_TMDB_TOKEN
+const RAWG_API_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY
 
 // Экранирование спецсимволов для XML (чтобы ссылки вроде game?name=1&id=2 не ломали валидацию)
 function escapeXml(str) {
