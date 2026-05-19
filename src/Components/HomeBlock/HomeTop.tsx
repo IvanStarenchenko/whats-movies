@@ -48,7 +48,6 @@ export function HomeTop() {
 
 					return (
 						<SwiperSlide key={item.id} className='relative overflow-hidden'>
-							{/* Фоновое изображение с градиентами */}
 							<div className='absolute inset-0 select-none'>
 								<Image
 									src={backdrop}
@@ -86,7 +85,7 @@ export function HomeTop() {
 								</div>
 
 								{/* Заголовок с ограничением в 2 строки */}
-								<h1 className='text-3xl md:text-7xl font-black text-white mb-4 leading-[1.1] drop-shadow-2xl animate-in slide-in-from-left-10 duration-700 line-clamp-2 uppercase'>
+								<h1 className='text-3xl md:text-6xl font-black text-white mb-4 leading-[1.1] drop-shadow-2xl animate-in slide-in-from-left-10 duration-700 line-clamp-2 uppercase'>
 									{title}
 								</h1>
 
