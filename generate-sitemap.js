@@ -122,7 +122,7 @@ ${xmlItems}
 </urlset>`
 
   // Безопасная запись пути через process.cwd() — сработает на любом хостинге и в любой системе
-  const destPath = path.join(process.cwd(), 'public', 'sitemap.xml')
+  const destPath = path.join(process.cwd(), 'public', 'sitemap-main.xml')
   
   // Проверяем существование папки public (на случай странных сред сборки)
   const publicDir = path.dirname(destPath)
