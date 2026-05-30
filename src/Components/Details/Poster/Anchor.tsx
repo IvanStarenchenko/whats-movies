@@ -1,11 +1,11 @@
 import {
-	AnchorBookData,
-	AnchorGameData,
-	AnchorMovieData,
-	AnchorTvData,
+    AnchorBookData,
+    AnchorGameData,
+    AnchorMovieData,
+    AnchorTvData,
 } from '@/Data/DetailsAnchor'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
-import { IAnchoredMenu } from '@/Types/DetailsAnchor'
+import { IAnchoredMenu } from '@/Types/DetailsAnchor.interface'
 import { Link } from 'react-scroll'
 
 export function Anchor({ type }: { type: MediaType }) {

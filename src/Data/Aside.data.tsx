@@ -1,5 +1,5 @@
 import { ICONS } from '@/Assets/Icons'
-import { IAsideFilter, IAsideMenu } from '@/Types/Aside.type'
+import { IAsideFilter, IAsideMenu } from '@/Types/Aside.interface'
 export const AsideMenu: IAsideMenu[] = [
 	{
 		icon: ICONS.home,

@@ -1,4 +1,4 @@
-import { IAsideMenu } from '@/Types/Aside.type'
+import { IAsideMenu } from '@/Types/Aside.interface'
 import clsx from 'clsx'
 import Link from 'next/link'
 interface IAsideItemProps extends IAsideMenu {

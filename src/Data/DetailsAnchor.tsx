@@ -1,4 +1,4 @@
-import { IAnchoredMenu } from '@/Types/DetailsAnchor'
+import { IAnchoredMenu } from '@/Types/DetailsAnchor.interface'
 
 export const AnchorMovieData: IAnchoredMenu[] = [
 	{ title: 'Trailer', href: 'trailer' },
