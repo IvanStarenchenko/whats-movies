@@ -68,7 +68,7 @@ export function DetailsBook({ bookData, description }: DetailsBookProps) {
 				>
 					{isCinema && (
 						<div className='w-full max-w-5xl aspect-video scale-95 animate-in zoom-in-95 duration-700'>
-							<Gallery key={bookId} type='book' />
+							<Gallery contentKey={bookId} type='book' />
 						</div>
 					)}
 				</div>

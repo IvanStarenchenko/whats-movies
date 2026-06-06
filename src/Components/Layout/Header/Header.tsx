@@ -1,4 +1,5 @@
 import { SearchBy } from '@/Components/SearchByDescription/SearchBy'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { Logo } from './Logo'
 import { Search } from './Search'
 import { WishList } from './WishList'
@@ -14,7 +15,8 @@ export function Header() {
 				<SearchBy />
 			</div>
 
-			<div className='flex-shrink-0'>
+			<div className='flex flex-shrink-0 items-center gap-2'>
+				<LanguageSwitcher />
 				<WishList />
 			</div>
 		</header>

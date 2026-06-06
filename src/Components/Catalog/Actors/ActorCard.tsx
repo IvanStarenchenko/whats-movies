@@ -3,8 +3,10 @@ import { TMDBMediaItem, TMDBPersona } from '@/Store/TMDB/tMDB.type'
 import { simplifyName } from '@/Utils/cleanString'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 export function ActorCard({ person }: { person: TMDBPersona }) {
+	const { t } = useTranslation()
 	const mainWorks = person.known_for?.slice(0, 3) || []
 	const hasAdult = mainWorks.some(work => work.adult)
 
@@ -41,14 +43,14 @@ export function ActorCard({ person }: { person: TMDBPersona }) {
 								)}
 							</span>
 							<span className='text-white/30 text-[9px] md:text-[10px] font-bold uppercase tracking-widest'>
-								Score: {Math.round(person.popularity)}
+								{t('common.score')}: {Math.round(person.popularity)}
 							</span>
 						</div>
 					</div>
 
 					<div className='space-y-3 md:space-y-4'>
 						<p className='text-[9px] md:text-[10px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/20 font-black'>
-							Featured In
+							{t('actors.featuredIn')}
 						</p>
 						<div className='flex gap-2 md:gap-4'>
 							{mainWorks.map((work: TMDBMediaItem) => (

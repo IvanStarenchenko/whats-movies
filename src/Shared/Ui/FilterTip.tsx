@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 interface FilterTipProps {
 	savedFilters: {
 		genres: number[]
@@ -9,6 +11,8 @@ export function FilterTip({
 	savedFilters,
 	selectedGenreNames
 }: FilterTipProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div
 			className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 
@@ -19,17 +23,22 @@ export function FilterTip({
                 min-w-[150px] w-max max-w-[250px] z-50"
 		>
 			<div className="text-xs font-medium text-white/40 uppercase tracking-wider mb-1">
-				Active Filters
+				{t('catalog.filters.active')}
 			</div>
 			{savedFilters.genres.length > 0 && (
 				<div className="text-sm text-white/90 leading-tight">
-					<span className="text-[--secondActiveColor]">Genres:</span>{' '}
+					<span className="text-[--secondActiveColor]">
+						{t('catalog.filters.genresLabel')}
+					</span>{' '}
 					{selectedGenreNames}
 				</div>
 			)}
 			{savedFilters.rating > 0 && (
 				<div className="text-sm text-white/90 mt-1">
-					<span className="text-amber-400">Rating:</span> from{' '}
+					<span className="text-amber-400">
+						{t('catalog.filters.ratingLabel')}
+					</span>{' '}
+					{t('catalog.filters.from')}{' '}
 					{savedFilters.rating}
 				</div>
 			)}

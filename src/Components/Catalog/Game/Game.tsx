@@ -8,6 +8,7 @@ import { MediaType } from '@/Store/TMDB/tMDB.type'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { Fragment, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CatalogCard } from '../CatalogCard'
 const DynamicCatalogFilter = dynamic(
 	() => import('../Filter/CategoryFilter').then(mod => mod.CatalogFilter),
@@ -18,6 +19,7 @@ const DynamicCatalogFilter = dynamic(
 	}
 )
 export function Game({ type }: { type: MediaType }) {
+	const { t } = useTranslation()
 	const { gamesOptions, orderingGamesOptions } = useFilter(type)
 	const [page, setPage] = useState(1)
 	const searchParams = useSearchParams()
@@ -27,7 +29,7 @@ export function Game({ type }: { type: MediaType }) {
 		const options = gamesOptions
 		if (urlCategory) {
 			const matchedOption = options.find(
-				(o: Option) => o.TmdbValue === urlCategory
+				(o: Option) => o.GameValue === urlCategory
 			)
 			if (matchedOption) return matchedOption
 		}
@@ -35,9 +37,17 @@ export function Game({ type }: { type: MediaType }) {
 	})
 	const [selectedOrder, setSelectedOrder] = useState(orderingGamesOptions[0])
 
+	const localizedSelectedOption =
+		gamesOptions.find(option => option.GameValue === selectedOption.GameValue) ||
+		selectedOption
+
+	const localizedSelectedOrder =
+		orderingGamesOptions.find(option => option.order === selectedOrder.order) ||
+		selectedOrder
+
 	const { data, isFetching } = useGetGamesByGenreQuery({
-		genre_slug: (selectedOption.GameValue as TGamesGenre) || 'action',
-		ordering: selectedOrder.order,
+		genre_slug: (localizedSelectedOption.GameValue as TGamesGenre) || 'action',
+		ordering: localizedSelectedOrder.order,
 		page,
 	})
 
@@ -45,7 +55,7 @@ export function Game({ type }: { type: MediaType }) {
 	const handlePrefetchNext = () => {
 		if (page < totalPages) {
 			prefetchPage({
-				genre_slug: (selectedOption.GameValue as TGamesGenre) || 'action',
+				genre_slug: (localizedSelectedOption.GameValue as TGamesGenre) || 'action',
 				page: page + 1,
 			})
 		}
@@ -54,8 +64,7 @@ export function Game({ type }: { type: MediaType }) {
 		<div className='space-y-10'>
 			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
 				<h2 className='text-2xl font-bold flex items-center gap-4  text-white uppercase tracking-wider'>
-					{selectedOption.label}{' '}
-					{type === 'game' ? 'Games' : type === 'movie' ? 'Movies' : 'TV Shows'}
+					{t('catalog.gamesTitle', { category: localizedSelectedOption.label })}
 					<RandomBtn games={data?.results || []} />
 				</h2>
 
@@ -63,9 +72,9 @@ export function Game({ type }: { type: MediaType }) {
 					<DynamicCatalogFilter
 						setPage={setPage}
 						filterType={type}
-						selectedOption={selectedOption}
+						selectedOption={localizedSelectedOption}
 						setSelectedOrder={setSelectedOrder}
-						selectedOrder={selectedOrder}
+						selectedOrder={localizedSelectedOrder}
 						setSelectedOption={setSelectedOption}
 					/>
 				</div>
@@ -95,16 +104,16 @@ export function Game({ type }: { type: MediaType }) {
 						disabled={page === 1 || isFetching}
 						className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 					>
-						Previous
-					</button>
+							{t('common.previous')}
+						</button>
 
 					<div className='flex flex-col items-center'>
-						<span className='text-(--secondActiveColor) font-bold'>
-							Page {page}
-						</span>
-						<span className='text-gray-500 text-xs font-normal'>
-							of {totalPages.toLocaleString()}
-						</span>
+							<span className='text-(--secondActiveColor) font-bold'>
+							{t('common.page', { page })}
+							</span>
+							<span className='text-gray-500 text-xs font-normal'>
+							{t('common.of', { total: totalPages.toLocaleString() })}
+							</span>
 					</div>
 
 					<button
@@ -116,8 +125,8 @@ export function Game({ type }: { type: MediaType }) {
 						disabled={page === totalPages || isFetching}
 						className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 					>
-						Next
-					</button>
+							{t('common.next')}
+						</button>
 				</div>
 			)}
 		</div>

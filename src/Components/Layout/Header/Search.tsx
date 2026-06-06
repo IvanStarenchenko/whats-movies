@@ -5,11 +5,27 @@ import { Search as SearchIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export function Search() {
+	const { t } = useTranslation()
 	const { value, setValue, combinedResults, isAnyLoading } = useSearch()
 	const [isOpen, setIsOpen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
+	const getTypeLabel = (type: string) => {
+		switch (type) {
+			case 'movie':
+				return t('media.movie')
+			case 'tv':
+				return t('media.tv')
+			case 'book':
+				return t('media.book')
+			case 'game':
+				return t('media.game')
+			default:
+				return type
+		}
+	}
 
 	useEffect(() => {
 		const handleClickOutside = (e: MouseEvent) => {
@@ -49,7 +65,7 @@ export function Search() {
 					value={value}
 					onChange={e => setValue(e.target.value)}
 					onFocus={() => setIsOpen(true)}
-					placeholder='Search movies or books...'
+					placeholder={t('search.globalPlaceholder')}
 					className={`
             w-full py-2 bg-[#1a1d29] border border-white/10 rounded-xl text-white outline-none 
             focus:border-(--secondActiveColor)/50 transition-all text-sm
@@ -105,7 +121,7 @@ export function Search() {
 												/>
 											) : (
 												<div className='w-full h-full flex items-center justify-center text-[8px] text-gray-600 uppercase text-center p-1'>
-													No image
+													{t('search.noImage')}
 												</div>
 											)}
 										</div>
@@ -115,7 +131,7 @@ export function Search() {
 											</span>
 											<div className='flex items-center gap-2 text-[10px] text-gray-500 uppercase font-bold'>
 												<span className={getItemTypeColor(item.type)}>
-													{item.type}
+													{getTypeLabel(item.type)}
 												</span>
 												{item.year && (
 													<>
@@ -129,7 +145,7 @@ export function Search() {
 								))
 							) : !isAnyLoading ? (
 								<div className='p-8 text-center text-gray-500 text-sm'>
-									No results found
+									{t('search.noResults')}
 								</div>
 							) : null}
 						</div>

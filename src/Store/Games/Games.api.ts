@@ -43,13 +43,13 @@ export const GamesApi = createApi({
 		getGameAdditions: builder.query<IGameSearch, { id: string | number }>({
 			query: ({ id }) => ({
 				url: `games/${id}/additions`,
-				params: { key: 'ТВОЙ_KEY' }
+				params: { key: RAWG_KEY }
 			}),
 		}),
 		getParentGames: builder.query<IGameSearch, { id: string | number }>({
 			query: ({ id }) => ({
 				url: `games/${id}/parent-games`,
-				params: { key: 'ТВОЙ_KEY' }
+				params: { key: RAWG_KEY }
 			}),
 		}),
 		getGameSearch: builder.query<IGameSearch, { query: string }>({

@@ -1,10 +1,20 @@
 import { useGetMediaCreditsQuery } from '@/Store/TMDB/tMDB.api'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 interface CastProps {
 	id?: number | string | undefined
 	type?: string
 }
 export function useGetCast({ id, type }: CastProps) {
-	const { data, isLoading, isError } = useGetMediaCreditsQuery({ id, type })
+	const { tmdbLanguage } = useCurrentLanguage()
+	const isTmdbType = type === 'movie' || type === 'tv'
+	const { data, isLoading, isError } = useGetMediaCreditsQuery(
+		{
+			id,
+			type,
+			language: tmdbLanguage,
+		},
+		{ skip: !id || !isTmdbType }
+	)
 
 	const topCast = data?.cast ? data.cast.slice(0, 20) : []
 	const director = data?.crew

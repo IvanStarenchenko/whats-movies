@@ -3,6 +3,7 @@ import { IGameDetails } from '@/Store/Games/Games.type'
 import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { getYouTubeUrl } from '@/Utils/Utils'
 import dynamic from 'next/dynamic'
+import { useTranslation } from 'react-i18next'
 
 const DynamicMoviePlayer = dynamic(
 	() => import('@/Shared/Ui/MoviePlayer').then(mod => mod.MoviePlayer),
@@ -43,6 +44,8 @@ export function Film({
 	isGame,
 	isCinema,
 }: FilmProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className='relative w-full overflow-hidden aspect-video z-10 '>
 			{activeMode === 'movie' ? (
@@ -75,7 +78,7 @@ export function Film({
 					src={`${getYouTubeUrl(mainTrailer.key)}${
 						isCinema ? '?autoplay=1' : ''
 					}`}
-					title='Video Player'
+					title={t('video.playerTitle')}
 					className='absolute inset-0 w-full h-full'
 					allow='autoplay; encrypted-media'
 					allowFullScreen

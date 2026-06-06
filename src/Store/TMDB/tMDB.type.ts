@@ -2,6 +2,7 @@ import { StaticImageData } from 'next/image'
 
 export type MediaType = 'movie' | 'tv' | 'book' | 'game' | 'music'
 export type TMDBKnownForDepartment = 'Acting' | 'Directing' | 'Writing'
+export type TMDBLanguage = 'ru-RU' | 'en-US'
 
 export type TMDBListCategory =
 	| 'popular'
@@ -63,10 +64,12 @@ export type TMDBSpecialCategories = 'with_runtime.lte' | 'with_runtime.gte'
 export interface TMDBGenre {
 	name: string
 	id: number
+	labelKey?: string
 }
 export interface TMDBRating {
 	name: string
 	value: number
+	labelKey?: string
 }
 
 export interface WatchProvider {
@@ -101,6 +104,7 @@ export interface TMDBPaginatedResponse<T> {
 export interface TMDBGenre {
 	id: number
 	name: string
+	labelKey?: string
 }
 
 export interface TMDBPersona {

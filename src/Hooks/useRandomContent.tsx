@@ -5,6 +5,7 @@ import { IWishListState } from '@/Store/Slices/WishList.type'
 import { MediaType, TMDBMediaItem } from '@/Store/TMDB/tMDB.type'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export type ContentItem =
 	| TMDBMediaItem
@@ -21,6 +22,7 @@ export function useRandomContent({
 	content,
 	contentType: initialType
 }: RandomProps) {
+	const { t } = useTranslation()
 	const router = useRouter()
 	const [isSpinning, setIsSpinning] = useState(false)
 	const [tempName, setTempName] = useState('')
@@ -31,7 +33,7 @@ export function useRandomContent({
 			(item as TMDBMediaItem).title ||
 			(item as TMDBMediaItem).name ||
 			(item as OpenLibraryBook).title ||
-			'Unknown'
+			t('common.unknown')
 		)
 	}
 

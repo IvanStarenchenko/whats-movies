@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 export function OriginalIdenty({
 	original_name,
 	title,
@@ -7,16 +9,18 @@ export function OriginalIdenty({
 	title?: string
 	original_language?: string
 }) {
+	const { t } = useTranslation()
+
 	return (
 		<div className="space-y-3">
 			<p className="text-[10px] text-white/40 font-black uppercase tracking-[0.2em]">
-				Original Identity
+				{t('details.originalIdentity')}
 			</p>
 			<div className="flex flex-col">
 				<span className="text-sm font-semibold text-white/80">
 					<span className="text-[10px] text-white/30 font-medium uppercase mt-1">
 						{' '}
-						Origin Name:
+						{t('details.originName')}
 					</span>
 					<span className="text-(--secondActiveColor)">
 						{' '}
@@ -25,7 +29,7 @@ export function OriginalIdenty({
 				</span>
 				{original_language && (
 					<span className="text-[10px] text-white/30 font-medium uppercase mt-1">
-						Language:{' '}
+						{t('details.language')}{' '}
 						<span className="text-(--activeColor) font-bold">
 							{' '}
 							{original_language}

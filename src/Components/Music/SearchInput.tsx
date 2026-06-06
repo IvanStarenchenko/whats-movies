@@ -1,4 +1,5 @@
 import { Search, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface SearchInputProps {
 	handleSearch: () => void
@@ -14,6 +15,8 @@ export function SearchInput({
 	isSearching,
 	setInputValue
 }: SearchInputProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className=" flex gap-2 ">
 			<div className="relative flex-1 group">
@@ -22,7 +25,7 @@ export function SearchInput({
 					value={inputValue}
 					onChange={e => setInputValue(e.target.value)}
 					onKeyDown={e => e.key === 'Enter' && handleSearch()}
-					placeholder="Search movie or game soundtrack..."
+					placeholder={t('music.placeholder')}
 					className=" w-full  border border-white/10 p-5 rounded-2xl outline-none focus:border-(--activeColor)/50 transition-all text-lg"
 				/>
 				{inputValue && (
@@ -44,7 +47,7 @@ export function SearchInput({
 					'...'
 				) : (
 					<>
-						<Search size={24} /> Search
+						<Search size={24} /> {t('music.search')}
 					</>
 				)}
 			</button>

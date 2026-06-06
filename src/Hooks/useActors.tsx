@@ -3,15 +3,17 @@ import {
 	useSearchPersonQuery
 } from '@/Store/TMDB/tMDB.api'
 import { TMDBKnownForDepartment } from '@/Store/TMDB/tMDB.type'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { useState } from 'react'
 export function useActors() {
+	const { tmdbLanguage } = useCurrentLanguage()
 	const [value, setValue] = useState('')
 
 	const { data: popularData, isLoading: popLoading } =
-		useGetPopularPersonsQuery({ page: 1 })
+		useGetPopularPersonsQuery({ page: 1, language: tmdbLanguage })
 
 	const { data: searchData, isLoading: searchLoading } = useSearchPersonQuery(
-		{ query: value },
+		{ query: value, language: tmdbLanguage },
 		{ skip: value.length < 2 }
 	)
 

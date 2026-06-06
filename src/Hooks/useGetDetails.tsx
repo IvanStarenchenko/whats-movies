@@ -2,9 +2,11 @@ import { useGetBookDetailsQuery } from '@/Store/Books/Openlibrary.api'
 import { useGetGameDetailsQuery } from '@/Store/Games/Games.api'
 import { useGetDetailsQuery } from '@/Store/TMDB/tMDB.api'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { useParams } from 'next/navigation'
 
 export function useGetDetails() {
+	const { tmdbLanguage } = useCurrentLanguage()
 	const params = useParams()
 	const type = params?.name as MediaType
 	const idParam = params?.id as string
@@ -17,7 +19,7 @@ export function useGetDetails() {
 		error: movieError,
 		isLoading: movieLoading
 	} = useGetDetailsQuery(
-		{ type: type as MediaType, id: movieId },
+		{ type: type as MediaType, id: movieId, language: tmdbLanguage },
 		{ skip: !isMovieOrTv || isNaN(movieId) }
 	)
 

@@ -5,6 +5,7 @@ import { LazyPuls } from '@/Shared/Ui/LazyPuls'
 import dynamic from 'next/dynamic'
 import { usePathname } from 'next/navigation'
 import { Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const MoviesLazy = dynamic(
 	() => import('../../Catalog/Movies/Movies').then(mod => mod.Movies),
@@ -28,6 +29,7 @@ const ActorsLazy = dynamic(
 )
 
 export function Catalog() {
+	const { t } = useTranslation()
 	const pathname = usePathname()
 
 	const isMoviesPage = pathname === '/movies'
@@ -45,7 +47,7 @@ export function Catalog() {
 			</div>
 
 			<div className="p-6 min-w-0">
-				<Suspense fallback={<div>Загрузка контента...</div>}>
+				<Suspense fallback={<div>{t('common.contentLoading')}</div>}>
 					{isMoviesPage && <MoviesLazy type="movie" />}
 					{isTvShowsPage && <TvLazy type="tv" />}
 					{isBooksPage && <BooksLazy type="book" />}

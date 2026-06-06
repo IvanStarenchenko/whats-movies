@@ -1,10 +1,12 @@
 'use client'
 import { useGetTrendingQuery } from '@/Store/TMDB/tMDB.api'
 import { getItemTypeColor } from '@/Utils/getColorsByData'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { Play, Star } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { useTranslation } from 'react-i18next'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
 import 'swiper/css/pagination'
@@ -12,7 +14,12 @@ import { Autoplay, EffectFade, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 export function HomeTop() {
-	const { data, isLoading } = useGetTrendingQuery({ page: 1 })
+	const { t } = useTranslation()
+	const { tmdbLanguage } = useCurrentLanguage()
+	const { data, isLoading } = useGetTrendingQuery({
+		page: 1,
+		language: tmdbLanguage,
+	})
 
 	const trendingItems = data?.results?.slice(0, 5) || []
 
@@ -61,7 +68,6 @@ export function HomeTop() {
 								<div className='absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-[2]' />
 							</div>
 
-							{/* Контентный блок */}
 							<div className='absolute inset-0 flex flex-col justify-end md:justify-center px-6 pb-24 md:pb-0 md:px-20 max-w-5xl z-10'>
 								<div className='flex items-center flex-wrap gap-3 mb-4 animate-in slide-in-from-left-8 duration-500'>
 									<span
@@ -69,7 +75,7 @@ export function HomeTop() {
 											item.media_type
 										)} text-[10px] font-black uppercase tracking-[0.2em] rounded shrink-0`}
 									>
-										TRENDING WEEKLY
+										{t('home.trendingWeekly')}
 									</span>
 
 									{releaseDate && (
@@ -84,12 +90,10 @@ export function HomeTop() {
 									</div>
 								</div>
 
-								{/* Заголовок с ограничением в 2 строки */}
-								<h1 className='text-3xl md:text-6xl font-black text-white mb-4 leading-[1.1] drop-shadow-2xl animate-in slide-in-from-left-10 duration-700 line-clamp-2 uppercase'>
+								<h1 className='text-3xl md:text-5xl font-black text-white mb-4 leading-[1.1] drop-shadow-2xl animate-in slide-in-from-left-10 duration-700 line-clamp-2 uppercase'>
 									{title}
 								</h1>
 
-								{/* Описание с адаптивным ограничением строк */}
 								<p className='text-zinc-300 text-sm md:text-lg mb-8 line-clamp-2 md:line-clamp-3 max-w-2xl font-light leading-relaxed animate-in slide-in-from-left-12 duration-1000'>
 									{item.overview}
 								</p>
@@ -100,7 +104,7 @@ export function HomeTop() {
 										className='flex items-center gap-3 px-8 py-3.5 bg-white text-black font-bold rounded-2xl hover:bg-amber-400 hover:scale-105 transition-all active:scale-95 shadow-xl shadow-black/20'
 									>
 										<Play size={20} fill='black' />
-										Смотреть
+										{t('home.watch')}
 									</Link>
 								</div>
 							</div>

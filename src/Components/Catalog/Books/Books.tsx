@@ -7,6 +7,7 @@ import { onlyCoveredBooks } from '@/Utils/onlyCoveredBooks'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
 import { Fragment, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CatalogCard } from '../CatalogCard'
 const DynamicCatalogFilter = dynamic(
 	() => import('../Filter/CategoryFilter').then(mod => mod.CatalogFilter),
@@ -17,6 +18,7 @@ const DynamicCatalogFilter = dynamic(
 	}
 )
 export function Books({ type }: { type: MediaType }) {
+	const { t } = useTranslation()
 	const { booksOptions } = useFilter(type)
 	const [page, setPage] = useState(1)
 	const searchParams = useSearchParams()
@@ -33,8 +35,13 @@ export function Books({ type }: { type: MediaType }) {
 		return options[0]
 	})
 
-	const { data, isFetching, isLoading } = useGetBooksByGenreQuery({
-		genre: selectedOption.OpenlibValue as string,
+	const localizedSelectedOption =
+		booksOptions.find(
+			option => option.OpenlibValue === selectedOption.OpenlibValue
+		) || selectedOption
+
+	const { data, isFetching } = useGetBooksByGenreQuery({
+		genre: localizedSelectedOption.OpenlibValue as string,
 		limit: 30,
 		page,
 	})
@@ -49,14 +56,14 @@ export function Books({ type }: { type: MediaType }) {
 		<div className='space-y-10 '>
 			<div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
 				<h2 className='text-2xl font-bold text-white uppercase tracking-wider'>
-					{selectedOption.label} Books
+					{t('catalog.booksTitle', { category: localizedSelectedOption.label })}
 				</h2>
 
 				<div className='w-full md:w-64'>
 					<DynamicCatalogFilter
 						setPage={setPage}
 						filterType={'book'}
-						selectedOption={selectedOption}
+						selectedOption={localizedSelectedOption}
 						setSelectedOption={setSelectedOption}
 					/>
 				</div>
@@ -67,7 +74,7 @@ export function Books({ type }: { type: MediaType }) {
 					? Array.from({ length: 15 }).map((_, index) => (
 							<LazyPuls key={index} />
 					  ))
-					: booksWithCovers.map((item, index) => (
+					: booksWithCovers.map(item => (
 							<Fragment key={item.key}>
 								<CatalogCard item={item} type={type} />
 
@@ -78,7 +85,7 @@ export function Books({ type }: { type: MediaType }) {
 
 			{!isFetching && booksWithCovers.length === 0 && (
 				<div className='text-center text-gray-500 py-10'>
-					No books with covers found in this section.
+					{t('catalog.noBooksWithCovers')}
 				</div>
 			)}
 
@@ -91,13 +98,15 @@ export function Books({ type }: { type: MediaType }) {
 					disabled={page === 1 || isFetching}
 					className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 				>
-					Previous
+					{t('common.previous')}
 				</button>
 
 				<span className='text-(--secondActiveColor) font-bold'>
-					Page {page}{' '}
+					{t('common.page', { page })}{' '}
 					{totalPages > 0 && (
-						<span className='text-gray-500 font-normal'>of {totalPages}</span>
+						<span className='text-gray-500 font-normal'>
+							{t('common.of', { total: totalPages })}
+						</span>
 					)}
 				</span>
 
@@ -109,7 +118,7 @@ export function Books({ type }: { type: MediaType }) {
 					disabled={page >= totalPages || isFetching}
 					className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 				>
-					Next
+					{t('common.next')}
 				</button>
 			</div>
 		</div>

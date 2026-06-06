@@ -2,6 +2,7 @@ import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { getFullscreenGalleryImageUrl } from '@/Utils/Utils'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 interface TMDBProps {
 	type: MediaType
 	id: number
@@ -21,14 +22,16 @@ export function TMDB({
 	handlePrev,
 	currentImage
 }: TMDBProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className="w-full h-full overflow-y-auto px-4 py-6 custom-scrollbar">
 			<div className="flex items-center gap-x-4 mb-8 border-b border-white/10 pb-4">
 				<h2 className="text-2xl font-black uppercase tracking-tighter">
-					Backdrops Gallery
+					{t('gallery.backdrops')}
 				</h2>
 				<span className="text-xs font-mono text-white/30 px-3 py-1 bg-white/5 rounded-full border border-white/10">
-					{backdrops.length} Images
+					{t('common.images', { count: backdrops.length })}
 				</span>
 			</div>
 
@@ -42,7 +45,7 @@ export function TMDB({
 						<Image
 							fill
 							src={getFullscreenGalleryImageUrl(image.file_path)}
-							alt="gallery item"
+							alt={t('gallery.itemAlt')}
 							className="object-cover transition-transform duration-500 group-hover:scale-105"
 							sizes="(max-width: 768px) 100vw, 33vw"
 						/>
@@ -77,7 +80,7 @@ export function TMDB({
 					>
 						<Image
 							src={getFullscreenGalleryImageUrl(currentImage.file_path)}
-							alt="fullscreen"
+							alt={t('gallery.fullscreenAlt')}
 							fill
 							className="object-contain"
 							priority

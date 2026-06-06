@@ -15,6 +15,7 @@ import { Heart, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export interface MovieCardProps {
 	item: TMDBMediaItem | OpenLibraryWorks | IGame | TMDBPersonCredit | undefined
@@ -25,6 +26,7 @@ export const CatalogCard = memo(function CatalogCard({
 	item,
 	type,
 }: MovieCardProps) {
+	const { t } = useTranslation()
 	const { title, date, rating, itemId, posterUrl, isBook, isGame, movieItem } =
 		useCardData(item, type)
 
@@ -59,7 +61,7 @@ export const CatalogCard = memo(function CatalogCard({
 				)}
 
 				<button
-					aria-label='Compare'
+					aria-label={t('search.compare')}
 					onClick={() => {
 						onToggle(categoryKey, item as UniversalItem)
 					}}
@@ -92,7 +94,7 @@ export const CatalogCard = memo(function CatalogCard({
 				</button>
 
 				<button
-					aria-label='Add to wishlist'
+					aria-label={t('search.addToWishlist')}
 					onClick={e => toggleSliderWishlistHandler(e, item as UniversalItem)}
 					type='button'
 					className={`p-1.5 sm:p-2 border backdrop-blur-xl rounded-lg sm:rounded-xl transition-all duration-300 active:scale-90 
@@ -150,7 +152,7 @@ export const CatalogCard = memo(function CatalogCard({
 
 					<div className='flex items-center justify-between mt-auto gap-2 text-[9px] sm:text-xs'>
 						<span className='text-gray-400 flex-shrink-0'>
-							{date ? date.split('-')[0] : 'N/A'}
+							{date ? date.split('-')[0] : t('common.na')}
 						</span>
 
 						<span
@@ -160,7 +162,7 @@ export const CatalogCard = memo(function CatalogCard({
 								type
 							)}/20 flex-shrink-0`}
 						>
-							{categoryKey.replace('Shows', '').replace('s', '')}
+							{t(`media.${type}`)}
 						</span>
 					</div>
 				</div>

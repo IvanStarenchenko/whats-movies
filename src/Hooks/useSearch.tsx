@@ -6,9 +6,11 @@ import { ISearchResult } from '@/Store/Slices/Relative.type'
 import { useSearchMultiQuery } from '@/Store/TMDB/tMDB.api'
 import { TMDBMediaItem } from '@/Store/TMDB/tMDB.type'
 import { getBookCoverUrl, getTmdbImageSlideUrl } from '@/Utils/Utils'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { useState } from 'react'
 import { useDebounce } from 'use-debounce'
 export function useSearch() {
+	const { tmdbLanguage } = useCurrentLanguage()
 	const [value, setValue] = useState('')
 	const [debouncedValue] = useDebounce(value, 500)
 
@@ -17,7 +19,7 @@ export function useSearch() {
 		isLoading: movieLoading,
 		isFetching: movieFetching
 	} = useSearchMultiQuery(
-		{ query: debouncedValue },
+		{ query: debouncedValue, language: tmdbLanguage },
 		{ skip: debouncedValue.length < 3 }
 	)
 	const {

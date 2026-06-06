@@ -2,8 +2,10 @@
 import { useRandomContent } from '@/Hooks/useRandomContent'
 import { useWishlist } from '@/Hooks/useWishlist'
 import { Dices, Heart, Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export function WishList() {
+	const { t } = useTranslation()
 	const {
 		renderListSection,
 		MovieList,
@@ -26,7 +28,7 @@ export function WishList() {
 			ref={dropdownRef}
 		>
 			<button
-				aria-label="Wishlist"
+				aria-label={t('wishlist.aria')}
 				className={`relative cursor-pointer transition-transform active:scale-95 ${
 					isActive ? 'text-white' : 'text-(--activeColor)'
 				}`}
@@ -63,7 +65,7 @@ export function WishList() {
 								) : (
 									<>
 										<Dices size={16} />
-										<span>Random Choice</span>
+										<span>{t('wishlist.randomChoice')}</span>
 									</>
 								)}
 							</button>
@@ -71,14 +73,14 @@ export function WishList() {
 
 						{totalItems === 0 ? (
 							<p className="text-gray-500 text-xs text-center py-4">
-								Wishlist is empty
+								{t('wishlist.empty')}
 							</p>
 						) : (
 							<div className="space-y-1">
-								{renderListSection(MovieList, 'Movie', 'text-(--blue)')}
-								{renderListSection(TVShowList, 'TV Show', 'text-(--green)')}
-								{renderListSection(BookList, 'Book', 'text-(--orange)')}
-								{renderListSection(GameList, 'Game', 'text-(--red)')}
+								{renderListSection(MovieList, t('wishlist.movie'), 'text-(--blue)')}
+								{renderListSection(TVShowList, t('wishlist.tv'), 'text-(--green)')}
+								{renderListSection(BookList, t('wishlist.book'), 'text-(--orange)')}
+								{renderListSection(GameList, t('wishlist.game'), 'text-(--red)')}
 							</div>
 						)}
 					</div>

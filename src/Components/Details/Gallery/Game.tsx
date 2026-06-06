@@ -1,5 +1,6 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 interface GameProps {
 	screenshots: { id: number; image: string }[]
 	currentIndex: number | null
@@ -15,14 +16,16 @@ export function Game({
 	handleNext,
 	handlePrev
 }: GameProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className="w-full h-full overflow-y-auto px-4 py-6 custom-scrollbar">
 			<div className="flex items-center gap-x-4 mb-8 border-b border-white/10 pb-4">
 				<h2 className="text-2xl font-black uppercase tracking-tighter text-white">
-					Screenshots
+					{t('gallery.screenshots')}
 				</h2>
 				<span className="text-xs font-mono text-white/30 px-3 py-1 bg-white/5 rounded-full border border-white/10">
-					{screenshots.length} Images
+					{t('common.images', { count: screenshots.length })}
 				</span>
 			</div>
 
@@ -36,7 +39,7 @@ export function Game({
 						<Image
 							fill
 							src={screen.image}
-							alt="game screenshot"
+							alt={t('gallery.gameScreenshotAlt')}
 							className="object-cover transition-transform duration-500 group-hover:scale-105"
 							sizes="(max-width: 768px) 100vw, 33vw"
 						/>
@@ -73,7 +76,7 @@ export function Game({
 					>
 						<Image
 							src={screenshots[currentIndex].image}
-							alt="fullscreen"
+							alt={t('gallery.fullscreenAlt')}
 							fill
 							className="object-contain"
 							priority

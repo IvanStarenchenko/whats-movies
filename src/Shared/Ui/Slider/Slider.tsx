@@ -14,6 +14,7 @@ import {
 } from '@/Store/TMDB/tMDB.type'
 import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -42,6 +43,7 @@ export function Slider({
 	filter,
 	Loading,
 }: ISliderProps) {
+	const { t } = useTranslation()
 	const swiperRef = useRef<SwiperType | null>(null)
 	const router = useRouter()
 
@@ -61,9 +63,9 @@ export function Slider({
 			? 'Games'
 			: 'Books'
 
-	if (Loading) return <div className='p-4 text-white'>Loading...</div>
+	if (Loading) return <div className='p-4 text-white'>{t('common.loading')}</div>
 	if (!items || items.length === 0)
-		return <div className='p-4 text-gray-500'>No items available</div>
+		return <div className='p-4 text-gray-500'>{t('related.noContent')}</div>
 
 	const updateQuery = (filterValue: string) => {
 		const targetPath =

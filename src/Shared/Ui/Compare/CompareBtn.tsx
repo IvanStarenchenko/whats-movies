@@ -2,8 +2,10 @@
 import { useCompare } from '@/Hooks/useCompare'
 import { Zap } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Compare } from './Compare'
 export function CompareBtn() {
+	const { t } = useTranslation()
 	const { onRemove, getRating, activeCategories, totalCount, clearCompare } =
 		useCompare()
 	const [isActive, setIsActive] = useState(false)
@@ -13,7 +15,7 @@ export function CompareBtn() {
 	return (
 		<>
 			<button
-				aria-label='compare button'
+				aria-label={t('compare.button')}
 				onClick={() => setIsActive(!isActive)}
 				className='btn-add-note fixed bottom-25 right-3 z-50 p-4  rounded-2xl shadow-[0_0_20px_rgba(249,115,22,0.4)] hover:scale-110 transition-all active:scale-95 group'
 			>

@@ -16,6 +16,7 @@ import {
 	TMDBMediaItem
 } from '@/Store/TMDB/tMDB.type'
 import { getBookCoverUrl } from '@/Utils/Utils'
+import { useTranslation } from 'react-i18next'
 
 export type statusType =
 	| 'Not Started'
@@ -43,6 +44,7 @@ export function useData({
 	description,
 	status
 }: UseDataProps) {
+	const { t } = useTranslation()
 	const dispatch = useAppDispatch()
 	const wishlist = useAppSelector(state => state.wishlist)
 
@@ -69,25 +71,25 @@ export function useData({
 	) => {
 		e.stopPropagation()
 
-		let currentId: string | number = 'Unknown'
-		let name = 'Unknown'
+		let currentId: string | number = t('common.unknown')
+		let name = t('common.unknown')
 		let imageUrl = ''
 
 		if (type === 'book') {
 			const bookItem = item as OpenLibraryWorks
-			currentId = bookItem.key.split('/').pop() || 'Unknown'
-			name = bookItem.title || 'Unknown'
+			currentId = bookItem.key.split('/').pop() || t('common.unknown')
+			name = bookItem.title || t('common.unknown')
 			const coverUrl = getBookCoverUrl(bookItem.cover_id, 'L')
 			imageUrl = typeof coverUrl === 'string' ? coverUrl : coverUrl?.src || ''
 		} else if (type === 'game') {
 			const gameItem = item as IGameDetails
-			currentId = gameItem.slug || gameItem.id || 'Unknown'
-			name = gameItem.name || 'Unknown'
+			currentId = gameItem.slug || gameItem.id || t('common.unknown')
+			name = gameItem.name || t('common.unknown')
 			imageUrl = gameItem.background_image || ''
 		} else {
 			const mediaItem = item as TMDBMediaItem
-			currentId = mediaItem.id || 'Unknown'
-			name = mediaItem.title || mediaItem.name || 'Unknown'
+			currentId = mediaItem.id || t('common.unknown')
+			name = mediaItem.title || mediaItem.name || t('common.unknown')
 			imageUrl = mediaItem.poster_path || ''
 		}
 
@@ -116,7 +118,7 @@ export function useData({
 				movieData?.name ||
 				bookData?.title ||
 				gameData?.name ||
-				'Unknown'
+				t('common.unknown')
 			const imageUrl =
 				type === 'book'
 					? getBookCoverUrl(bookData?.covers?.[0], 'L')
@@ -151,7 +153,7 @@ export function useData({
 			gameData?.genres?.map(g => g.name),
 		status:
 			movieData?.status ||
-			(type === 'book' ? 'Reading' : type === 'game' ? 'Playing' : 'N/A')
+			(type === 'book' ? t('media.book') : type === 'game' ? t('media.game') : t('common.na'))
 	}
 
 	const posterData = {
@@ -177,7 +179,7 @@ export function useData({
 			movieData?.overview ||
 			gameData?.description_raw ||
 			gameData?.description ||
-			'Description currently unavailable.',
+			t('details.descriptionUnavailable'),
 
 		tagline: movieData?.tagline,
 		runtime: movieData?.runtime,

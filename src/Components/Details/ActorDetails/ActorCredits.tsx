@@ -1,6 +1,7 @@
 import { CatalogCard } from '@/Components/Catalog/CatalogCard'
 import { TMDBPersonCredit, TMDBPersonFullDetails } from '@/Store/TMDB/tMDB.type'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ActorCreditsProps {
 	data: TMDBPersonFullDetails
@@ -21,6 +22,7 @@ export function ActorCredits({
 	slicedTVCount,
 	slicedMovieCount
 }: ActorCreditsProps) {
+	const { t } = useTranslation()
 	type SortType = 'tv' | 'movie'
 	const [sortOrder, setSortOrder] = useState<Record<SortType, boolean>>({
 		tv: false,
@@ -38,10 +40,10 @@ export function ActorCredits({
 		<section className="w-full space-y-4 md:space-y-6 px-4 sm:px-6 lg:px-8">
 			<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-3 md:pb-4">
 				<h2 className="text-xl md:text-2xl font-bold italic tracking-tighter uppercase">
-					Filmography
+					{t('actors.filmography')}
 				</h2>
 				<span className="text-xs font-mono text-white/30 px-3 py-1 bg-white/5 rounded-full w-fit">
-					Total: {data.combined_credits?.cast.length}
+					{t('common.total')}: {data.combined_credits?.cast.length}
 				</span>
 			</div>
 
@@ -49,17 +51,17 @@ export function ActorCredits({
 				<div className="flex-1 flex flex-col min-h-[500px] lg:min-h-0 bg-white/2 rounded-4xl border border-white/5 p-4 md:p-6">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 md:mb-6 px-2">
 						<h3 className="text-base md:text-lg font-black uppercase text-(--orange)">
-							Movies
+							{t('actors.movies')}
 						</h3>
 						<div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
 							<button
 								onClick={() => handleSort('movie')}
 								className="text-xs md:text-sm text-white/40 font-bold tracking-wider hover:text-white transition-colors"
 							>
-								{sortOrder.movie ? 'Highest' : 'Lowest'}
+								{sortOrder.movie ? t('actors.highest') : t('actors.lowest')}
 							</button>
 							<span className="text-[10px] text-white/40 uppercase tracking-widest">
-								{mainMovieRoles.length} items
+								{t('common.items', { count: mainMovieRoles.length })}
 							</span>
 						</div>
 					</div>
@@ -83,7 +85,9 @@ export function ActorCredits({
 											type={item.media_type}
 										/>
 										<p className="text-[10px] md:text-xs text-gray-500 truncate italic px-1">
-											as {item.character || 'Unknown'}
+											{t('actors.asCharacter', {
+												character: item.character || t('common.unknown'),
+											})}
 										</p>
 									</div>
 								))}
@@ -92,7 +96,7 @@ export function ActorCredits({
 							className="w-full py-3 md:py-4 rounded-2xl font-bold text-[10px] md:text-xs bg-white/5 hover:bg-white/10 border border-white/10 transition-all uppercase tracking-widest active:scale-95"
 							onClick={() => setSlicedMovieCount(slicedMovieCount + 10)}
 						>
-							Load More Movies
+							{t('actors.loadMoreMovies')}
 						</button>
 					</div>
 				</div>
@@ -102,17 +106,17 @@ export function ActorCredits({
 				<div className="flex-1 flex flex-col min-h-[500px] lg:min-h-0 bg-white/2 rounded-4xl border border-white/5 p-4 md:p-6">
 					<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 md:mb-6 px-2">
 						<h3 className="text-base md:text-lg font-black uppercase text-(--green)">
-							TV Shows
+							{t('actors.tvShows')}
 						</h3>
 						<div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
 							<button
 								onClick={() => handleSort('tv')}
 								className="text-xs md:text-sm text-white/40 font-bold tracking-wider hover:text-white transition-colors"
 							>
-								{sortOrder.tv ? 'Highest' : 'Lowest'}
+								{sortOrder.tv ? t('actors.highest') : t('actors.lowest')}
 							</button>
 							<span className="text-[10px] text-white/40 uppercase tracking-widest">
-								{mainTVRoles.length} items
+								{t('common.items', { count: mainTVRoles.length })}
 							</span>
 						</div>
 					</div>
@@ -136,7 +140,9 @@ export function ActorCredits({
 											type={item.media_type}
 										/>
 										<p className="text-[10px] md:text-xs text-gray-500 truncate italic px-1">
-											as {item.character || 'Unknown'}
+											{t('actors.asCharacter', {
+												character: item.character || t('common.unknown'),
+											})}
 										</p>
 									</div>
 								))}
@@ -146,7 +152,7 @@ export function ActorCredits({
 							className="w-full py-3 md:py-4 rounded-2xl font-bold text-[10px] md:text-xs bg-white/5 hover:bg-white/10 border border-white/10 transition-all uppercase tracking-widest active:scale-95"
 							onClick={() => setSlicedTVCount(slicedTVCount + 10)}
 						>
-							Load More TV
+							{t('actors.loadMoreTv')}
 						</button>
 					</div>
 				</div>

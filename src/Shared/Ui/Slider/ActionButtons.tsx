@@ -3,6 +3,7 @@ import { ICompareState } from '@/Store/Slices/Compare.slice'
 import { MediaType, TMDBMediaItem } from '@/Store/TMDB/tMDB.type'
 import { getItemTypeColor } from '@/Utils/getColorsByData'
 import { Heart, Zap } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 interface ActionButtonsProps {
 	toggleSliderWishlistHandler: (
 		e: React.MouseEvent,
@@ -27,10 +28,12 @@ export function ActionButtons({
 	item,
 	type,
 }: ActionButtonsProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className='absolute top-12 right-3 z-30 flex flex-col gap-2'>
 			<button
-				aria-label='add to wishlist'
+				aria-label={t('search.addToWishlist')}
 				onClick={e => toggleSliderWishlistHandler(e, item)}
 				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${
 					isAdded
@@ -44,7 +47,7 @@ export function ActionButtons({
 			</button>
 
 			<button
-				aria-label='compare'
+				aria-label={t('search.compare')}
 				onClick={e => {
 					e.preventDefault()
 					e.stopPropagation()
@@ -57,7 +60,7 @@ export function ActionButtons({
 						  )} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
 						: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110 hover:text-indigo-300'
 				}`}
-				title='Add to compare'
+				title={t('details.addToCompare')}
 			>
 				<Zap size={18} fill={isComparing ? 'currentColor' : 'none'} />
 			</button>

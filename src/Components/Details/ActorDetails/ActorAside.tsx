@@ -2,12 +2,15 @@ import { TMDBPersonFullDetails } from '@/Store/TMDB/tMDB.type'
 import { TMDB_CAST_IMAGE_PLACEHOLDER_URL } from '@/Utils/Utils'
 import { Calendar, MapPin, UserIcon } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 
 interface ActorAsideProps {
 	data: TMDBPersonFullDetails
 }
 
 export function ActorAside({ data }: ActorAsideProps) {
+	const { t } = useTranslation()
+
 	return (
 		<aside className="w-full space-y-4 sm:space-y-6 lg:sticky lg:top-24">
 			<div className="mx-auto w-full max-w-sm sm:max-w-md lg:max-w-none">
@@ -29,7 +32,7 @@ export function ActorAside({ data }: ActorAsideProps) {
 
 			<div className="space-y-4 sm:space-y-6 rounded-2xl sm:rounded-3xl border border-white/10 bg-white/5 p-4 sm:p-6">
 				<h3 className="border-b border-white/10 pb-3 text-lg sm:text-xl font-bold">
-					Personal Info
+					{t('actors.personalInfo')}
 				</h3>
 
 				<div className="space-y-3 sm:space-y-4">
@@ -39,7 +42,9 @@ export function ActorAside({ data }: ActorAsideProps) {
 							size={18}
 						/>
 						<div>
-							<p className="text-xs sm:text-sm text-gray-400">Known For</p>
+							<p className="text-xs sm:text-sm text-gray-400">
+								{t('actors.knownFor')}
+							</p>
 							<p className="text-sm sm:text-base">{data.known_for_department}</p>
 						</div>
 					</div>
@@ -51,7 +56,9 @@ export function ActorAside({ data }: ActorAsideProps) {
 								size={18}
 							/>
 							<div>
-								<p className="text-xs sm:text-sm text-gray-400">Birthday</p>
+								<p className="text-xs sm:text-sm text-gray-400">
+									{t('actors.birthday')}
+								</p>
 								<p className="text-sm sm:text-base">
 									{data.birthday} {data.deathday ? `— ${data.deathday}` : ''}
 								</p>
@@ -63,7 +70,9 @@ export function ActorAside({ data }: ActorAsideProps) {
 						<div className="flex items-start gap-3">
 							<MapPin className="shrink-0 text-[--secondActiveColor]" size={18} />
 							<div>
-								<p className="text-xs sm:text-sm text-gray-400">Place of Birth</p>
+								<p className="text-xs sm:text-sm text-gray-400">
+									{t('actors.placeOfBirth')}
+								</p>
 								<p className="text-sm sm:text-base leading-relaxed">
 									{data.place_of_birth}
 								</p>

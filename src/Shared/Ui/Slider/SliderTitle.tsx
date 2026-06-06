@@ -1,4 +1,5 @@
 import { TvMinimalPlay } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface ISliderTitleProps {
 	title: string
@@ -12,6 +13,8 @@ export function SliderTitle({
 	filter,
 	updateQuery,
 }: ISliderTitleProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className='flex items-center justify-between mb-4 md:mb-6'>
 			<div className='flex flex-col'>
@@ -23,7 +26,7 @@ export function SliderTitle({
 				</p>
 			</div>
 			<button
-				aria-label='Filter content'
+				aria-label={t('catalog.openFilters')}
 				onClick={() => updateQuery(filter || 'popular')}
 				className='text-(--activeColor) text-xs md:text-sm font-semibold hover:underline shrink-0'
 			>
@@ -31,7 +34,7 @@ export function SliderTitle({
 					size={18}
 					className='inline-block mr-1.5 md:mr-2 md:size-[21px]'
 				/>
-				View More
+				{t('home.viewMore')}
 			</button>
 		</div>
 	)

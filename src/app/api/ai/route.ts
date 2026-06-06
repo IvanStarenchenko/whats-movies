@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
-const SYSTEM_PROMPT = `
+const SYSTEM_PROMPTS = {
+	ru: `
 Ты — эрудированный культурный обозреватель. Твоя задача: написать точное и атмосферное эссе о проекте, опираясь на предоставленный сюжет и свой широкий кругозор в области поп-культуры.
 
 Правила написания:
@@ -13,10 +14,26 @@ const SYSTEM_PROMPT = `
 Формат:
 - Два-три коротких абзаца (до 700 символов).
 - Лаконичное вступление, сразу переходящее к глубокому анализу сути.
-`
+`,
+	en: `
+You are an erudite cultural critic. Your task is to write a precise, atmospheric essay about the project, using the provided plot context and your broad pop-culture knowledge.
+
+Rules:
+1. NO HEDGING: Avoid phrases like "probably", "likely", "might be". Write with confident expertise.
+2. CULTURAL CONTEXT: Place the project inside its universe, franchise, genre, or historical context when that connection is well known.
+3. SPECIFICS OVER FILLER: Replace generic phrases with concrete names, titles, world details, social structures, or production context.
+4. STYLE: Cohesive, intelligent prose without icons or lists. Dry but perceptive tone.
+5. NO SPOILERS: Analyze the premise and spirit without revealing key twists.
+
+Format:
+- Two or three short paragraphs, up to 700 characters.
+- A concise opening that moves straight into meaningful analysis.
+`,
+}
 export async function POST(req: Request) {
 	try {
-		const { title, type, overview } = await req.json()
+		const { title, type, overview, language = 'ru' } = await req.json()
+		const normalizedLanguage = language === 'en' ? 'en' : 'ru'
 
 		const response = await fetch(
 			'https://api.groq.com/openai/v1/chat/completions',
@@ -29,15 +46,23 @@ export async function POST(req: Request) {
 				body: JSON.stringify({
 					model: 'llama-3.3-70b-versatile',
 					messages: [
-						{ role: 'system', content: SYSTEM_PROMPT },
+						{
+							role: 'system',
+							content: SYSTEM_PROMPTS[normalizedLanguage],
+						},
 						{
 							role: 'user',
-							content: `Проект: "${title}". Категория: ${type}. Контекст: ${
-								overview || 'нет описания'
-							}`,
+							content:
+								normalizedLanguage === 'en'
+									? `Project: "${title}". Category: ${type}. Context: ${
+											overview || 'no description'
+									  }`
+									: `Проект: "${title}". Категория: ${type}. Контекст: ${
+											overview || 'нет описания'
+									  }`,
 						},
 					],
-					temperature: 0.6, // Немного снизим для стабильности
+					temperature: 0.6,
 					max_tokens: 200,
 				}),
 			}
@@ -46,6 +71,6 @@ export async function POST(req: Request) {
 		const data = await response.json()
 		return NextResponse.json(data)
 	} catch (error) {
-		return NextResponse.json({ error: 'Ошибка сервера' }, { status: 500 })
+		return NextResponse.json({ error: 'Server error' }, { status: 500 })
 	}
 }

@@ -1,9 +1,10 @@
 'use client'
 import { Radar } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form } from "./Form";
-import { useSearch } from "@/Hooks/useSearch";
+import { useTranslation } from "react-i18next";
 export function SearchBy() {
+    const { t } = useTranslation()
     const [isActive, setIsActive] = useState(false)
 
    return (
@@ -11,6 +12,7 @@ export function SearchBy() {
             <Radar 
                 className="w-6 h-6 text-zinc-400 cursor-pointer hover:text-(--secondActiveColor) transition-colors duration-200" 
                 onClick={() => setIsActive(!isActive)} 
+                aria-label={t('aiSearch.open')}
             />
             
             {isActive && (

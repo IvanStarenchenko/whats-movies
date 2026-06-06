@@ -4,8 +4,10 @@ import { ActorDetailsSkeleton } from '@/Shared/Ui/SkeletonActorDetail'
 import { ActorAside } from './ActorAside'
 import { ActorBiography } from './ActorBiography'
 import { ActorCredits } from './ActorCredits'
+import { useTranslation } from 'react-i18next'
 
 export function ActorDetails() {
+	const { t } = useTranslation()
 	const {
 		data,
 		mainTVRoles,
@@ -21,7 +23,7 @@ export function ActorDetails() {
 	if (isLoading) return <ActorDetailsSkeleton />
 	if (error || !data)
 		return (
-			<div className='text-white p-6 md:p-10'>Error loading actor details.</div>
+			<div className='text-white p-6 md:p-10'>{t('actors.error')}</div>
 		)
 
 	return (

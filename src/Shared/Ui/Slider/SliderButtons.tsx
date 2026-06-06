@@ -1,15 +1,17 @@
 import type { Swiper as SwiperType } from 'swiper'
+import { useTranslation } from 'react-i18next'
 interface SliderButtonsProps {
 	swiperRef: React.RefObject<SwiperType | null>
 }
 export function SliderButtons({ swiperRef }: SliderButtonsProps) {
+	const { t } = useTranslation()
 	const btnCustomeStyles =
 		'absolute z-10 bg-gray-800/80 hover:bg-white hover:text-black text-white w-8 h-8 md:w-10 md:h-10 rounded-full transition-all flex items-center justify-center border border-gray-700 shadow-2xl text-xs md:text-base'
 
 	return (
 		<>
 			<button
-				aria-label='left swinger'
+				aria-label={t('common.previous')}
 				onClick={e => {
 					e.stopPropagation()
 					swiperRef.current?.slidePrev()
@@ -19,7 +21,7 @@ export function SliderButtons({ swiperRef }: SliderButtonsProps) {
 				←
 			</button>
 			<button
-				aria-label='right swinger'
+				aria-label={t('common.next')}
 				onClick={e => {
 					e.stopPropagation()
 					swiperRef.current?.slideNext()

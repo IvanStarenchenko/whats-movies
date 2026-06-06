@@ -2,6 +2,7 @@
 
 import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ActorSearchProps {
 	value: string
@@ -9,6 +10,7 @@ interface ActorSearchProps {
 }
 
 export function ActorSearch({ value, setValue }: ActorSearchProps) {
+	const { t } = useTranslation()
 	const [isScrolled, setIsScrolled] = useState(false)
 
 	useEffect(() => {
@@ -43,7 +45,7 @@ export function ActorSearch({ value, setValue }: ActorSearchProps) {
 					type='text'
 					value={value}
 					onChange={e => setValue(e.target.value)}
-					placeholder='Search actors...'
+					placeholder={t('actors.searchPlaceholder')}
 					className={`w-full bg-transparent py-4 md:py-6 pl-12 md:pl-16 pr-6 rounded-2xl md:rounded-3xl text-base md:text-xl focus:outline-none transition-all text-white placeholder:text-white/20`}
 				/>
 			</div>

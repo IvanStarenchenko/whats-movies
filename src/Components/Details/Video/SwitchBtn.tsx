@@ -1,4 +1,5 @@
 import { Play, YoutubeIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export function SwitchBtn({
 	activeMode,
@@ -7,6 +8,8 @@ export function SwitchBtn({
 	activeMode: 'movie' | 'trailer'
 	setActiveMode: (mode: 'movie' | 'trailer') => void
 }) {
+	const { t } = useTranslation()
+
 	return (
 		<div className='absolute -top-11 left-[51%] -translate-x-1/2 z-40 flex p-1 bg-black/60 backdrop-blur-md rounded-full border border-white/10 shadow-2xl transition-all'>
 			<button
@@ -18,7 +21,7 @@ export function SwitchBtn({
 				}`}
 			>
 				<YoutubeIcon size={14} />
-				<span className=''>Trailer</span>
+				<span className=''>{t('video.trailer')}</span>
 			</button>
 
 			<button
@@ -30,7 +33,7 @@ export function SwitchBtn({
 				}`}
 			>
 				<Play size={14} fill='currentColor' />
-				<span className=''>Movie</span>
+				<span className=''>{t('video.movie')}</span>
 			</button>
 		</div>
 	)

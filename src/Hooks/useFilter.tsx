@@ -18,16 +18,21 @@ import {
 	TMDBListCategory,
 	TMDBSpecialCategories,
 } from '@/Store/TMDB/tMDB.type'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 export interface Option {
 	TmdbValue?: TMDBListCategory | TMDBSpecialCategories
 	OpenlibValue?: BooksListCategory
 	GameValue?: TGamesGenre
 	label: string
+	labelKey?: string
 }
 
 export function useFilter(type: MediaType) {
+	const { t } = useTranslation()
+	const { tmdbLanguage } = useCurrentLanguage()
 	const [isActive, setIsActive] = useState(false)
 	const [page, setPage] = useState(1)
 	const searchParams = useSearchParams()
@@ -39,7 +44,60 @@ export function useFilter(type: MediaType) {
 		rating: number
 	}>({ genres: [], rating: 0 })
 
-	const FilterGenresData = type === 'movie' ? MovieGenresData : TvGenresData
+	const localizeOptions = useCallback(
+		<T extends { label: string; labelKey?: string }>(options: T[]): T[] =>
+			options.map(option => ({
+				...option,
+				label: option.labelKey ? t(option.labelKey, option.label) : option.label,
+			})),
+		[t]
+	)
+
+	const localizedMovieOptions = useMemo(
+		() => localizeOptions(movieOptions),
+		[localizeOptions]
+	)
+	const localizedTvOptions = useMemo(
+		() => localizeOptions(tvOptions),
+		[localizeOptions]
+	)
+	const localizedOrderingGamesOptions = useMemo(
+		() => localizeOptions(orderingGamesOptions),
+		[localizeOptions]
+	)
+	const localizedSpecialMovieOptions = useMemo(
+		() => localizeOptions(specialMovieOptions),
+		[localizeOptions]
+	)
+	const localizedBooksOptions = useMemo(
+		() => localizeOptions(booksOptions),
+		[localizeOptions]
+	)
+	const localizedGamesOptions = useMemo(
+		() => localizeOptions(gamesOptions),
+		[localizeOptions]
+	)
+
+	const FilterGenresData = useMemo(
+		() =>
+			(type === 'movie' ? MovieGenresData : TvGenresData).map(genre => ({
+				...genre,
+				name: genre.labelKey ? t(genre.labelKey, genre.name) : genre.name,
+			})),
+		[t, type]
+	)
+
+	const localizedFilterRatingData = useMemo(
+		() =>
+			FilterRatingData.map(rating => ({
+				...rating,
+				name:
+					rating.value === 0
+						? t('catalog.rating.any')
+						: t('catalog.rating.above', { rating: rating.value }),
+			})),
+		[t]
+	)
 
 	const selectedGenreNames = FilterGenresData.filter(g =>
 		savedFilters.genres.includes(g.id)
@@ -48,7 +106,7 @@ export function useFilter(type: MediaType) {
 		.join(', ')
 
 	const [selectedOption, setSelectedOption] = useState<Option>(() => {
-		const options = type === 'movie' ? movieOptions : tvOptions
+		const options = type === 'movie' ? localizedMovieOptions : localizedTvOptions
 		if (urlCategory) {
 			const matchedOption = options.find(
 				(o: Option) => o.TmdbValue === urlCategory
@@ -58,19 +116,30 @@ export function useFilter(type: MediaType) {
 		return options[0]
 	})
 
-	const { data, isFetching } = useGetListQuery({
-		type: type || 'movie',
-		category: selectedOption.TmdbValue || 'popular',
-		page,
-		genres: savedFilters.genres,
-		minRating: savedFilters.rating,
-	})
+	const localizedSelectedOption =
+		(type === 'movie' ? localizedMovieOptions : localizedTvOptions).find(
+			option => option.TmdbValue === selectedOption.TmdbValue
+		) || selectedOption
+
+	const { data, isFetching } = useGetListQuery(
+		{
+			type: type || 'movie',
+			category: localizedSelectedOption.TmdbValue || 'popular',
+			page,
+			genres: savedFilters.genres,
+			minRating: savedFilters.rating,
+			language: tmdbLanguage,
+		},
+		{ skip: type !== 'movie' && type !== 'tv' }
+	)
 
 	const totalPages = data?.total_pages || 1
 
 	const resetFilter = () => {
 		setSavedFilters({ genres: [], rating: 0 })
-		setSelectedOption(type === 'movie' ? movieOptions[0] : tvOptions[0])
+		setSelectedOption(
+			type === 'movie' ? localizedMovieOptions[0] : localizedTvOptions[0]
+		)
 		setPage(1)
 
 		const params = new URLSearchParams(searchParams.toString())
@@ -82,18 +151,18 @@ export function useFilter(type: MediaType) {
 		router.replace(`${pathname}?${params.toString()}`)
 	}
 	return {
-		movieOptions,
-		tvOptions,
-		orderingGamesOptions,
-		specialMovieOptions,
-		booksOptions,
-		FilterRatingData,
+		movieOptions: localizedMovieOptions,
+		tvOptions: localizedTvOptions,
+		orderingGamesOptions: localizedOrderingGamesOptions,
+		specialMovieOptions: localizedSpecialMovieOptions,
+		booksOptions: localizedBooksOptions,
+		FilterRatingData: localizedFilterRatingData,
 		FilterGenresData,
-		gamesOptions,
+		gamesOptions: localizedGamesOptions,
 		resetFilter,
 		setIsActive,
 		isActive,
-		selectedOption,
+		selectedOption: localizedSelectedOption,
 		setSelectedOption,
 		selectedGenreNames,
 		savedFilters,

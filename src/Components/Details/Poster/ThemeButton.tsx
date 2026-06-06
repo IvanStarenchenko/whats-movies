@@ -1,5 +1,6 @@
 import { Music, Pause, Play } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'react-i18next'
 
 interface ThemeButtonProps {
 	isPlaying: boolean
@@ -14,6 +15,7 @@ export function ThemeButton({
 	isShown,
 	title,
 }: ThemeButtonProps) {
+	const { t } = useTranslation()
 	const router = useRouter()
 	const getPlaylist = () => {
 		router.push(`/music?search=${title ? encodeURIComponent(title) : ''} `)
@@ -22,7 +24,9 @@ export function ThemeButton({
 	return (
 		<div className={`flex items-center gap-3 ${isShown ? '' : 'hidden'}`}>
 			<button
-				aria-label={isPlaying ? 'Stop Theme' : 'Listen Theme'}
+				aria-label={
+					isPlaying ? t('details.stopTheme') : t('details.listenTheme')
+				}
 				onClick={() => setIsPlaying(!isPlaying)}
 				className={`flex items-center gap-2 px-4 py-1.5 rounded-full border transition-all duration-300 active:scale-95 ${
 					isPlaying
@@ -38,7 +42,7 @@ export function ThemeButton({
 							<div className='w-0.5 bg-black animate-[music-bar_1.0s_ease-in-out_infinite] delay-200' />
 						</div>
 						<span className='text-[10px] font-black uppercase tracking-widest hidden md:inline'>
-							Stop Theme
+							{t('details.stopTheme')}
 						</span>
 						<Pause size={18} fill='currentColor' />
 					</>
@@ -46,7 +50,7 @@ export function ThemeButton({
 					<>
 						<Music size={18} className='text-(--activeColor)' />
 						<span className='text-[10px] font-black uppercase tracking-widest hidden md:inline'>
-							Listen Theme
+							{t('details.listenTheme')}
 						</span>
 						<Play size={14} fill='currentColor' className='hidden md:inline' />
 					</>

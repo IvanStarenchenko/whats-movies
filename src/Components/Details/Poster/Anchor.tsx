@@ -7,8 +7,10 @@ import {
 import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { IAnchoredMenu } from '@/Types/DetailsAnchor.interface'
 import { Link } from 'react-scroll'
+import { useTranslation } from 'react-i18next'
 
 export function Anchor({ type }: { type: MediaType }) {
+	const { t } = useTranslation()
 	let movieAnchors: IAnchoredMenu[] = []
 	if (type === 'movie') {
 		movieAnchors = AnchorMovieData
@@ -42,7 +44,7 @@ export function Anchor({ type }: { type: MediaType }) {
 						tracking-tight break-words
 			'
 				>
-					{anchor.title}
+					{t(anchor.titleKey, anchor.title)}
 				</Link>
 			))}
 		</nav>

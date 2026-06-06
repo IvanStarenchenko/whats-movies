@@ -12,6 +12,7 @@ import {
 import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { ISearchResult } from '@/Store/Types/Global.types'
 import { getBookCoverUrl, getTmdbImageSlideUrl } from '@/Utils/Utils'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 
 export function useCrossMediaDiscovery(
 	name: string,
@@ -19,6 +20,7 @@ export function useCrossMediaDiscovery(
 	type: MediaType,
 	collectionId?: number | undefined
 ) {
+	const { tmdbLanguage } = useCurrentLanguage()
 	const isGame = type === 'game'
 	const coreName = name.split(/[:\-(]/)[0].trim()
 
@@ -38,13 +40,16 @@ export function useCrossMediaDiscovery(
 
 	const { data: tmdbData, isLoading: tmdbLoading } =
 		useGetMovieRecommendationsQuery(
-			{ type: isGame ? 'movie' : type, id },
+			{ type: isGame ? 'movie' : type, id, language: tmdbLanguage },
 			{ skip: type === 'book' || (isGame && !name) }
 		)
 	const { data: collectionData, isLoading: collectionLoading } =
-		useGetMovieCollectionQuery(collectionId as number, {
-			skip: type !== 'movie' || !name
-		})
+		useGetMovieCollectionQuery(
+			{ collectionId: collectionId as number, language: tmdbLanguage },
+			{
+				skip: type !== 'movie' || !name || !collectionId
+			}
+		)
 
 	const { data: bookData, isLoading: bookLoading } = useSearchBooksQuery(
 		{ query: coreName, page: 1 },
@@ -75,7 +80,7 @@ export function useCrossMediaDiscovery(
 				type: 'game',
 				title: game.name,
 				image: game.background_image,
-				year: game.released?.slice(0, 4) || 'N/A'
+				year: game.released?.slice(0, 4)
 			}))
 	})()
 
@@ -94,7 +99,7 @@ export function useCrossMediaDiscovery(
 					type: 'book',
 					title: item.title,
 					image: getBookCoverUrl(item.cover_i!, 'M'),
-					year: item.first_publish_year?.toString() || 'N/A'
+					year: item.first_publish_year?.toString()
 				}))
 		: []
 

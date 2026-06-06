@@ -1,13 +1,15 @@
 import { useGetPersonQuery } from '@/Store/TMDB/tMDB.api'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export function useActorDetails() {
+	const { tmdbLanguage } = useCurrentLanguage()
 	const params = useParams()
 	const idParam = params?.id as string
 
 	const { data, error, isLoading } = useGetPersonQuery(
-		{ id: idParam },
+		{ id: idParam, language: tmdbLanguage },
 		{ skip: !idParam }
 	)
 

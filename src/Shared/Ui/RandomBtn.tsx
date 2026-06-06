@@ -3,6 +3,7 @@ import { IGame } from '@/Store/Games/Games.type'
 import { TMDBMediaItem } from '@/Store/TMDB/tMDB.type'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Dices } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 export function RandomBtn({
 	movies,
@@ -13,6 +14,7 @@ export function RandomBtn({
 	tv?: TMDBMediaItem[]
 	games?: IGame[]
 }) {
+	const { t } = useTranslation()
 	const { handleRandomSelect, isSpinning, tempName } = useRandomContent({
 		content: movies || tv || games || [],
 		contentType: movies ? 'movie' : tv ? 'tv' : 'game',
@@ -36,7 +38,7 @@ export function RandomBtn({
 						? 'bg-(--orange)/20 border-(--orange)/50 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
 						: 'bg-white/10 hover:bg-white/20 border-white/10'
 				} group`}
-				title='Случайный фильм из списка'
+				title={t('catalog.randomTitle')}
 			>
 				<Dices
 					className={`w-6 h-6 transition-colors ${

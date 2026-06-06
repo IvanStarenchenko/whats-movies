@@ -3,6 +3,7 @@ import {
 	useGetWatchProvidersQuery,
 } from '@/Store/TMDB/tMDB.api'
 import { getTmdbImageOriginalUrl } from '@/Utils/Utils'
+import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
 import { useEffect, useRef, useState } from 'react'
 import { useMusic } from './useMusic'
 export function useVideo(
@@ -11,9 +12,18 @@ export function useVideo(
 	backdrop_path?: string | null,
 	name?: string | null
 ) {
-	const [activeMode, setActiveMode] = useState<'trailer' | 'movie'>('movie')
+	const { tmdbLanguage, watchRegion } = useCurrentLanguage()
+	const isGame = type === 'game'
+	const [activeModeState, setActiveModeState] = useState<'trailer' | 'movie'>(
+		isGame ? 'trailer' : 'movie'
+	)
 	const [isFullscreen, setIsFullscreen] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
+
+	const activeMode = isGame ? 'trailer' : activeModeState
+	const setActiveMode = (mode: 'trailer' | 'movie') => {
+		if (!isGame) setActiveModeState(mode)
+	}
 
 	useEffect(() => {
 		const handleFullscreenChange = () => {
@@ -24,10 +34,14 @@ export function useVideo(
 			document.removeEventListener('fullscreenchange', handleFullscreenChange)
 	}, [])
 
-	const { data, isLoading } = useGetMediaVideosQuery({
-		type: type || 'movie',
-		id: id || 0,
-	})
+	const { data, isLoading } = useGetMediaVideosQuery(
+		{
+			type: type || 'movie',
+			id: id || 0,
+			language: tmdbLanguage,
+		},
+		{ skip: !id || isGame }
+	)
 
 	const toggleFullscreen = () => {
 		if (!containerRef.current) return
@@ -41,21 +55,23 @@ export function useVideo(
 		}
 	}
 
-	const isGame = type === 'game'
-
 	const { mainThemeId: gameTrailerId } = useMusic({
 		initialName: isGame ? `${name} official gameplay trailer` : '',
 		type: 'video',
 	})
 
-	const { data: watchProvidersData } = useGetWatchProvidersQuery({
-		type: type || 'movie',
-		id: id || 0,
-	})
+	const { data: watchProvidersData } = useGetWatchProvidersQuery(
+		{
+			type: type || 'movie',
+			id: id || 0,
+		},
+		{ skip: !id || isGame }
+	)
 
 	const providers =
-		watchProvidersData?.results?.RU ||
+		watchProvidersData?.results?.[watchRegion] ||
 		watchProvidersData?.results?.US ||
+		watchProvidersData?.results?.RU ||
 		Object.values(watchProvidersData?.results || {})[0]
 
 	const imageUrl = getTmdbImageOriginalUrl(backdrop_path)

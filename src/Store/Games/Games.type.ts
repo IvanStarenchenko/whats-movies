@@ -9,6 +9,7 @@ interface IGeneral {
 export interface IOrderingGameOption {
 	order: string
 	label: string
+	labelKey?: string
 }
 
 export interface IGame {

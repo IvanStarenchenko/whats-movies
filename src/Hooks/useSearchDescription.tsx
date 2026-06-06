@@ -2,8 +2,12 @@ import { useState } from "react"
 import { useSearch } from "./useSearch"
 import { useForm } from "@formspree/react"
 import { getAISearch } from "@/services/llm"
+import { useCurrentLanguage } from "@/i18n/useCurrentLanguage"
+import { useTranslation } from "react-i18next"
 
 export function useSearchDescription() {
+    const { t } = useTranslation()
+    const { language } = useCurrentLanguage()
      const [state, handleSubmit] = useForm('xzdjrjdz')
     const [loading, setLoading] = useState(false)
     const { setValue, combinedResults, isAnyLoading } = useSearch()
@@ -14,13 +18,13 @@ export function useSearchDescription() {
         if (!description.trim()) return
         setLoading(true)
         try {
-            const data = await getAISearch(description)
+            const data = await getAISearch(description, language)
             
             if (data) {
                 setValue(data.title) 
                 setResult(`${data.title} (${data.releaseYear}) — ${data.explanation}`)
             } else {
-                setResult("Ничего не найдено. Попробуйте описать по-другому.")
+                setResult(t('aiSearch.notFound'))
             }
         } catch (error) {
             console.error(error)

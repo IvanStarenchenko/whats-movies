@@ -1,20 +1,18 @@
 'use client'
-import { getAISearch } from "@/services/llm";
-import { useForm, ValidationError } from "@formspree/react";
-import { useState } from "react";
-// ИСПРАВЛЕНО: импортируем Link из Next.js, а иконку переименовываем
+import { ValidationError } from "@formspree/react";
 import Link from "next/link"; 
-import { Link as LinkIcon, X } from "lucide-react";
-import { useSearch } from "@/Hooks/useSearch";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { getItemTypeColor } from "@/Utils/getColorsByData";
 import { useSearchDescription } from "@/Hooks/useSearchDescription";
+import { useTranslation } from "react-i18next";
 
 interface FormProps {
     setIsActive: (value: boolean) => void
 }
 
 export function Form({ setIsActive }: FormProps) {
+   const { t } = useTranslation()
    const {
         state,
         handleSubmit,
@@ -38,7 +36,7 @@ export function Form({ setIsActive }: FormProps) {
                     htmlFor='description'
                     className='text-xs font-semibold text-zinc-400 uppercase tracking-wider block ml-1'
                 >
-                    ИИ Поиск по описанию
+                    {t('aiSearch.title')}
                 </label>
                 <button 
                     type='button' 
@@ -57,12 +55,12 @@ export function Form({ setIsActive }: FormProps) {
                     rows={4}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    placeholder='Например: игра, где нужно ходить с младенцем в капсуле по разрушенной Америке...'
+                    placeholder={t('aiSearch.placeholder')}
                     className='w-full px-4 py-3 bg-zinc-900/50 border border-white/5 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-(--secondActiveColor) transition-all resize-none text-sm leading-relaxed'
                 />
                 
                 <ValidationError
-                    prefix='Description'
+                    prefix={t('aiSearch.validationPrefix')}
                     field='description'
                     errors={state.errors}
                     className='text-xs text-red-500 mt-1 ml-1'
@@ -80,9 +78,9 @@ export function Form({ setIsActive }: FormProps) {
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                             </svg>
-                            Вспоминаю...
+                            {t('aiSearch.thinking')}
                         </span>
-                    ) : 'Сгенерировать ответ'}
+                    ) : t('aiSearch.generate')}
                 </button>
             </form>
 
@@ -118,7 +116,7 @@ export function Form({ setIsActive }: FormProps) {
                                             />
                                         ) : (
                                             <div className='w-full h-full flex items-center justify-center text-[8px] text-gray-500 uppercase text-center p-1 font-bold'>
-                                                No img
+                                                {t('aiSearch.noImage')}
                                             </div>
                                         )}
                                     </div>
@@ -147,11 +145,11 @@ export function Form({ setIsActive }: FormProps) {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
-                                Ищу в базах данных...
+                                {t('aiSearch.searchingDatabases')}
                             </div>
                         ) : (
                             <div className='p-6 text-center text-gray-500 text-sm'>
-                                Совпадений не найдено
+                                {t('aiSearch.noMatches')}
                             </div>
                         )}
                     </div>

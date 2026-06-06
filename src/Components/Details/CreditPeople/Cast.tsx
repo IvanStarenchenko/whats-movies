@@ -7,14 +7,16 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { Element } from 'react-scroll'
+import { useTranslation } from 'react-i18next'
 interface CastProps {
 	id: number
 	type: string
 }
 
 export function Cast({ id, type }: CastProps) {
+	const { t } = useTranslation()
 	const { topCast, isLoading, isError } = useGetCast({ id, type })
-	if (isLoading) return <div className="text-gray-500">Loading cast...</div>
+	if (isLoading) return <div className="text-gray-500">{t('common.loading')}</div>
 	if (isError || !topCast.length) return null
 
 	return (
@@ -22,7 +24,9 @@ export function Cast({ id, type }: CastProps) {
 			name="top-cast"
 			className="mt-20"
 		>
-			<h3 className="text-2xl font-bold text-white mb-6">Top Cast</h3>
+			<h3 className="text-2xl font-bold text-white mb-6">
+				{t('details.anchors.topCast')}
+			</h3>
 			<div className="custom-scrollbar flex gap-6 overflow-x-auto py-4  ">
 				{topCast.map(person => (
 					<Link

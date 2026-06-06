@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 export function Label({
 	activeMode,
 	mainTrailer,
@@ -6,6 +7,8 @@ export function Label({
 	activeMode: 'movie' | 'trailer'
 	mainTrailer?: { key: string; site: string; type: string }
 }) {
+	const { t } = useTranslation()
+
 	return (
 		<div
 			className={`absolute top-3 left-3 sm:top-6 sm:left-6 flex items-center gap-2 sm:gap-3 pointer-events-none transition-opacity duration-300 ${
@@ -19,10 +22,10 @@ export function Label({
 				/>
 				<span className='text-[8px] sm:text-[10px] text-white font-bold uppercase tracking-[1.5px] sm:tracking-[2px] whitespace-nowrap'>
 					{activeMode === 'movie'
-						? 'Full Movie'
+						? t('video.fullMovie')
 						: mainTrailer
-						? 'Official Trailer'
-						: 'Preview'}
+						? t('video.officialTrailer')
+						: t('video.preview')}
 				</span>
 			</div>
 		</div>

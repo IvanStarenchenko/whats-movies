@@ -1,15 +1,21 @@
+'use client'
+
 import { IAsideMenu } from '@/Types/Aside.interface'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 interface IAsideItemProps extends IAsideMenu {
 	pathname: string
 }
 export function AsideItem({
 	icon: Icon,
 	title,
+	titleKey,
 	href,
 	pathname
 }: IAsideItemProps) {
+	const { t } = useTranslation()
+
 	return (
 		<Link
 			href={href}
@@ -18,7 +24,7 @@ export function AsideItem({
 				pathname === href && 'menuItem--active'
 			)}
 		>
-			<Icon size={18} /> {title}
+			<Icon size={18} /> {t(titleKey, title)}
 		</Link>
 	)
 }

@@ -1,5 +1,6 @@
 import { getYouTubeUrl } from '@/Utils/Utils'
 import { Film } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 interface StubProps {
 	imageUrl: string
@@ -9,6 +10,8 @@ interface StubProps {
 }
 
 export function VideoStub({ imageUrl, type, name, releasedYear }: StubProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className="relative w-full h-full flex items-center justify-center">
 			<div
@@ -25,11 +28,12 @@ export function VideoStub({ imageUrl, type, name, releasedYear }: StubProps) {
 					/>
 				</div>
 				<h3 className="text-white text-xl font-bold mb-2">
-					Trailer Unavailable
+					{t('video.trailerUnavailable')}
 				</h3>
 				<p className="text-gray-400 text-sm max-w-xs mb-6">
-					We couldnt find an official trailer for this{' '}
-					{type === 'tv' ? 'TV show' : 'movie'}.
+					{t('video.trailerDescription', {
+						type: type === 'tv' ? t('media.tv') : t('media.movie'),
+					})}
 				</p>
 
 				<a
@@ -42,7 +46,7 @@ export function VideoStub({ imageUrl, type, name, releasedYear }: StubProps) {
 					rel="noopener noreferrer"
 					className="pointer-events-auto flex items-center gap-2 bg-white text-black px-6 py-2.5 rounded-xl font-bold hover:bg-gray-200 transition-all active:scale-95"
 				>
-					Search on YouTube
+					{t('video.searchYoutube')}
 				</a>
 			</div>
 		</div>

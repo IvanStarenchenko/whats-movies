@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Check, RotateCcw, X } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface CatalogFilterProps {
 	filterType: MediaType
@@ -20,6 +21,7 @@ export function GenreFilter({
 	resetFilter,
 	onApply,
 }: CatalogFilterProps) {
+	const { t } = useTranslation()
 	const router = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
@@ -81,10 +83,12 @@ export function GenreFilter({
 				<div className='max-w-5xl mx-auto w-full flex justify-between items-center mb-10 md:mb-16'>
 					<div>
 						<h1 className='text-3xl md:text-5xl font-black text-white uppercase italic tracking-tighter'>
-							Filters
+							{t('catalog.filters.title')}
 						</h1>
 						<p className='text-white/40 text-xs md:text-sm font-mono mt-1'>
-							Refine your {filterType} exploration
+							{t('catalog.filters.refine', {
+								type: t(`media.${filterType}`),
+							})}
 						</p>
 					</div>
 					<button
@@ -99,12 +103,14 @@ export function GenreFilter({
 					<section>
 						<div className='flex items-end gap-4 mb-6 md:mb-8'>
 							<h2 className='text-xl md:text-2xl font-bold text-white uppercase'>
-								Genres
+								{t('catalog.filters.genres')}
 							</h2>
 							<span className='text-white/20 text-sm font-mono pb-1'>
 								{selectedGenres.length > 0
-									? `(${selectedGenres.length} selected)`
-									: '(All)'}
+									? t('catalog.filters.selected', {
+											count: selectedGenres.length,
+									  })
+									: t('catalog.filters.all')}
 							</span>
 						</div>
 						<ul className='flex flex-wrap gap-2 md:gap-3'>
@@ -135,7 +141,7 @@ export function GenreFilter({
 
 					<section>
 						<h2 className='text-xl md:text-2xl font-bold text-white uppercase mb-6 md:mb-8'>
-							Minimum Rating
+							{t('catalog.filters.minimumRating')}
 						</h2>
 						<ul className='flex flex-wrap gap-2 md:gap-3'>
 							{ratings.map((r, idx) => (
@@ -167,7 +173,7 @@ export function GenreFilter({
 						className='flex-1 flex items-center justify-center gap-2 px-10 py-5 bg-white text-black font-black rounded-2xl hover:bg-gray-200 transition-all active:scale-95 uppercase tracking-tighter'
 					>
 						<Check size={20} />
-						Apply filters
+						{t('catalog.filters.apply')}
 					</button>
 					<button
 						onClick={() => {
@@ -177,7 +183,7 @@ export function GenreFilter({
 						className='flex items-center justify-center gap-2 px-10 py-5 bg-white/5 text-white/60 font-bold rounded-2xl hover:bg-white/10 hover:text-white transition-all active:scale-95 uppercase tracking-tighter'
 					>
 						<RotateCcw size={18} />
-						Reset
+						{t('catalog.filters.reset')}
 					</button>
 				</div>
 			</div>

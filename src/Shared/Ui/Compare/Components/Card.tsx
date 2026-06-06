@@ -4,6 +4,7 @@ import { ICompareType } from '@/Store/Slices/Compare.slice'
 import { getItemTypeColor } from '@/Utils/getColorsByData'
 import { Trash2 } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 import { Category } from '../Category'
 interface CardProps {
 	item: UniversalItem
@@ -19,6 +20,7 @@ export function Card({
 	isWinner,
 	handleRemoveFromCompare
 }: CardProps) {
+	const { t } = useTranslation()
 	const id = 'id' in item ? item.id : item.key
 	const accentColor = getItemTypeColor(category)
 	return (
@@ -47,7 +49,7 @@ export function Card({
 					<div
 						className={`absolute top-4 left-4  text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest z-30 animate-bounce ${getItemTypeColor(category)}`}
 					>
-						Leader
+						{t('compare.leader')}
 					</div>
 				)}
 
@@ -69,7 +71,7 @@ export function Card({
 			<div className="mt-6 space-y-4 px-2">
 				<div className="flex justify-between items-end border-b border-white/5 pb-2">
 					<span className="text-white/40 text-xs uppercase font-medium">
-						Score
+						{t('compare.score')}
 					</span>
 					<span
 						className={`text-xl font-mono font-bold ${isWinner ? 'text-(--orange)' : 'text-white'}`}

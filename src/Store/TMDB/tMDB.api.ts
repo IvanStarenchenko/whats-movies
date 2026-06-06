@@ -6,6 +6,7 @@ import {
 	TMDBMediaBackdropsResponse,
 	TMDBPersonFullDetails,
 	type MediaType,
+	type TMDBLanguage,
 	type TMDBMediaDetails,
 	type TMDBMediaItem,
 	type TMDBPaginatedResponse,
@@ -15,6 +16,46 @@ import {
 } from './tMDB.type'
 
 const baseUrl = 'https://api.themoviedb.org/3'
+const searchLocalizationLimit = 8
+
+type TMDBTranslation = {
+	iso_3166_1?: string
+	iso_639_1: string
+	data?: {
+		title?: string
+		name?: string
+		overview?: string
+	}
+}
+
+type TMDBTranslationsResponse = {
+	translations?: TMDBTranslation[]
+}
+
+const getLocalizedSearchTitle = (
+	item: TMDBMediaItem,
+	translations: TMDBTranslation[],
+	language: TMDBLanguage
+) => {
+	const [languageCode, regionCode] = language.split('-')
+	const translation =
+		translations.find(
+			item =>
+				item.iso_639_1 === languageCode && item.iso_3166_1 === regionCode
+		) || translations.find(item => item.iso_639_1 === languageCode)
+
+	if (!translation?.data) return null
+
+	const title =
+		item.media_type === 'movie'
+			? translation.data.title
+			: translation.data.name
+
+	return {
+		title: title?.trim() || null,
+		overview: translation.data.overview?.trim() || null,
+	}
+}
 
 export const tmdbApi = createApi({
 	reducerPath: 'tmdbApi',
@@ -36,27 +77,102 @@ export const tmdbApi = createApi({
 	endpoints: builder => ({
 		searchMulti: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
-			{ query: string; page?: number }
+			{ query: string; page?: number; language?: TMDBLanguage }
 		>({
-			query: ({ query, page = 1 }) => ({
-				url: '/search/multi',
-				params: {
-					query,
-					page,
-					include_adult: true,
-					language: 'en-US',
-				},
-			}),
+			async queryFn(
+				{ query, page = 1, language = 'ru-RU' },
+				_api,
+				_extraOptions,
+				fetchWithBQ
+			) {
+				const searchResponse = await fetchWithBQ({
+					url: '/search/multi',
+					params: {
+						query,
+						page,
+						include_adult: true,
+						language,
+					},
+				})
+
+				if (searchResponse.error) {
+					return { error: searchResponse.error }
+				}
+
+				const searchData =
+					searchResponse.data as TMDBPaginatedResponse<TMDBMediaItem>
+
+				if (language === 'en-US') {
+					return { data: searchData }
+				}
+
+				const mediaItemsToLocalize = searchData.results
+					.map((item, index) => ({ item, index }))
+					.filter(
+						({ item }) =>
+							item.media_type === 'movie' || item.media_type === 'tv'
+					)
+					.slice(0, searchLocalizationLimit)
+
+				if (!mediaItemsToLocalize.length) {
+					return { data: searchData }
+				}
+
+				const localizedItems = await Promise.all(
+					mediaItemsToLocalize.map(async ({ item, index }) => {
+						const translationsResponse = await fetchWithBQ({
+							url: `/${item.media_type}/${item.id}/translations`,
+						})
+
+						if (translationsResponse.error) return null
+
+						const localizedTitle = getLocalizedSearchTitle(
+							item,
+							(
+								translationsResponse.data as TMDBTranslationsResponse
+							).translations || [],
+							language
+						)
+
+						if (!localizedTitle?.title) return null
+
+						const localizedItem: TMDBMediaItem = {
+							...item,
+							overview: localizedTitle.overview || item.overview,
+							...(item.media_type === 'movie'
+								? { title: localizedTitle.title }
+								: { name: localizedTitle.title }),
+						}
+
+						return { index, item: localizedItem }
+					})
+				)
+
+				const localizedByIndex = new Map<number, TMDBMediaItem>()
+				localizedItems.forEach(result => {
+					if (result) localizedByIndex.set(result.index, result.item)
+				})
+
+				return {
+					data: {
+						...searchData,
+						results: searchData.results.map(
+							(item, index) => localizedByIndex.get(index) || item
+						),
+					},
+				}
+			},
 		}),
 
 		getDetails: builder.query<
 			TMDBMediaDetails,
-			{ type: MediaType; id: number }
+			{ type: MediaType; id: number; language?: TMDBLanguage }
 		>({
-			query: ({ type, id }) => ({
+			query: ({ type, id, language = 'ru-RU' }) => ({
 				url: `/${type}/${id}`,
 				params: {
 					append_to_response: 'external_ids',
+					language,
 				},
 			}),
 			providesTags: (result, error, { type, id }) => [
@@ -99,9 +215,10 @@ export const tmdbApi = createApi({
 				page: number
 				genres?: number[]
 				minRating?: number
+				language?: TMDBLanguage
 			}
 		>({
-			query: ({ type, category, page, genres, minRating }) => {
+			query: ({ type, category, page, genres, minRating, language = 'ru-RU' }) => {
 				const hasActiveFilters =
 					(genres && genres.length > 0) || (minRating && minRating > 0)
 				const isDiscoverCategory = discoveryOnlyCategories.includes(
@@ -113,7 +230,7 @@ export const tmdbApi = createApi({
 						url: `/list/28`,
 						params: {
 							page,
-							language: 'en-US',
+							language,
 						},
 					}
 				}
@@ -125,7 +242,7 @@ export const tmdbApi = createApi({
 
 				const params: Record<string, string | number | boolean> = {
 					page,
-					language: 'en-US',
+					language,
 					include_adult: false,
 				}
 
@@ -187,29 +304,39 @@ export const tmdbApi = createApi({
 					: [{ type: mediaType, id: 'LIST' }]
 			},
 		}),
-		getMovieCollection: builder.query<ITMDBCollectionResponse, number>({
-			query: collectionId => ({
+		getMovieCollection: builder.query<
+			ITMDBCollectionResponse,
+			{ collectionId: number; language?: TMDBLanguage }
+		>({
+			query: ({ collectionId, language = 'ru-RU' }) => ({
 				url: `collection/${collectionId}`,
 				params: {
-					language: 'en-US',
+					language,
 				},
 			}),
 		}),
 		getMovieRecommendations: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
-			{ type: string; id: string | number }
+			{ type: string; id: string | number; language?: TMDBLanguage }
 		>({
-			query: ({ type, id }) => ({
+			query: ({ type, id, language = 'ru-RU' }) => ({
 				url: `/${type}/${id}/recommendations`,
-				params: { page: 1 },
+				params: { page: 1, language },
 			}),
 		}),
 
 		getMediaCredits: builder.query<
 			{ cast: TMDBPersona[]; crew: TMDBPersona[] },
-			{ type: string | undefined; id: number | string | undefined }
+			{
+				type: string | undefined
+				id: number | string | undefined
+				language?: TMDBLanguage
+			}
 		>({
-			query: ({ type, id }) => `/${type}/${id}/credits`,
+			query: ({ type, id, language = 'ru-RU' }) => ({
+				url: `/${type}/${id}/credits`,
+				params: { language },
+			}),
 		}),
 
 		getWatchProviders: builder.query<
@@ -221,21 +348,24 @@ export const tmdbApi = createApi({
 
 		getMediaVideos: builder.query<
 			{ results: { key: string; site: string; type: string }[] },
-			{ type: string; id: number }
+			{ type: string; id: number; language?: TMDBLanguage }
 		>({
-			query: ({ type, id }) => `/${type}/${id}/videos`,
+			query: ({ type, id, language = 'ru-RU' }) => ({
+				url: `/${type}/${id}/videos`,
+				params: { language },
+			}),
 		}),
 
 		getTotal: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
-			{ type: string; page: number; genreId?: string }
+			{ type: string; page: number; genreId?: string; language?: TMDBLanguage }
 		>({
-			query: ({ type, page, genreId }) => ({
+			query: ({ type, page, genreId, language = 'ru-RU' }) => ({
 				url: `/discover/${type}`,
 				params: {
 					page,
 					with_genres: genreId,
-					language: 'en-US',
+					language,
 					sort_by: 'popularity.desc',
 				},
 			}),
@@ -246,55 +376,70 @@ export const tmdbApi = createApi({
 
 		getRuntime: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
-			{ category: TMDBSpecialCategories | undefined; page?: number }
+			{
+				category: TMDBSpecialCategories | undefined
+				page?: number
+				language?: TMDBLanguage
+			}
 		>({
-			query: () => ({
-				url: '/discover/movie',
-				params: {
-					'with_runtime.lte': 90,
-					'with_runtime.gte': 90,
-					page: 1,
-				},
-			}),
+			query: ({ category, page = 1, language = 'ru-RU' }) => {
+				const runtimeKey =
+					category === 'with_runtime.gte'
+						? 'with_runtime.gte'
+						: 'with_runtime.lte'
+
+				return {
+					url: '/discover/movie',
+					params: {
+						[runtimeKey]: 90,
+						page,
+						language,
+					},
+				}
+			},
 		}),
-		getPerson: builder.query<TMDBPersonFullDetails, { id: string }>({
-			query: ({ id }) => ({
+		getPerson: builder.query<
+			TMDBPersonFullDetails,
+			{ id: string; language?: TMDBLanguage }
+		>({
+			query: ({ id, language = 'ru-RU' }) => ({
 				url: `person/${id}`,
-				params: { append_to_response: 'combined_credits' },
+				params: { append_to_response: 'combined_credits', language },
 			}),
 		}),
 		searchPerson: builder.query<
 			TMDBPaginatedResponse<TMDBPersona>,
-			{ query: string; page?: number }
+			{ query: string; page?: number; language?: TMDBLanguage }
 		>({
-			query: ({ query, page = 1 }) => ({
+			query: ({ query, page = 1, language = 'ru-RU' }) => ({
 				url: '/search/person',
 				params: {
 					query,
 					page,
-					language: 'en-US',
+					language,
 					include_adult: true,
 				},
 			}),
 		}),
 		getPopularPersons: builder.query<
 			TMDBPaginatedResponse<TMDBPersona>,
-			{ page?: number }
+			{ page?: number; language?: TMDBLanguage }
 		>({
-			query: ({ page = 1 }) => ({
+			query: ({ page = 1, language = 'ru-RU' }) => ({
 				url: '/person/popular',
 				params: {
 					page,
-					language: 'en-US',
+					language,
 				},
 			}),
 		}),
 		getTrending: builder.query<
 			TMDBPaginatedResponse<TMDBMediaItem>,
-			{ page?: 1 }
+			{ page?: 1; language?: TMDBLanguage }
 		>({
-			query: () => ({
+			query: ({ language = 'ru-RU' }) => ({
 				url: `/trending/all/week`,
+				params: { language },
 			}),
 		}),
 	}),

@@ -2,6 +2,7 @@ import { Header } from '@/Components/Layout/Header/Header'
 import { CompareBtn } from '@/Shared/Ui/Compare/CompareBtn'
 import { ContactForm } from '@/Shared/Ui/Feedback/Feedback'
 import { StoreProvider } from '@/Store/Provider'
+import { I18nProvider } from '@/i18n/I18nProvider'
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import Script from 'next/script'
@@ -70,18 +71,20 @@ export default function RootLayout({
 					src='https://graphicslab.io/sdk/v2/rendex-sdk.min.js'
 					strategy='lazyOnload'
 				/>
-				<StoreProvider>
-					<Header />
-					<main className='relative pt-20'>
-						{children}
-						<div className='fixed bottom-8 right-3 z-20'>
-							<ContactForm />
-						</div>
-						<div className='absolute bottom-0 right-6'>
-							<CompareBtn />
-						</div>
-					</main>
-				</StoreProvider>
+				<I18nProvider>
+					<StoreProvider>
+						<Header />
+						<main className='relative pt-20'>
+							{children}
+							<div className='fixed bottom-8 right-3 z-20'>
+								<ContactForm />
+							</div>
+							<div className='absolute bottom-0 right-6'>
+								<CompareBtn />
+							</div>
+						</main>
+					</StoreProvider>
+				</I18nProvider>
 				<div id='portal-root'></div>
 			</body>
 		</html>

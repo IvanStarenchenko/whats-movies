@@ -2,6 +2,7 @@
 import { useCrossMediaDiscovery } from '@/Hooks/useCrossMediaDiscovery'
 import { IBelongsToCollection, MediaType } from '@/Store/TMDB/tMDB.type'
 import { Element } from 'react-scroll'
+import { useTranslation } from 'react-i18next'
 import { Books } from './Books'
 import { Collection } from './Collection'
 import { Games } from './Games'
@@ -20,6 +21,7 @@ export function DetailsRelative({
 	name,
 	belongs_to_collection
 }: DetailsRelativeProps) {
+	const { t } = useTranslation()
 	const {
 		recommendationsTmdb,
 		recommendationsBooks,
@@ -28,7 +30,7 @@ export function DetailsRelative({
 		isLoading
 	} = useCrossMediaDiscovery(name || '', id, type, belongs_to_collection?.id)
 
-	if (isLoading) return 'Loading...'
+	if (isLoading) return t('related.loading')
 
 	const hasContent =
 		recommendationsTmdb.length > 0 ||
@@ -39,7 +41,7 @@ export function DetailsRelative({
 		return (
 			<>
 				<span className="text-(--activeColor) uppercase tracking-wider text-lg font-bold block mb-9">
-					No related content found.
+					{t('related.noContent')}
 				</span>
 			</>
 		)
@@ -51,7 +53,7 @@ export function DetailsRelative({
 		>
 			<div className="flex items-center gap-4">
 				<h3 className="text-sm font-black text-white uppercase tracking-[0.3em] whitespace-nowrap">
-					Related Universe
+					{t('related.relatedUniverse')}
 				</h3>
 				<div className="h-1px w-full bg-linear-to-r from-white/20 to-transparent" />
 			</div>

@@ -1,5 +1,6 @@
 import { UniversalItem } from '@/Hooks/useCompare'
 import { OpenLibraryBook } from '@/Store/Books/Openlibrary.type'
+import { useTranslation } from 'react-i18next'
 
 interface CategoryProps {
 	category: string
@@ -7,6 +8,7 @@ interface CategoryProps {
 }
 
 export function Category({ category, item }: CategoryProps) {
+	const { t } = useTranslation()
 	const getProgressWidth = () => {
 		if ('popularity' in item) return Math.min(item.popularity / 10, 100)
 		if ('rating' in item) return (item.rating / 5) * 100
@@ -23,7 +25,7 @@ export function Category({ category, item }: CategoryProps) {
 				<div className="bg-white/5 rounded-2xl p-3 border border-white/5">
 					<div className="flex justify-between items-center mb-2">
 						<span className="text-white/40 text-[10px] uppercase font-black tracking-widest">
-							Hype Score
+							{t('compare.hypeScore')}
 						</span>
 						<span className="text-white text-xs font-mono font-bold">
 							{Math.round(item.popularity)}
@@ -41,11 +43,11 @@ export function Category({ category, item }: CategoryProps) {
 				<div className="grid grid-cols-2 gap-2">
 					<div className="bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col gap-1">
 						<span className="text-white/30 text-[9px] uppercase font-bold">
-							Release
+							{t('compare.release')}
 						</span>
 						<span className="text-white text-xs">
 							{
-								(item.release_date || item.first_air_date || 'TBA').split(
+								(item.release_date || item.first_air_date || t('common.tba')).split(
 									'-'
 								)[0]
 							}
@@ -53,7 +55,7 @@ export function Category({ category, item }: CategoryProps) {
 					</div>
 					<div className="bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col gap-1 text-right">
 						<span className="text-white/30 text-[9px] uppercase font-bold">
-							Votes
+							{t('compare.votes')}
 						</span>
 						<span className="text-white text-xs">
 							{item.vote_count?.toLocaleString()}
@@ -70,7 +72,7 @@ export function Category({ category, item }: CategoryProps) {
 				<div className="bg-white/5 p-3 rounded-2xl border border-white/5">
 					<div className="flex justify-between items-center mb-1">
 						<span className="text-white/40 text-[10px] uppercase">
-							User Rating
+							{t('compare.userRating')}
 						</span>
 						<span className="text-white text-sm font-bold">
 							{item.rating} / 5
@@ -87,7 +89,7 @@ export function Category({ category, item }: CategoryProps) {
 				<div className="grid grid-cols-2 gap-2">
 					<div className="bg-white/5 p-2.5 rounded-xl border border-white/5 text-center">
 						<span className="text-white/30 text-[9px] uppercase block">
-							Reviews
+							{t('compare.reviews')}
 						</span>
 						<span className="text-white text-xs font-bold">
 							{item.ratings_count}
@@ -95,17 +97,17 @@ export function Category({ category, item }: CategoryProps) {
 					</div>
 					<div className="bg-white/5 p-2.5 rounded-xl border border-white/5 text-center">
 						<span className="text-white/30 text-[9px] uppercase block">
-							Release
+							{t('compare.release')}
 						</span>
 						<span className="text-white text-xs font-bold">
-							{item.released?.split('-')[0] || 'TBA'}
+							{item.released?.split('-')[0] || t('common.tba')}
 						</span>
 					</div>
 				</div>
 
 				<div className="text-center p-2 bg-white/5 rounded-xl border border-white/5">
 					<span className="text-white/30 text-[9px] uppercase block mb-1">
-						Slug ID
+						{t('compare.slugId')}
 					</span>
 					<span className="text-white/60 text-[10px] font-mono truncate block">
 						{item.slug}
@@ -122,7 +124,7 @@ export function Category({ category, item }: CategoryProps) {
 				<div className="bg-white/5 rounded-2xl p-3 border border-white/5">
 					<div className="flex justify-between items-center mb-1">
 						<span className="text-white/40 text-[10px] uppercase font-black">
-							Rating Score
+							{t('compare.ratingScore')}
 						</span>
 						<span className="text-white text-xs font-bold">
 							{(book.ratings_average || 0).toFixed(1)}
@@ -138,29 +140,35 @@ export function Category({ category, item }: CategoryProps) {
 
 				<div className="bg-white/5 p-3 rounded-xl border border-white/5 flex flex-col gap-2">
 					<div className="flex justify-between items-center">
-						<span className="text-white/30 text-[9px] uppercase">Author</span>
+						<span className="text-white/30 text-[9px] uppercase">
+							{t('compare.author')}
+						</span>
 						<span className="text-white text-[11px] font-bold truncate max-w-[100px]">
-							{book.author_name?.[0] || 'Unknown'}
+							{book.author_name?.[0] || t('common.unknown')}
 						</span>
 					</div>
 					<div className="flex justify-between items-center border-t border-white/5 pt-2">
 						<span className="text-white/30 text-[9px] uppercase">
-							First Pub.
+							{t('compare.firstPublished')}
 						</span>
 						<span className="text-white text-[11px] font-mono">
-							{book.first_publish_year || 'N/A'}
-						</span>
-					</div>
-					<div className="flex justify-between items-center border-t border-white/5 pt-2">
-						<span className="text-white/30 text-[9px] uppercase">Language</span>
-						<span className="text-white text-[11px] font-mono">
-							{book?.language || 'N/A'}
+							{book.first_publish_year || t('common.na')}
 						</span>
 					</div>
 					<div className="flex justify-between items-center border-t border-white/5 pt-2">
-						<span className="text-white/30 text-[9px] uppercase">Rating</span>
+						<span className="text-white/30 text-[9px] uppercase">
+							{t('compare.language')}
+						</span>
 						<span className="text-white text-[11px] font-mono">
-							{book?.ratings_average?.toFixed(1) || 'N/A'}
+							{book?.language || t('common.na')}
+						</span>
+					</div>
+					<div className="flex justify-between items-center border-t border-white/5 pt-2">
+						<span className="text-white/30 text-[9px] uppercase">
+							{t('compare.ratingScore')}
+						</span>
+						<span className="text-white text-[11px] font-mono">
+							{book?.ratings_average?.toFixed(1) || t('common.na')}
 						</span>
 					</div>
 				</div>

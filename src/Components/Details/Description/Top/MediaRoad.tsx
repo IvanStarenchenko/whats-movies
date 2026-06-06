@@ -1,9 +1,11 @@
 import { Map } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 interface MediaRoadProps {
 	title: string | undefined
 }
 export function MediaRoad({ title }: MediaRoadProps) {
+	const { t } = useTranslation()
 	const slugPath =
 		title &&
 		title
@@ -44,7 +46,7 @@ export function MediaRoad({ title }: MediaRoadProps) {
 					group-hover:translate-x-0
 		'
 					>
-						Дорожная карта проекта (и не только)
+						{t('details.roadmap')}
 					</p>
 				</Link>
 			</button>

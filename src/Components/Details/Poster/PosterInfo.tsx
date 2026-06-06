@@ -3,11 +3,13 @@ import { useGetCast } from '@/Hooks/useGetCast'
 import { useMusic } from '@/Hooks/useMusic'
 import { Loader } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { HiddenPlayer } from '../../../Shared/Ui/HiddenPlayer/HiddenPlayer'
 import { DetailsPosterProps } from './DetailsPoster'
 import { From } from './Director'
 import { ThemeButton } from './ThemeButton'
 export function PosterInfo({ ...data }: DetailsPosterProps) {
+	const { t } = useTranslation()
 	const { setInputValue, songs, handleSearch, isFetchingSongs } = useMusic()
 	const [isPlaying, setIsPlaying] = useState(false)
 	const isShown = data?.ratingCount && data?.ratingCount > 100
@@ -49,7 +51,7 @@ export function PosterInfo({ ...data }: DetailsPosterProps) {
 					</div>
 				) : (
 					<div className="flex items-center gap-1 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded border border-white/10 text-(--activeColor) text-sm">
-						{data.revision} Revisions
+						{t('details.revisions', { count: data.revision || 0 })}
 					</div>
 				)}
 
@@ -73,7 +75,7 @@ export function PosterInfo({ ...data }: DetailsPosterProps) {
 
 			<div className="flex items-center gap-4 text-gray-300 text-sm mb-8 font-medium">
 				<span>
-					{data.releaseDate ? data.releaseDate.split(/[- ]/)[0] : 'N/A'}
+					{data.releaseDate ? data.releaseDate.split(/[- ]/)[0] : t('common.na')}
 				</span>
 				{data.genres && data.genres.length > 0 && (
 					<>

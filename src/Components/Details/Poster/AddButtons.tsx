@@ -2,6 +2,7 @@ import { getItemTypeColor } from '@/Utils/getColorsByData'
 import clsx from 'clsx'
 import { Check, Plus, Share2, Zap } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DetailsPosterProps } from './DetailsPoster'
 interface PosterButtonsProps extends DetailsPosterProps {
 	handleCompareClick: (e: React.MouseEvent) => void
@@ -12,6 +13,7 @@ export function PosterButtons({
 	handleCompareClick,
 	...data
 }: PosterButtonsProps) {
+	const { t } = useTranslation()
 	const [isCopied, setIsCopied] = useState(false)
 	const [showTitle, setShowTitle] = useState(false)
 	const copyUrl = () => {
@@ -55,18 +57,18 @@ export function PosterButtons({
 				{data.isAdded ? (
 					<>
 						<Check className='text-xl' />
-						<span className='hidden md:inline'>Added to Wishlist</span>
+						<span className='hidden md:inline'>{t('details.addedToWishlist')}</span>
 					</>
 				) : (
 					<>
 						<Plus className='text-xl' />
-						<span className='hidden md:inline'>Add to Wishlist</span>
+						<span className='hidden md:inline'>{t('details.addToWishlist')}</span>
 					</>
 				)}
 			</button>
 
 			<button
-				aria-label='share'
+				aria-label={t('details.share')}
 				className={clsx(
 					'relative group bg-[#1a1d29]/80 backdrop-blur-md border border-gray-700 hover:bg-gray-800 transition-all text-white p-3 rounded-xl active:scale-95',
 					isCopied && 'bg-green-600'
@@ -86,7 +88,7 @@ export function PosterButtons({
 								: 'opacity-0 translate-y-1'
 						)}
 					>
-						Link copied
+						{t('details.linkCopied')}
 						<div className='absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-zinc-900' />
 					</div>
 				)}

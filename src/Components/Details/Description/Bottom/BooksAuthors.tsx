@@ -1,13 +1,16 @@
 import { OpenLibraryBookDetails } from '@/Store/Books/Openlibrary.type'
+import { useTranslation } from 'react-i18next'
 import { AuthorLink } from '../../CreditPeople/Authors'
 interface BooksAuthorsProps {
 	bookData: OpenLibraryBookDetails
 }
 export function BooksAuthors({ bookData }: BooksAuthorsProps) {
+	const { t } = useTranslation()
+
 	return (
 		<div className='space-y-3 md:col-span-2 pt-4 border-t border-white/5'>
 			<p className='text-[10px] text-white/40 font-black uppercase tracking-[0.2em]'>
-				Creative Mind
+				{t('details.creativeMind')}
 			</p>
 			<div className='flex flex-wrap gap-4'>
 				{bookData?.authors?.map(a => (

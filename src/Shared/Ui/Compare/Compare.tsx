@@ -1,6 +1,7 @@
 import { UniversalItem } from '@/Hooks/useCompare'
 import { ICompareState } from '@/Store/Slices/Compare.slice'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Card } from './Components/Card'
 import { Header } from './Components/Header'
 
@@ -19,6 +20,7 @@ export function Compare({
 	clearCompare,
 	activeCategories,
 }: CompareProps) {
+	const { t } = useTranslation()
 	const handleClearAll = () => {
 		clearCompare()
 		onClose()
@@ -45,12 +47,16 @@ export function Compare({
 				<div className='flex-1 overflow-y-auto p-10 space-y-20 custom-scrollbar'>
 					{activeCategories.map(([category, items]) => {
 						const maxRating = Math.max(...items.map(getRating))
+						const categoryKey =
+							category === 'TVShows'
+								? 'tvShows'
+								: category.toLowerCase()
 
 						return (
 							<section key={category}>
 								<div className='flex items-center gap-6 mb-10'>
 									<h3 className='text-3xl font-bold text-white uppercase italic'>
-										{category}
+										{t(`compare.${categoryKey}`)}
 									</h3>
 									<div className='h-px flex-1 bg-linear-to-r from-(--orange)/50 to-transparent' />
 								</div>

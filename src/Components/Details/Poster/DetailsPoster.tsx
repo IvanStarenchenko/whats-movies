@@ -3,6 +3,7 @@ import { ICompareState } from '@/Store/Slices/Compare.slice'
 import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { getTmdbImageOriginalUrl } from '@/Utils/Utils'
 import { StaticImageData } from 'next/image'
+import { useTranslation } from 'react-i18next'
 import { PosterButtons } from './AddButtons'
 import { Anchor } from './Anchor'
 import { PosterImage } from './PosterImage'
@@ -30,6 +31,7 @@ export function DetailsPoster({
 	movieId,
 	...data
 }: DetailsPosterProps) {
+	const { t } = useTranslation()
 	const { onToggle, isInCompare } = useCompare()
 
 	const categoryKey: keyof ICompareState =
@@ -55,7 +57,7 @@ export function DetailsPoster({
 
 		const itemToCompare = {
 			id: data.id,
-			name: data.name || 'Unknown',
+			name: data.name || t('common.unknown'),
 			popularity: data.ratingCount || 0,
 			release_date: data.releaseDate || '',
 			vote_count: data.ratingCount || 0,

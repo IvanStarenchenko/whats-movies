@@ -7,6 +7,7 @@ import { MediaType } from '@/Store/TMDB/tMDB.type'
 import { FunnelPlus } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CatalogCard } from '../CatalogCard'
 
 const DynamicCatalogFilter = dynamic(
@@ -28,6 +29,7 @@ const DynamicGenreFilter = dynamic(
 )
 
 export function Movies({ type }: { type: MediaType }) {
+	const { t } = useTranslation()
 	const {
 		setPage,
 		page,
@@ -52,7 +54,7 @@ export function Movies({ type }: { type: MediaType }) {
 						<span className='text-sm text-(--activeColor)'>
 							{selectedGenreNames && `${selectedGenreNames} `}
 						</span>
-						{selectedOption.label} Movies
+						{t('catalog.moviesTitle', { category: selectedOption.label })}
 					</div>
 					<RandomBtn movies={data?.results || []} />
 				</h2>
@@ -126,12 +128,14 @@ export function Movies({ type }: { type: MediaType }) {
 					disabled={page === 1 || isFetching}
 					className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 				>
-					Previous
+					{t('common.previous')}
 				</button>
 
 				<span className='text-[--secondActiveColor] font-bold'>
-					Page {page}{' '}
-					<span className='text-gray-500 font-normal'>of {totalPages}</span>
+					{t('common.page', { page })}{' '}
+					<span className='text-gray-500 font-normal'>
+						{t('common.of', { total: totalPages })}
+					</span>
 				</span>
 
 				<button
@@ -142,7 +146,7 @@ export function Movies({ type }: { type: MediaType }) {
 					disabled={page === totalPages || isFetching}
 					className='px-6 py-2 bg-[#1a1d29] border border-white/10 rounded-xl disabled:opacity-30 hover:bg-white/5 transition-colors text-white'
 				>
-					Next
+					{t('common.next')}
 				</button>
 			</div>
 		</div>

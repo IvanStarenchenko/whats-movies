@@ -1,10 +1,12 @@
 'use client'
 import { useActors } from '@/Hooks/useActors'
 import { TrendingUp } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { ActorCard } from './ActorCard'
 import { ActorSearch } from './ActorSearch'
 
 export function Actors() {
+	const { t } = useTranslation()
 	const { value, setValue, displayData, isSearching, isLoading } = useActors()
 
 	return (
@@ -21,13 +23,13 @@ export function Actors() {
 						<div className='flex items-center gap-2 md:gap-3'>
 							{isSearching ? (
 								<h2 className='text-xl md:text-3xl font-bold line-clamp-1'>
-									Results for: {value}
+									{t('actors.resultsFor', { query: value })}
 								</h2>
 							) : (
 								<>
 									<TrendingUp className='text-[--secondActiveColor] size-5 md:size-6' />
 									<h2 className='text-xl md:text-3xl font-bold font-serif italic'>
-										Trending Personalities
+										{t('actors.trending')}
 									</h2>
 								</>
 							)}

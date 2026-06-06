@@ -2,6 +2,7 @@
 import { YouTubePlaylistItems } from '@/Store/Music/Music.type'
 import { Music, Play, X } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 
 interface SongCardProps {
 	song: YouTubePlaylistItems['items'][number]
@@ -16,6 +17,7 @@ export function SongCard({
 	activeVideoId,
 	setActiveVideoId,
 }: SongCardProps) {
+	const { t } = useTranslation()
 	const isPlaying = activeVideoId === song.snippet.resourceId.videoId
 	return (
 		<div
@@ -39,7 +41,7 @@ export function SongCard({
 					<Image
 						src={song.snippet?.thumbnails?.default?.url || ''}
 						fill
-						alt='img'
+						alt={t('music.thumbnailAlt')}
 						className='rounded-lg object-cover'
 					/>
 				) : (
@@ -68,7 +70,7 @@ export function SongCard({
 							setActiveVideoId(null)
 						}}
 						className='bg-white/10 p-3 rounded-full hover:bg-(--red)/20 hover:text-(--red) transition-all text-white'
-						title='Stop playing'
+						title={t('music.stopPlaying')}
 					>
 						<X size={24} />
 					</button>

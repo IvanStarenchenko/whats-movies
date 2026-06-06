@@ -1,6 +1,7 @@
 // @/Components/Details/Gallery/Books.tsx
 import { ArrowLeft, ArrowRight, X } from 'lucide-react'
 import Image from 'next/image'
+import { useTranslation } from 'react-i18next'
 
 interface BooksProps {
 	bookCovers: number[]
@@ -17,6 +18,8 @@ export function Books({
 	handleNext,
 	handlePrev,
 }: BooksProps) {
+	const { t } = useTranslation()
+
 	if (bookCovers.length === 0) return null
 
 	const getBookUrl = (coverId: number) =>
@@ -26,10 +29,10 @@ export function Books({
 		<div className='w-full h-full overflow-y-auto px-4 py-6 custom-scrollbar'>
 			<div className='flex items-center gap-x-4 mb-8 border-b border-white/10 pb-4'>
 				<h2 className='text-2xl font-black uppercase tracking-tighter text-white'>
-					Edition Covers
+					{t('gallery.editionCovers')}
 				</h2>
 				<span className='text-xs font-mono text-white/30 px-3 py-1 bg-white/5 rounded-full border border-white/10'>
-					{bookCovers.length} Covers
+					{t('common.covers', { count: bookCovers.length })}
 				</span>
 			</div>
 
@@ -43,7 +46,7 @@ export function Books({
 						<Image
 							fill
 							src={getBookUrl(coverId)}
-							alt='book cover'
+							alt={t('gallery.bookCoverAlt')}
 							className='object-cover transition-transform duration-500 group-hover:scale-105'
 							sizes='(max-width: 768px) 50vw, 25vw'
 						/>
@@ -86,7 +89,7 @@ export function Books({
 					>
 						<Image
 							src={getBookUrl(bookCovers[currentIndex])}
-							alt='fullscreen cover'
+							alt={t('gallery.fullscreenCoverAlt')}
 							fill
 							className='object-contain'
 							priority

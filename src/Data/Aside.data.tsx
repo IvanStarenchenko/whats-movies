@@ -4,26 +4,31 @@ export const AsideMenu: IAsideMenu[] = [
 	{
 		icon: ICONS.home,
 		title: 'Home',
+		titleKey: 'nav.home',
 		href: '/',
 	},
 	{
 		icon: ICONS.movies,
 		title: 'Movies',
+		titleKey: 'nav.movies',
 		href: '/movies',
 	},
 	{
 		icon: ICONS.tv,
 		title: 'TV Shows',
+		titleKey: 'nav.tvShows',
 		href: '/tv-shows',
 	},
 	{
 		icon: ICONS.books,
 		title: 'Books',
+		titleKey: 'nav.books',
 		href: '/books',
 	},
 	{
 		icon: ICONS.games,
 		title: 'Games',
+		titleKey: 'nav.games',
 		href: '/games',
 	},
 	// {
@@ -34,6 +39,7 @@ export const AsideMenu: IAsideMenu[] = [
 	{
 		icon: ICONS.user,
 		title: 'Actors',
+		titleKey: 'nav.actors',
 		href: '/actors',
 	},
 	// {
@@ -49,9 +55,25 @@ export const AsideMenu: IAsideMenu[] = [
 ]
 
 export const AsideFilterData: IAsideFilter[] = [
-	{ title: 'Popular Movies', anchor: 'PopularMovies' },
-	{ title: 'Currently playing in theaters', anchor: 'NowPlaying' },
-	{ title: 'Quick Watch < 90 min', anchor: 'FilmForTonight' },
-	{ title: 'On The Air', anchor: 'OnTheAir' },
-	{ title: 'Horror Books', anchor: 'PopularBook' },
+	{
+		title: 'Popular Movies',
+		titleKey: 'aside.popularMovies',
+		anchor: 'PopularMovies',
+	},
+	{
+		title: 'Currently playing in theaters',
+		titleKey: 'aside.nowPlaying',
+		anchor: 'NowPlaying',
+	},
+	{
+		title: 'Quick Watch < 90 min',
+		titleKey: 'aside.quickWatch',
+		anchor: 'FilmForTonight',
+	},
+	{ title: 'On The Air', titleKey: 'aside.onTheAir', anchor: 'OnTheAir' },
+	{
+		title: 'Horror Books',
+		titleKey: 'aside.horrorBooks',
+		anchor: 'PopularBook',
+	},
 ]

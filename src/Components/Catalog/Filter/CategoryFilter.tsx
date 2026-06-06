@@ -39,6 +39,23 @@ export function CatalogFilter({
 					? gamesOptions
 					: booksOptions
 
+	const getOptionValue = (option?: Option | IOrderingGameOption) =>
+		option
+			? 'order' in option
+				? option.order
+				: option.TmdbValue || option.OpenlibValue || option.GameValue || ''
+			: ''
+
+	const selectedCategoryValue =
+		options.find(
+			option => getOptionValue(option) === getOptionValue(selectedOption)
+		) || selectedOption
+
+	const selectedOrderingValue =
+		orderingGamesOptions.find(
+			option => getOptionValue(option) === getOptionValue(selectedOrder)
+		) || selectedOrder
+
 	const customStyles: StylesConfig<Option, false> = {
 		control: (base, state) => ({
 			...base,
@@ -123,6 +140,7 @@ export function CatalogFilter({
 			(opt as IOrderingGameOption).order ||
 			(opt as Option).TmdbValue ||
 			(opt as Option).OpenlibValue ||
+			(opt as Option).GameValue ||
 			''
 
 		params.set(key, value)
@@ -136,7 +154,7 @@ export function CatalogFilter({
 			{filterType === 'game' && (
 				<div className="w-full sm:w-64">
 					<Select
-						value={selectedOrder}
+						value={selectedOrderingValue}
 						onChange={opt =>
 							handleParamChange('ordering', opt as IOrderingGameOption)
 						}
@@ -150,7 +168,7 @@ export function CatalogFilter({
 			)}
 			<div className="w-full sm:w-64">
 				<Select
-					value={selectedOption}
+					value={selectedCategoryValue}
 					onChange={opt => handleParamChange('category', opt as Option)}
 					options={options}
 					styles={customStyles}

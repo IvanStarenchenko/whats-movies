@@ -2,6 +2,7 @@ import { getTmdbImageOriginalUrl } from '@/Utils/Utils'
 import { motion } from 'framer-motion'
 
 import Image, { StaticImageData } from 'next/image'
+import { useTranslation } from 'react-i18next'
 
 interface PosterImageProps {
 	backdropPath: string | StaticImageData | null | undefined
@@ -16,6 +17,7 @@ export function PosterImage({
 	type,
 	isCinema,
 }: PosterImageProps) {
+	const { t } = useTranslation()
 	const imageUrl =
 		typeof backdropPath === 'string' && backdropPath.startsWith('http')
 			? backdropPath
@@ -47,7 +49,7 @@ export function PosterImage({
 			>
 				<Image
 					src={imageUrl}
-					alt={'Background Poster'}
+					alt={t('gallery.backdropAlt')}
 					fill
 					priority
 					className={`object-cover ${
