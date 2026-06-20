@@ -1,44 +1,21 @@
-'use client'
-import { useSearch } from '@/Hooks/useSearch'
 import { getItemTypeColor } from '@/Utils/getColorsByData'
+import { getTypeLabel } from '@/Utils/getTypeLabel'
 import { Search as SearchIcon, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
-
-export function Search() {
+interface SearchProps {
+	containerRef: RefObject<HTMLDivElement | null>
+	isOpen: boolean
+	setIsOpen: (isOpen: boolean) => void
+	value: string
+	setValue: (value: string) => void
+	combinedResults: any[]
+	isAnyLoading: boolean
+}
+export function Search({ containerRef, isOpen, setIsOpen, value, setValue, combinedResults, isAnyLoading }: SearchProps) {
 	const { t } = useTranslation()
-	const { value, setValue, combinedResults, isAnyLoading } = useSearch()
-	const [isOpen, setIsOpen] = useState(false)
-	const containerRef = useRef<HTMLDivElement>(null)
-	const getTypeLabel = (type: string) => {
-		switch (type) {
-			case 'movie':
-				return t('media.movie')
-			case 'tv':
-				return t('media.tv')
-			case 'book':
-				return t('media.book')
-			case 'game':
-				return t('media.game')
-			default:
-				return type
-		}
-	}
-
-	useEffect(() => {
-		const handleClickOutside = (e: MouseEvent) => {
-			if (
-				containerRef.current &&
-				!containerRef.current.contains(e.target as Node)
-			) {
-				setIsOpen(false)
-			}
-		}
-		document.addEventListener('mousedown', handleClickOutside)
-		return () => document.removeEventListener('mousedown', handleClickOutside)
-	}, [])
 
 	return (
 		<div
@@ -69,10 +46,9 @@ export function Search() {
 					className={`
             w-full py-2 bg-[#1a1d29] border border-white/10 rounded-xl text-white outline-none 
             focus:border-(--secondActiveColor)/50 transition-all text-sm
-            ${
-							isOpen
-								? 'pl-10 pr-10'
-								: 'pl-0 pr-0 opacity-0 sm:opacity-100 sm:pl-10 sm:pr-10'
+            ${isOpen
+							? '  pl-10 pr-10'
+							: 'pl-0 pr-0 opacity-0 sm:opacity-100 sm:pl-10 sm:pr-10'
 						}
           `}
 				/>
@@ -98,7 +74,7 @@ export function Search() {
 			{isOpen &&
 				value.length >= 3 &&
 				(combinedResults.length > 0 || isAnyLoading) && (
-					<div className='absolute top-full left-0 w-full mt-2 bg-[#1a1d29]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[100]'>
+					<div className='absolute top-full left-0 min-w-full mt-2 bg-[#1a1d29]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[100]'>
 						<div className='max-h-80 sm:max-h-100 overflow-y-auto custom-scrollbar p-2 flex flex-col gap-1'>
 							{combinedResults.length > 0 ? (
 								combinedResults.map(item => (

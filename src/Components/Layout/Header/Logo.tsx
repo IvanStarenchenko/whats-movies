@@ -1,7 +1,11 @@
 import { Film } from 'lucide-react'
 import Link from 'next/link'
 
-export function Logo() {
+interface LogoProps {
+	isOpen?: boolean
+}
+export function Logo({ isOpen }: LogoProps) {
+
 	return (
 		<Link
 			href="/"
@@ -12,8 +16,9 @@ export function Logo() {
 					color="white"
 					size={26}
 				/>
-			</div>{' '}
-			<h1 className="text-white">MediaHub</h1>
+			</div>
+			{!isOpen && <h1 className="text-white">MediaHub</h1>}
+
 		</Link>
 	)
 }

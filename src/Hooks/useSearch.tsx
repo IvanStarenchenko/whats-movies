@@ -7,13 +7,26 @@ import { useSearchMultiQuery } from '@/Store/TMDB/tMDB.api'
 import { TMDBMediaItem } from '@/Store/TMDB/tMDB.type'
 import { getBookCoverUrl, getTmdbImageSlideUrl } from '@/Utils/Utils'
 import { useCurrentLanguage } from '@/i18n/useCurrentLanguage'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 export function useSearch() {
 	const { tmdbLanguage } = useCurrentLanguage()
 	const [value, setValue] = useState('')
+	const [isOpen, setIsOpen] = useState(false)
+	const containerRef = useRef<HTMLDivElement>(null)
 	const [debouncedValue] = useDebounce(value, 500)
-
+	useEffect(() => {
+		const handleClickOutside = (e: MouseEvent) => {
+			if (
+				containerRef.current &&
+				!containerRef.current.contains(e.target as Node)
+			) {
+				setIsOpen(false)
+			}
+		}
+		document.addEventListener('mousedown', handleClickOutside)
+		return () => document.removeEventListener('mousedown', handleClickOutside)
+	}, [])
 	const {
 		data: movieData,
 		isLoading: movieLoading,
@@ -86,6 +99,9 @@ export function useSearch() {
 		value,
 		setValue,
 		isAnyLoading,
-		combinedResults
+		combinedResults,
+		isOpen,
+		setIsOpen,
+		containerRef
 	}
 }

@@ -17,7 +17,7 @@ export function LanguageSwitcher() {
 				language: t(`language.${currentLanguage?.startsWith('en') ? 'en' : 'ru'}`),
 			})}
 		>
-			<Globe2 className='ml-2 h-4 w-4 text-white/50' />
+			<Globe2 className='ml-2 h-4 w-4 text-white/50 hidden sm:block' />
 			{languageOptions.map(option => {
 				const isActive = currentLanguage?.startsWith(option.code)
 				return (
