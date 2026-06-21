@@ -17,7 +17,12 @@ export function Logo({ isOpen }: LogoProps) {
 					size={26}
 				/>
 			</div>
-			{!isOpen && <h1 className="text-white">MediaHub</h1>}
+			<h1 className={`
+  text-white
+  ${!isOpen ? 'block' : 'hidden md:block'}
+`}>
+				MediaHub
+			</h1>
 
 		</Link>
 	)
