@@ -31,17 +31,16 @@ export function ActionButtons({
 	const { t } = useTranslation()
 
 	return (
-		<div className='absolute top-12 right-3 z-30 flex flex-col gap-2'>
+		<div className='absolute top-1 -right-2 z-30 flex flex-col gap-2'>
 			<button
 				aria-label={t('search.addToWishlist')}
 				onClick={e => toggleSliderWishlistHandler(e, item)}
-				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${
-					isAdded
-						? `${getItemTypeColor(
-								type
-						  )} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
-						: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110'
-				}`}
+				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${isAdded
+					? `${getItemTypeColor(
+						type
+					)} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
+					: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110'
+					}`}
 			>
 				<Heart size={18} fill={isAdded ? 'currentColor' : 'none'} />
 			</button>
@@ -53,13 +52,12 @@ export function ActionButtons({
 					e.stopPropagation()
 					onToggle(categoryKey, item)
 				}}
-				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${
-					isComparing
-						? `${getItemTypeColor(
-								type
-						  )} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
-						: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110 hover:text-indigo-300'
-				}`}
+				className={`p-2 rounded-full backdrop-blur-md transition-all duration-300 border ${isComparing
+					? `${getItemTypeColor(
+						type
+					)} scale-110 shadow-[0_0_15px_rgba(0,0,0,0.5)]`
+					: 'bg-black/40 border-white/10 text-gray-400 opacity-0 group-hover:opacity-100 hover:scale-110 hover:text-indigo-300'
+					}`}
 				title={t('details.addToCompare')}
 			>
 				<Zap size={18} fill={isComparing ? 'currentColor' : 'none'} />

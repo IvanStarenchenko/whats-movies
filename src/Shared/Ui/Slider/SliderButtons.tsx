@@ -1,5 +1,5 @@
-import type { Swiper as SwiperType } from 'swiper'
 import { useTranslation } from 'react-i18next'
+import type { Swiper as SwiperType } from 'swiper'
 interface SliderButtonsProps {
 	swiperRef: React.RefObject<SwiperType | null>
 }

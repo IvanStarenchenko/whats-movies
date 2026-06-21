@@ -21,10 +21,9 @@ import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { ActionButtons } from './ActionButtons'
-import { SliderBottom } from './SliderBottom'
+import { MediaHubCard } from './MediaHubCard'
 import { SliderButtons } from './SliderButtons'
 import { SliderTitle } from './SliderTitle'
-import { SliderTop } from './SliderTop'
 
 interface ISliderProps {
 	title: string
@@ -34,6 +33,7 @@ interface ISliderProps {
 	Loading?: boolean
 	filter?: TMDBSpecialCategories | TMDBListCategory | BooksListCategory
 }
+
 
 export function Slider({
 	title,
@@ -58,10 +58,10 @@ export function Slider({
 		type === 'movie'
 			? 'Movies'
 			: type === 'tv'
-			? 'TVShows'
-			: type === 'game'
-			? 'Games'
-			: 'Books'
+				? 'TVShows'
+				: type === 'game'
+					? 'Games'
+					: 'Books'
 
 	if (Loading) return <div className='p-4 text-white'>{t('common.loading')}</div>
 	if (!items || items.length === 0)
@@ -77,7 +77,7 @@ export function Slider({
 
 	return (
 		<div className='p-4 w-full'>
-			<div className='max-w-360 min-h-full mx-auto'>
+			<div className='max-w-360 min-h-full  mx-auto'>
 				<SliderTitle
 					title={title}
 					subtitle={subtitle}
@@ -94,12 +94,13 @@ export function Slider({
 							640: { slidesPerView: 2 },
 							1024: { slidesPerView: 3 },
 							1280: { slidesPerView: 4 },
-							1440: { slidesPerView: 5 },
+							1440: { slidesPerView: 4 },
 						}}
 						observeParents={true}
 						observer={true}
 						onSwiper={s => (swiperRef.current = s)}
-						className='w-full h-125 p-1! items-stretch'
+
+						className='w-full !pt-6 !pb-8 px-1 items-stretch'
 					>
 						{items.map((item, index) => {
 							const currentId =
@@ -113,10 +114,11 @@ export function Slider({
 							return (
 								<SwiperSlide
 									key={currentId}
-									className='h-auto! group flex cursor-pointer'
+
+									className='h-auto! group flex cursor-pointer relative hover:z-50 transition-all duration-300'
 									onClick={() => router.push(`/details/${type}/${currentId}`)}
 								>
-									<div className='relative rounded-xl flex flex-col h-full border border-gray-800 bg-[#1a1d29] overflow-hidden transition-all duration-300 card-hover-effect'>
+									<div className='absolute top-1 right-6 z-30 pointer-events-auto' onClick={(e) => e.stopPropagation()}>
 										<ActionButtons
 											toggleSliderWishlistHandler={toggleSliderWishlistHandler}
 											isAdded={isAdded}
@@ -126,16 +128,14 @@ export function Slider({
 											item={item}
 											type={type}
 										/>
-
-										<SliderTop item={item} index={index} type={type} />
-										<SliderBottom item={item} type={type} />
 									</div>
+
+									<MediaHubCard item={item} type={type} index={index} />
 								</SwiperSlide>
 							)
 						})}
 					</Swiper>
 					<div className='hidden sm:block'>
-						{' '}
 						<SliderButtons swiperRef={swiperRef} />
 					</div>
 				</div>
