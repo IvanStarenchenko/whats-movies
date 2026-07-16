@@ -11,45 +11,52 @@ interface MoviePlayerProps {
 
 export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 	({ tmdbId, type = 'movie', movieData }, ref) => {
+
 		useEffect(() => {
-			// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
-			if (window.rendex) {
-				// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
+			// @ts-expect-error - так как SDK подгружается извне
+			if (window.rendex && movieData && tmdbId) {
+				// @ts-expect-error - так как SDK подгружается извне
 				window.rendex.render()
 			}
-		}, [tmdbId, type])
+		}, [tmdbId, type, movieData])
 
-		if (!movieData || !tmdbId) return null
+		if (!tmdbId) return null
 
 		const imdbId =
-			(movieData as TMDBMediaDetails).external_ids?.imdb_id ||
-			(movieData as TMDBMediaDetails).imdb_id
+			(movieData as TMDBMediaDetails)?.external_ids?.imdb_id ||
+			(movieData as TMDBMediaDetails)?.imdb_id
+
+
+		const activeId = imdbId || tmdbId
+
 		return (
 			<div
 				ref={ref}
 				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
 			>
 				<style jsx global>{`
-					.vibix-player,
-					.vibix-player iframe {
-						width: 100% !important;
-						height: 100% !important;
-						position: absolute !important;
-						top: 0;
-						left: 0;
-						object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
-					}
-				`}</style>
+          .vibix-player,
+          .vibix-player iframe {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            object-fit: contain;
+          }
+        `}</style>
+
+
 				<ins
-					key={`${tmdbId}-${type}`}
+					key={`${activeId}-${type}`}
 					className='vibix-player'
 					data-publisher-id='677242216'
 					data-type='imdb'
-					data-id={imdbId || tmdbId}
+					data-id={activeId}
 					data-design='2'
 					data-nopreload='true'
 					data-width='100%'
-					data-height='100%' // Обязательно 100%
+					data-height='100%'
 				></ins>
 			</div>
 		)
