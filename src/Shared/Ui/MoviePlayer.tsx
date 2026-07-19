@@ -26,8 +26,13 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 			(movieData as TMDBMediaDetails)?.external_ids?.imdb_id ||
 			(movieData as TMDBMediaDetails)?.imdb_id
 
+		let currentType: 'imdb' | 'movie' | 'series' = type === 'tv' ? 'series' : 'movie'
+		let currentId = String(tmdbId)
 
-		const activeId = imdbId || tmdbId
+		if (imdbId && imdbId.startsWith('tt')) {
+			currentType = 'imdb'
+			currentId = imdbId
+		}
 
 		return (
 			<div
@@ -35,24 +40,23 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
 			>
 				<style jsx global>{`
-          .vibix-player,
-          .vibix-player iframe {
-            width: 100% !important;
-            height: 100% !important;
-            position: absolute !important;
-            top: 0;
-            left: 0;
-            object-fit: contain;
-          }
-        `}</style>
-
+				.vibix-player,
+				.vibix-player iframe {
+				width: 100% !important;
+				height: 100% !important;
+				position: absolute !important;
+				top: 0;
+				left: 0;
+				object-fit: contain;
+				}
+ `}</style>
 
 				<ins
-					key={`${activeId}-${type}`}
+					key={`${currentId}-${currentType}`}
 					className='vibix-player'
-					data-publisher-id='677242216'
-					data-type='imdb'
-					data-id={activeId}
+					data-publisher-id='28803'
+					data-type={currentType}
+					data-id={currentId}
 					data-design='2'
 					data-nopreload='true'
 					data-width='100%'
