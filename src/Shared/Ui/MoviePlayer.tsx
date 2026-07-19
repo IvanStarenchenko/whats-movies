@@ -11,56 +11,45 @@ interface MoviePlayerProps {
 
 export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 	({ tmdbId, type = 'movie', movieData }, ref) => {
-
 		useEffect(() => {
-			// @ts-expect-error - так как SDK подгружается извне
-			if (window.rendex && movieData && tmdbId) {
-				// @ts-expect-error - так как SDK подгружается извне
+			// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
+			if (window.rendex) {
+				// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
 				window.rendex.render()
 			}
-		}, [tmdbId, type, movieData])
+		}, [tmdbId, type])
 
-		if (!tmdbId) return null
+		if (!movieData || !tmdbId) return null
 
 		const imdbId =
-			(movieData as TMDBMediaDetails)?.external_ids?.imdb_id ||
-			(movieData as TMDBMediaDetails)?.imdb_id
-
-		let currentType: 'imdb' | 'movie' | 'series' = type === 'tv' ? 'series' : 'movie'
-		let currentId = String(tmdbId)
-
-		if (imdbId && imdbId.startsWith('tt')) {
-			currentType = 'imdb'
-			currentId = imdbId
-		}
-
+			(movieData as TMDBMediaDetails).external_ids?.imdb_id ||
+			(movieData as TMDBMediaDetails).imdb_id
 		return (
 			<div
 				ref={ref}
 				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
 			>
 				<style jsx global>{`
-				.vibix-player,
-				.vibix-player iframe {
-				width: 100% !important;
-				height: 100% !important;
-				position: absolute !important;
-				top: 0;
-				left: 0;
-				object-fit: contain;
-				}
- `}</style>
-
+          .vibix-player,
+          .vibix-player iframe {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute !important;
+            top: 0;
+            left: 0;
+            object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
+          }
+        `}</style>
 				<ins
-					key={`${currentId}-${currentType}`}
+					key={`${tmdbId}-${type}`}
 					className='vibix-player'
 					data-publisher-id='28803'
-					data-type={currentType}
-					data-id={currentId}
+					data-type='imdb'
+					data-id={imdbId || tmdbId}
 					data-design='2'
 					data-nopreload='true'
 					data-width='100%'
-					data-height='100%'
+					data-height='100%' // Обязательно 100%
 				></ins>
 			</div>
 		)
