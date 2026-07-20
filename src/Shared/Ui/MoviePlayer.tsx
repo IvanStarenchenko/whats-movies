@@ -39,7 +39,7 @@ export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerPr
 		<div className="w-full h-full bg-black relative">
 			<ins
 				key={resolvedId}
-				data-publisher-id='677242216'
+				data-publisher-id={publisherId}
 				data-type={vibixType}
 				data-id={resolvedId}
 				className="vibix-player"
