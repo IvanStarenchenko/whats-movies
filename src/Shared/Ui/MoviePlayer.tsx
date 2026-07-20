@@ -8,7 +8,7 @@ interface MoviePlayerProps {
 	movieData: (any & { media_type: "movie" | "tv" | "person" }) | any
 }
 
-const publisherId = '28803'
+const publisherId = '677242216'
 
 export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerProps) {
 
