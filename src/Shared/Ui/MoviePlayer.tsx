@@ -64,6 +64,10 @@ export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerPr
 				data-publisher-id={publisherId}
 				data-type={dataType}
 				data-id={dataId}
+				data-design='2'
+				data-nopreload='true'
+				data-width='100%'
+				data-height='100%'
 				className="vibix-player"
 				style={{ display: 'block', width: '100%', height: '100%' }}
 			/>
