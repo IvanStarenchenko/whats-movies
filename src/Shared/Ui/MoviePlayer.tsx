@@ -1,11 +1,13 @@
 'use client'
 
+import { IGameDetails } from '@/Store/Games/Games.type'
+import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
 import { useEffect } from 'react'
 
 interface MoviePlayerProps {
 	tmdbId?: number
 	type?: 'movie' | 'tv'
-	movieData: any // Здесь при необходимости укажи точный тип TMDBMediaDetails
+	movieData: TMDBMediaDetails | IGameDetails
 }
 
 export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerProps) {
@@ -14,12 +16,10 @@ export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerPr
 	const vibixType = type === 'tv' ? 'series' : 'movie'
 
 
-	const resolvedId = movieData?.imdb_id || tmdbId?.toString() || ''
+	const resolvedId = ('imdb_id' in movieData ? movieData.imdb_id : undefined) || tmdbId?.toString() || ''
 
 	useEffect(() => {
 		if (!resolvedId) return
-
-
 		try {
 			if ((window as any).rendexSDK?.init) {
 				(window as any).rendexSDK.init()
@@ -39,7 +39,7 @@ export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerPr
 		<div className="w-full h-full bg-black relative">
 			<ins
 				key={resolvedId}
-				data-publisher-id={publisherId}
+				data-publisher-id='677242216'
 				data-type={vibixType}
 				data-id={resolvedId}
 				className="vibix-player"
