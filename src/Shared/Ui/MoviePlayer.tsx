@@ -1,72 +1,58 @@
 'use client'
-
-import { useEffect } from 'react'
+import { IGameDetails } from '@/Store/Games/Games.type'
+import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
+import { forwardRef, useEffect } from 'react'
 
 interface MoviePlayerProps {
-	tmdbId?: number
+	movieData?: TMDBMediaDetails | IGameDetails
+	tmdbId: number | string | undefined
 	type?: 'movie' | 'tv'
-	movieData: (any & { media_type: "movie" | "tv" | "person" }) | any
 }
 
-const publisherId = '28803'
-
-export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerProps) {
-
-	const isMedia = movieData && 'media_type' in movieData
-
-
-	const kpId = isMedia
-		? (movieData.kinopoisk_id || (movieData as any).movieData?.kinopoisk_id)
-		: undefined
-
-	const imdbId = isMedia
-		? (movieData.imdb_id || (movieData as any).movieData?.imdb_id)
-		: undefined
-
-	let dataType = type === 'tv' ? 'series' : 'movie'
-	let dataId = ''
-
-	if (kpId) {
-		dataType = 'kp'
-		dataId = kpId.toString()
-	} else if (imdbId) {
-		dataType = type === 'tv' ? 'series' : 'movie'
-		dataId = imdbId
-	} else {
-		dataId = tmdbId?.toString() || movieData.id?.toString() || ''
-	}
-
-	useEffect(() => {
-		if (!dataId) return
-		try {
-			if ((window as any).rendexSDK?.init) {
-				(window as any).rendexSDK.init()
-			} else if ((window as any).Vibix?.init) {
-				(window as any).Vibix.init()
+export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
+	({ tmdbId, type = 'movie', movieData }, ref) => {
+		useEffect(() => {
+			// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
+			if (window.rendex) {
+				// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
+				window.rendex.render()
 			}
-		} catch (error) {
-			console.warn('Не удалось автоматически переинициализировать плеер через SDK:', error)
-		}
-	}, [dataId, dataType])
+		}, [tmdbId, type])
 
-	if (!dataId) {
+		if (!movieData || !tmdbId) return null
+
+		const imdbId =
+			(movieData as TMDBMediaDetails).external_ids?.imdb_id ||
+			(movieData as TMDBMediaDetails).imdb_id
 		return (
-			<div className="w-full aspect-video bg-gray-950 flex items-center justify-center text-gray-500">
-				ID контента отсутствует
+			<div
+				ref={ref}
+				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
+			>
+				<style jsx global>{`
+					.vibix-player,
+					.vibix-player iframe {
+						width: 100% !important;
+						height: 100% !important;
+						position: absolute !important;
+						top: 0;
+						left: 0;
+						object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
+					}
+				`}</style>
+				<ins
+					className="vibix-player"
+					data-publisher-id="28803"
+					data-type="imdb"
+					data-id={imdbId}
+					data-design="2"
+					data-nopreload="true"
+					data-width="100%"
+					data-height="100%"
+				/>
 			</div>
 		)
 	}
+)
 
-	return (
-		<div className="w-full h-full bg-black relative">
-			<ins
-				key={`${dataType}-${dataId}`}
-				data-publisher-id={publisherId}
-				data-type={dataType}
-				data-id={dataId}
-				className="vibix-player"
-				style={{ display: 'block', width: '100%', height: '100%' }}
-			/>
-		</div>
-	)
-}
+MoviePlayer.displayName = 'MoviePlayer'
