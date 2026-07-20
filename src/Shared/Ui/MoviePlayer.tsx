@@ -30,16 +30,16 @@ export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
 				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
 			>
 				<style jsx global>{`
-          .vibix-player,
-          .vibix-player iframe {
-            width: 100% !important;
-            height: 100% !important;
-            position: absolute !important;
-            top: 0;
-            left: 0;
-            object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
-          }
-        `}</style>
+					.vibix-player,
+					.vibix-player iframe {
+						width: 100% !important;
+						height: 100% !important;
+						position: absolute !important;
+						top: 0;
+						left: 0;
+						object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
+					}
+				`}</style>
 				<ins
 					key={`${tmdbId}-${type}`}
 					className='vibix-player'
