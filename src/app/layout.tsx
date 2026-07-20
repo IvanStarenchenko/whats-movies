@@ -66,11 +66,13 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='ru'>
-			<body className={`${inter.variable} ${poppins.variable} antialiased`}>
+			<head>
 				<Script
-					src='https://graphicslab.io/sdk/v2/rendex-sdk.min.js'
-					strategy='lazyOnload'
+					src="https://graphicslab.io/sdk/v2/rendex-sdk.min.js"
+					strategy="beforeInteractive"
 				/>
+			</head>
+			<body className={`${inter.variable} ${poppins.variable} antialiased`}>
 				<I18nProvider>
 					<StoreProvider>
 						<Header />

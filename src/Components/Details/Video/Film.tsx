@@ -12,6 +12,7 @@ const DynamicMoviePlayer = dynamic(
 		loading: () => <div className='w-full h-full bg-gray-900 animate-pulse' />,
 	}
 )
+
 interface FilmProps {
 	movieData: TMDBMediaDetails | IGameDetails
 	activeMode: 'movie' | 'trailer'
@@ -24,13 +25,14 @@ interface FilmProps {
 	isCinema?: boolean
 	isGame?: boolean
 	mainTrailer:
-		| {
-				key: string
-				site: string
-				type: string
-		  }
-		| undefined
+	| {
+		key: string
+		site: string
+		type: string
+	}
+	| undefined
 }
+
 export function Film({
 	movieData,
 	activeMode,
@@ -57,9 +59,8 @@ export function Film({
 			) : isGame ? (
 				gameTrailerId ? (
 					<iframe
-						src={`https://www.youtube.com/embed/${gameTrailerId}?autoplay=${
-							isCinema ? 1 : 0
-						}&modestbranding=1`}
+						src={`https://www.youtube.com/embed/${gameTrailerId}?autoplay=${isCinema ? 1 : 0
+							}&modestbranding=1`}
 						title={`${name} trailer`}
 						className='absolute inset-0 w-full h-full'
 						allow='autoplay; encrypted-media'
@@ -75,9 +76,8 @@ export function Film({
 				)
 			) : mainTrailer ? (
 				<iframe
-					src={`${getYouTubeUrl(mainTrailer.key)}${
-						isCinema ? '?autoplay=1' : ''
-					}`}
+					src={`${getYouTubeUrl(mainTrailer.key)}${isCinema ? '?autoplay=1' : ''
+						}`}
 					title={t('video.playerTitle')}
 					className='absolute inset-0 w-full h-full'
 					allow='autoplay; encrypted-media'

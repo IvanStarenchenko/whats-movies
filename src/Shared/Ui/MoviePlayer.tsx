@@ -1,59 +1,50 @@
 'use client'
-import { IGameDetails } from '@/Store/Games/Games.type'
-import { TMDBMediaDetails } from '@/Store/TMDB/tMDB.type'
-import { forwardRef, useEffect } from 'react'
+
+import { useEffect } from 'react'
 
 interface MoviePlayerProps {
-	movieData?: TMDBMediaDetails | IGameDetails
-	tmdbId: number | string | undefined
+	tmdbId?: number
 	type?: 'movie' | 'tv'
+	movieData: any // Здесь при необходимости укажи точный тип TMDBMediaDetails
 }
 
-export const MoviePlayer = forwardRef<HTMLDivElement, MoviePlayerProps>(
-	({ tmdbId, type = 'movie', movieData }, ref) => {
-		useEffect(() => {
-			// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
-			if (window.rendex) {
-				// @ts-expect-error - так как SDK подгружается извне и TS о нем не знает
-				window.rendex.render()
+export function MoviePlayer({ tmdbId, type = 'movie', movieData }: MoviePlayerProps) {
+	const publisherId = '28803'
+
+	const vibixType = type === 'tv' ? 'series' : 'movie'
+
+
+	const resolvedId = movieData?.imdb_id || tmdbId?.toString() || ''
+
+	useEffect(() => {
+		if (!resolvedId) return
+
+
+		try {
+			if ((window as any).rendexSDK?.init) {
+				(window as any).rendexSDK.init()
+			} else if ((window as any).Vibix?.init) {
+				(window as any).Vibix.init()
 			}
-		}, [tmdbId, type])
+		} catch (error) {
+			console.warn('Не удалось автоматически переинициализировать плеер через SDK:', error)
+		}
+	}, [resolvedId, vibixType])
 
-		if (!movieData || !tmdbId) return null
-
-		const imdbId =
-			(movieData as TMDBMediaDetails).external_ids?.imdb_id ||
-			(movieData as TMDBMediaDetails).imdb_id
-		return (
-			<div
-				ref={ref}
-				className='relative w-full h-full bg-black rounded-xl overflow-hidden border border-white/5'
-			>
-				<style jsx global>{`
-					.vibix-player,
-					.vibix-player iframe {
-						width: 100% !important;
-						height: 100% !important;
-						position: absolute !important;
-						top: 0;
-						left: 0;
-						object-fit: contain; /* Чтобы картинка не растягивалась уродливо */
-					}
-				`}</style>
-				<ins
-					key={`${tmdbId}-${type}`}
-					className='vibix-player'
-					data-publisher-id='28803'
-					data-type='imdb'
-					data-id={imdbId || tmdbId}
-					data-design='2'
-					data-nopreload='true'
-					data-width='100%'
-					data-height='100%' // Обязательно 100%
-				></ins>
-			</div>
-		)
+	if (!resolvedId) {
+		return <div className="w-full aspect-video bg-gray-950 flex items-center justify-center text-gray-500">ID контента отсутствует</div>
 	}
-)
 
-MoviePlayer.displayName = 'MoviePlayer'
+	return (
+		<div className="w-full h-full bg-black relative">
+			<ins
+				key={resolvedId}
+				data-publisher-id={publisherId}
+				data-type={vibixType}
+				data-id={resolvedId}
+				className="vibix-player"
+				style={{ display: 'block', width: '100%', height: '100%' }}
+			/>
+		</div>
+	)
+}
